@@ -166,9 +166,15 @@ private:
     
     /** Sets the highest frequency to pass */
     GtkWidget* _spinHigh;
+    GtkWidget* _spinHighLabel;
     
     /** Sets the lowest frequency to pass */
     GtkWidget* _spinLow;
+    GtkWidget* _spinLowLabel;
+    
+    /** Sets the gamma factor */
+    GtkWidget* _spinGamma;
+    GtkWidget* _spinGammaLabel;
     
     /** Pointer to the backend part of the window */
     MainWindowPresenter* _presenter;
