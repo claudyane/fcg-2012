@@ -144,6 +144,8 @@ private:
      */
     static void cb_quitMenuItem( GtkMenuItem *item, gpointer user_data );
     
+    static void cb_comboBoxSelectItem( GtkComboBoxText* widget, gpointer user_data );
+    
     /** GtkWidget pointer, pointing to created window */
     GtkWidget* _window;
     
@@ -161,6 +163,12 @@ private:
     
     /** Menu bar */
     GtkWidget* _menuBar;
+    
+    /** Sets the highest frequency to pass */
+    GtkWidget* _spinHigh;
+    
+    /** Sets the lowest frequency to pass */
+    GtkWidget* _spinLow;
     
     /** Pointer to the backend part of the window */
     MainWindowPresenter* _presenter;
