@@ -76,6 +76,12 @@ void MainWindowPresenter::saveImage(char* path)
 
 void MainWindowPresenter::resetImage()
 {
+    if( _fourierImg )
+    {
+        delete[] _fourierImg;
+        _fourierImg = 0;
+    }
+    
     imgDestroy( _dstImg );
     _dstImg = imgCopy( _srcImg );
 }
@@ -176,6 +182,9 @@ void MainWindowPresenter::applyFourrier( bool phase )
             buf[i] = std::abs( _fourierImg[i] );
         }
     }
+    
+    applyShift();
+    applyNormalize();
 }
 
 
@@ -218,4 +227,108 @@ void MainWindowPresenter::applyInverseFourier()
     
     imgDestroy( _dstImg );
     _dstImg = imgCopy( auxImg );
+}
+
+
+
+void MainWindowPresenter::applyHighPass( float radius )
+{
+    int w = imgGetWidth( _dstImg );
+    int h = imgGetHeight( _dstImg );
+    int radius_2 = radius * radius;
+    
+    //create black and white image to hold the filter
+    Image* filter = imgCreate( w, h, 1 );
+    
+    for (int x = 0; x < w; ++x)
+    {
+        int x_2 = (x-w/2) * (x-w/2);
+        
+        for (int y = 0; y < h; ++y)
+        {
+            int y_2 = (y-h/2) * (y-h/2);
+            
+            //if the pixel is out of the circle, paint it black
+            if (( x_2 + y_2 ) > radius_2)
+            {
+                imgSetPixel3f( filter, x, y, 0.0f, 0.0f, 0.0f );
+            }
+            else
+            {
+                imgSetPixel3f( filter, x, y, 1.0f, 1.0f, 1.0f );
+            }
+        }
+    }
+    
+    // shift the filter to match the transform
+    Image* filterShift = imgShift( filter );
+    
+    int total = w * h;
+    float* filterBuf = imgGetData( filter );
+    float* filterShiftBuf = imgGetData( filterShift );
+    float* dstBuf = imgGetData( _dstImg );
+    for (int i = 0; i < total;  ++i)
+    {
+        _fourierImg[i] *= (double)filterShiftBuf[i];
+        dstBuf[i] *= (double)filterBuf[i];
+    }
+    
+    imgDestroy( filter );
+    imgDestroy( filterShift );
+}
+
+
+
+void MainWindowPresenter::applyLowPass( float radius )
+{
+    int w = imgGetWidth( _dstImg );
+    int h = imgGetHeight( _dstImg );
+    int radius_2 = radius * radius;
+    
+    //create black and white image to hold the filter
+    Image* filter = imgCreate( w, h, 1 );
+    
+    for (int x = 0; x < w; ++x)
+    {
+        int x_2 = (x-w/2) * (x-w/2);
+        
+        for (int y = 0; y < h; ++y)
+        {
+            int y_2 = (y-h/2) * (y-h/2);
+            
+            //if the pixel is inside the circle, paint it black
+            if (( x_2 + y_2 ) > radius_2)
+            {
+                imgSetPixel3f( filter, x, y, 1.0f, 1.0f, 1.0f );
+            }
+            else
+            {
+                imgSetPixel3f( filter, x, y, 0.0f, 0.0f, 0.0f );
+            }
+        }
+    }
+    
+    // shift the filter to match the transform
+    Image* filterShift = imgShift( filter );
+    
+    int total = w * h;
+    float* filterBuf = imgGetData( filter );
+    float* filterShiftBuf = imgGetData( filterShift );
+    float* dstBuf = imgGetData( _dstImg );
+    for (int i = 0; i < total;  ++i)
+    {
+        _fourierImg[i] *= (double)filterShiftBuf[i];
+        dstBuf[i] *= (double)filterBuf[i];
+    }
+    
+    imgDestroy( filter );
+    imgDestroy( filterShift );
+}
+
+
+
+void MainWindowPresenter::applyBandPass( float inRadius, float outRadius )
+{
+    applyHighPass( outRadius );
+    applyLowPass( inRadius );
 }

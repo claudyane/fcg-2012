@@ -46,6 +46,9 @@ extern "C"
 #define GAMMA_UP      "Gamma +"
 #define GAMMA_DOWN    "Gamma -"
 #define NORMALIZE     "Normalize"
+#define LOW_PASS      "Low Pass"
+#define HIGH_PASS     "High Pass"
+#define BAND_PASS     "Band Pass"
 
 MainWindow::MainWindow()
 {
@@ -54,10 +57,11 @@ MainWindow::MainWindow()
     build();
     
     g_signal_connect_swapped( _window, "destroy", G_CALLBACK (gtk_main_quit), NULL );
-    g_signal_connect( _dstCanvas, "configure-event", G_CALLBACK( cb_configGLCanvas ), NULL );
-    g_signal_connect( _dstCanvas, "expose-event", G_CALLBACK( cb_exposeGLCanvas ), this );
-    g_signal_connect( _srcCanvas, "configure-event", G_CALLBACK( cb_configGLCanvas ), NULL );
-    g_signal_connect( _srcCanvas, "expose-event", G_CALLBACK( cb_exposeGLCanvas ), this );
+    g_signal_connect( _dstCanvas    , "configure-event", G_CALLBACK( cb_configGLCanvas )    , NULL );
+    g_signal_connect( _dstCanvas    , "expose-event"   , G_CALLBACK( cb_exposeGLCanvas )    , this );
+    g_signal_connect( _srcCanvas    , "configure-event", G_CALLBACK( cb_configGLCanvas )    , NULL );
+    g_signal_connect( _srcCanvas    , "expose-event"   , G_CALLBACK( cb_exposeGLCanvas )    , this );
+    g_signal_connect( _filterChooser, "changed"        , G_CALLBACK( cb_comboBoxSelectItem ), this );
     
     gtk_widget_show_all( _window );
 }
@@ -118,6 +122,23 @@ GtkWidget* MainWindow::buildFilterBox()
 
     buildButtons();
     gtk_box_pack_start( GTK_BOX( filterBox ), _applyButton, FALSE, FALSE, 0 );
+    
+    GtkWidget* fill = gtk_label_new( "" );
+    gtk_box_pack_start( GTK_BOX( filterBox ), fill, TRUE, TRUE, 0 );
+    
+    GtkWidget* lowLabel = gtk_label_new( "Lowest:" );
+    gtk_box_pack_start( GTK_BOX( filterBox ), lowLabel, FALSE, FALSE, 0 );
+    
+    _spinLow  = gtk_spin_button_new_with_range( 0.0, 1024.0, 1.0 );
+    gtk_widget_set_sensitive( GTK_WIDGET(_spinLow), false );
+    gtk_box_pack_start( GTK_BOX( filterBox ), _spinLow, FALSE, FALSE, 0 );
+    
+    GtkWidget* highLabel = gtk_label_new( "Highest:" );
+    gtk_box_pack_start( GTK_BOX( filterBox ), highLabel, FALSE, FALSE, 0 );
+    
+    _spinHigh = gtk_spin_button_new_with_range( 0.0, 1024.0, 1.0 );
+    gtk_widget_set_sensitive( GTK_WIDGET(_spinHigh), false );
+    gtk_box_pack_start( GTK_BOX( filterBox ), _spinHigh, FALSE, FALSE, 0 );
     
     return filterBox;
 }
@@ -210,6 +231,10 @@ void MainWindow::buildFilterChooser()
     gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( _filterChooser ), GAMMA_UP );
     gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( _filterChooser ), GAMMA_DOWN );
     gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( _filterChooser ), NORMALIZE );
+    gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( _filterChooser ), HIGH_PASS );
+    gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( _filterChooser ), LOW_PASS );
+    gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT( _filterChooser ), BAND_PASS );
+    
 }
 
 
@@ -377,6 +402,22 @@ void MainWindow::cb_applyButton( GtkMenuItem* item, gpointer user_data )
     {
         _this->_presenter->applyNormalize();
     }
+    else if( strcmp( filter, HIGH_PASS ) == 0 )
+    {
+        int radius = gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(_this->_spinHigh) );
+        _this->_presenter->applyHighPass( radius );
+    }
+    else if( strcmp( filter, LOW_PASS ) == 0 )
+    {
+        int radius = gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(_this->_spinLow) );
+        _this->_presenter->applyLowPass( radius );
+    }
+    else if( strcmp( filter, BAND_PASS ) == 0 )
+    {
+        int radiusH = gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(_this->_spinHigh) );
+        int radiusL = gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(_this->_spinLow) );
+        _this->_presenter->applyBandPass( radiusL, radiusH );
+    }
     
     gtk_widget_queue_draw( _this->_dstCanvas );
 }
@@ -455,4 +496,34 @@ void MainWindow::cb_resetMenuItem(GtkMenuItem* item, gpointer user_data)
 void MainWindow::cb_quitMenuItem(GtkMenuItem* item, gpointer user_data)
 {
     gtk_main_quit();
+}
+
+
+
+void MainWindow::cb_comboBoxSelectItem(GtkComboBoxText* widget, gpointer user_data)
+{
+    MainWindow* _this = (MainWindow*) user_data;
+    
+    gchar* item = gtk_combo_box_text_get_active_text( widget );
+    
+    if (strcmp( item, BAND_PASS ) == 0)
+    {
+        gtk_widget_set_sensitive( _this->_spinLow,  true );
+        gtk_widget_set_sensitive( _this->_spinHigh, true );
+    }
+    else if (strcmp( item, HIGH_PASS ) == 0)
+    {
+        gtk_widget_set_sensitive( _this->_spinLow,  false );
+        gtk_widget_set_sensitive( _this->_spinHigh, true  );
+    }
+    else if (strcmp( item, LOW_PASS )  == 0)
+    {
+        gtk_widget_set_sensitive( _this->_spinLow,  true  );
+        gtk_widget_set_sensitive( _this->_spinHigh, false );
+    }
+    else
+    {
+        gtk_widget_set_sensitive( _this->_spinLow,  false );
+        gtk_widget_set_sensitive( _this->_spinHigh, false );
+    }
 }

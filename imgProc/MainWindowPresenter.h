@@ -119,6 +119,12 @@ public:
      */
     void applyInverseFourier();
     
+    void applyHighPass( float radius );
+    
+    void applyLowPass( float radius );
+    
+    void applyBandPass( float inRadius, float outRadius );
+    
 private:
     
     /** Original image object */
