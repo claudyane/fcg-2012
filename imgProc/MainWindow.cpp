@@ -51,9 +51,9 @@ extern "C"
 
 MainWindow::MainWindow()
 {
-    _presenter = new MainWindowPresenter();
-    
     build();
+    
+    _presenter = new MainWindowPresenter( GTK_WINDOW(_window) );
     
     g_signal_connect_swapped( _window, "destroy", G_CALLBACK (gtk_main_quit), NULL );
     g_signal_connect( _dstCanvas    , "configure-event", G_CALLBACK( cb_configGLCanvas )    , NULL );

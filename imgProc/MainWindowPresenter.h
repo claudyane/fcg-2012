@@ -21,7 +21,7 @@ public:
     /**
      * Default constructor
      */
-    MainWindowPresenter();
+    MainWindowPresenter( GtkWindow* window );
     
     /**
      * Default destructor
@@ -125,7 +125,12 @@ public:
     
     void applyBandPass( float inRadius, float outRadius );
     
+    void showErrorMessage( const char* message );
+    
 private:
+    
+    /** pointer to widget with the window */
+    GtkWindow* _window;
     
     /** Original image object */
     Image* _srcImg;
