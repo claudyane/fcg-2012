@@ -1,7 +1,6 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkglinit.h>
 
-#include "MainWindow.h"
 
 int main( int argc, char** argv )
 {
