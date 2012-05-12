@@ -52,16 +52,6 @@ class Vector4D
         void normalize();
 
         /**
-         * Compute cross operation
-         */
-        Vector4D cross( const Vector4D& a, const Vector4D& b );
-
-        /**
-         * Compute dot operation
-         */
-        double dot( const Vector4D& a, const Vector4D& b );
-
-        /**
          * Operators
          */
 
@@ -82,6 +72,16 @@ class Vector4D
 	private:
 
 };
+
+/**
+ * Compute cross operation
+ */
+Vector4D cross( const Vector4D& a, const Vector4D& b );
+
+/**
+ * Compute dot operation
+ */
+double dot( const Vector4D& a, const Vector4D& b );
 
 Vector4D operator+( const Vector4D& a, const Vector4D& b );
 Vector4D operator-( const Vector4D& a, const Vector4D& b );
