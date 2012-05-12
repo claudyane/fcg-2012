@@ -16,7 +16,7 @@ endif
 .SILENT:
 
 all:
-	$(CC) $(CFLAGS) -o $(OUTPUT_DIR)/$(BUILD_DIR)/$(EXECUTABLE) $(SOURCES)
+	$(CC) -o $(OUTPUT_DIR)/$(BUILD_DIR)/$(EXECUTABLE) $(SOURCES) $(CFLAGS)
 
 clean: 
 	rm -f ../bin/$(BUILD_DIR)/$(EXECUTABLE)	
