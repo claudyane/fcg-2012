@@ -9,6 +9,7 @@
 #define CAMERA_H_
 
 #include "Vector3D.h"
+#include "Ray.h"
 
 class Camera
 {
@@ -16,12 +17,26 @@ public:
     /**
      * Constructor
      */
-    Camera();
+    Camera( Vector3D eye, Vector3D center, Vector3D up, double fovy, double near, int width, int height );
 
     /**
      * Desctructor
      */
     virtual ~Camera();
+
+    /**
+     * Calculates the remaining parameters not provided at construction.
+     * This method may also prove useful if the camera suffer any changes during the program.
+     */
+    void computeDerivedParameters();
+
+    /**
+     * Given a pixel coordinates, computeRay will return a ray that starts in camera and passes through the pixel.
+     * @param x Horizontal position of the pixel in the screen.
+     * @param y Vertical position of the pixel in the screen.
+     * @return Ray that starts in the eye position and goes through the pixel.
+     */
+    Ray computeRay( int x, int y );
 
 private:
     /** Position of the camera on world space */
@@ -49,10 +64,10 @@ private:
     int _height;
 
     /** width of screen in world units */
-    double a;
+    double _a;
 
     /** height of screen in world units */
-    double b;
+    double _b;
 
     /** base of the eye space */
     Vector3D _eyeBase;
