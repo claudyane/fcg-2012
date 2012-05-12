@@ -8,7 +8,7 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
-#include "Vector3D.h"
+#include "Vector4D.h"
 #include "Ray.h"
 
 class Camera
@@ -17,7 +17,7 @@ public:
     /**
      * Constructor
      */
-    Camera( Vector3D eye, Vector3D center, Vector3D up, double fovy, double near, int width, int height );
+    Camera( Vector4D eye, Vector4D center, Vector4D up, double fovy, double near, int width, int height );
 
     /**
      * Desctructor
@@ -40,13 +40,13 @@ public:
 
 private:
     /** Position of the camera on world space */
-    Vector3D _eye;
+    Vector4D _eye;
 
     /** Up vector of the camera */
-    Vector3D _up;
+    Vector4D _up;
 
     /** Point in the world the camera is looking at */
-    Vector3D _center;
+    Vector4D _center;
 
     /** Field of vision */
     double _fovy;
@@ -70,7 +70,7 @@ private:
     double _b;
 
     /** base of the eye space */
-    Vector3D _eyeBase;
+    Vector4D _eyeBase;
 };
 
 #endif /* CAMERA_H_ */

@@ -9,7 +9,7 @@
 
 #include "Camera.h"
 
-Camera::Camera( Vector3D eye, Vector3D center, Vector3D up, double fovy, double near, int width, int height )
+Camera::Camera( Vector4D eye, Vector4D center, Vector4D up, double fovy, double near, int width, int height )
 {
     _eye = eye;
     _center = center;
