@@ -1,0 +1,25 @@
+CC=g++
+
+SOURCES=../src/*.cpp
+EXECUTABLE=rayTrace
+
+OUTPUT_DIR = ../bin
+
+ifeq ($(DBG),Yes)
+  CFLAGS = -g -Wall -fopenmp `pkg-config --cflags --libs gtk+-2.0 gtkglext-1.0 gtkglext-x11-1.0 glu`
+  BUILD_DIR = debug
+else
+  CFLAGS = -Wall -fopenmp `pkg-config --cflags --libs gtk+-2.0 gtkglext-1.0 gtkglext-x11-1.0 glu`
+  BUILD_DIR = release
+endif
+
+.SILENT:
+
+all:
+	$(CC) $(CFLAGS) -o $(OUTPUT_DIR)/$(BUILD_DIR)/$(EXECUTABLE) $(SOURCES)
+
+clean: 
+	rm -f ../bin/$(BUILD_DIR)/$(EXECUTABLE)	
+
+
+
