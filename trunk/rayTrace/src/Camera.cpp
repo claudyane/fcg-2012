@@ -5,12 +5,22 @@
  *      Author: eliana & walther
  */
 
+#include <cmath>
+
 #include "Camera.h"
 
-Camera::Camera()
+Camera::Camera( Vector3D eye, Vector3D center, Vector3D up, double fovy, double near, int width, int height )
 {
-    // TODO Auto-generated constructor stub
-    
+    _eye = eye;
+    _center = center;
+    _up = up;
+    _fovy = fovy;
+    _near = near;
+    _far = 2 * near;
+    _width = width;
+    _height = height;
+
+    computeDerivedParameters();
 }
 
 Camera::~Camera()
@@ -18,3 +28,18 @@ Camera::~Camera()
     // TODO Auto-generated destructor stub
 }
 
+void Camera::computeDerivedParameters()
+{
+    _a = 2.0 * _near * tan( _fovy / 2.0 );
+    _b = _a * (double) _width / (double) _height;
+    //TODO xe, ye, ze
+}
+
+Ray Camera::computeRay( int x, int y )
+{
+    Ray ray;
+
+    ray.origin = _eye;
+
+    return ray;
+}
