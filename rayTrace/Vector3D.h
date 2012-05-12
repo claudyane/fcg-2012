@@ -11,8 +11,16 @@
 class Vector3D
 {
 public:
-    Vector3D();
+    Vector3D( double x, double y, double z );
     virtual ~Vector3D();
+    double getX();
+    double getY();
+    double getZ();
+
+private:
+    double _x;
+    double _y;
+    double _z;
 };
 
 #endif /* VECTOR3D_H_ */
