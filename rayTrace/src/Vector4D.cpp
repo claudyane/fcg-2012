@@ -68,16 +68,67 @@ void Vector4D::normalize()
 
 
 
-Vector4D Vector4D::cross( const Vector4D& a, const Vector4D& b )
+Vector4D Vector4D::operator+=( const Vector4D& a )
 {
-    return Vector4D( a.y*b.z - a.z*b.y,
-                     b.x*a.z - b.z*a.x,
-                     a.x*b.y - a.y*b.x, 1.0 );
+    x += a.x;
+    y += a.y;
+    z += a.z;
+    return *this;
 }
 
 
 
-double Vector4D::dot( const Vector4D& a, const Vector4D& b )
+Vector4D Vector4D::operator-=( const Vector4D& a )
+{
+    x -= a.x;
+    y -= a.y;
+    z -= a.z;
+    return *this;
+}
+
+
+
+Vector4D Vector4D::operator*=( const double a )
+{
+    x *= a;
+    y *= a;
+    z *= a;
+    return *this;
+}
+
+
+
+Vector4D Vector4D::operator/=( const double a )
+{
+    x /= a;
+    y /= a;
+    z /= a;
+    return *this;
+}
+
+
+
+Vector4D Vector4D::operator-()
+{
+    x = -x;
+    y = -y;
+    z = -z;
+    return *this;
+}
+
+
+
+Vector4D cross( const Vector4D& a, const Vector4D& b )
+{
+    return Vector4D( a.y*b.z - a.z*b.y,
+                     b.x*a.z - b.z*a.x,
+                     a.x*b.y - a.y*b.x,
+                     1.0 );
+}
+
+
+
+double dot( const Vector4D& a, const Vector4D& b )
 {
     return 0.0;
 }
@@ -88,3 +139,40 @@ Vector4D operator+( const Vector4D& a, const Vector4D& b )
 {
     return Vector4D( a.x + b.x, a.y + b.y, a.z + b.z, 1.0 );
 }
+
+
+
+Vector4D operator-( const Vector4D& a, const Vector4D& b )
+{
+    return Vector4D();
+}
+
+
+
+Vector4D operator*( const double a, const Vector4D& b )
+{
+    return Vector4D();
+}
+
+
+
+Vector4D operator*( const Vector4D& a, const double b )
+{
+    return Vector4D();
+}
+
+
+
+Vector4D operator/( const double a, const Vector4D& b )
+{
+    return Vector4D();
+}
+
+
+
+Vector4D operator/( const Vector4D& a, const double b )
+{
+    return Vector4D();
+}
+
+
