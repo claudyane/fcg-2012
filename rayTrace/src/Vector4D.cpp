@@ -130,7 +130,7 @@ Vector4D cross( const Vector4D& a, const Vector4D& b )
 
 double dot( const Vector4D& a, const Vector4D& b )
 {
-    return 0.0;
+    return a.x*b.x + a.y*b.y + a.z*b.z;
 }
 
 
@@ -144,35 +144,22 @@ Vector4D operator+( const Vector4D& a, const Vector4D& b )
 
 Vector4D operator-( const Vector4D& a, const Vector4D& b )
 {
-    return Vector4D();
+    return Vector4D( a.x - b.x, a.y - b.y, a.z - b.z, 1.0 );
 }
 
 
 
 Vector4D operator*( const double a, const Vector4D& b )
 {
-    return Vector4D();
+    return Vector4D( a*b.x, a*b.y, a*b.z, 1.0 );
 }
 
 
 
 Vector4D operator*( const Vector4D& a, const double b )
 {
-    return Vector4D();
+    return Vector4D( b*a.x, b*a.y, b*a.z, 1.0 );
 }
 
-
-
-Vector4D operator/( const double a, const Vector4D& b )
-{
-    return Vector4D();
-}
-
-
-
-Vector4D operator/( const Vector4D& a, const double b )
-{
-    return Vector4D();
-}
 
 

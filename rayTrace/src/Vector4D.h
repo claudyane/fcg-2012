@@ -83,11 +83,12 @@ Vector4D cross( const Vector4D& a, const Vector4D& b );
  */
 double dot( const Vector4D& a, const Vector4D& b );
 
+/**
+ * Operators
+ */
 Vector4D operator+( const Vector4D& a, const Vector4D& b );
 Vector4D operator-( const Vector4D& a, const Vector4D& b );
 Vector4D operator*( const double a, const Vector4D& b );
 Vector4D operator*( const Vector4D& a, const double b );
-Vector4D operator/( const double a, const Vector4D& b );
-Vector4D operator/( const Vector4D& a, const double b );
 
 #endif /* VECTOR4D_H_ */
