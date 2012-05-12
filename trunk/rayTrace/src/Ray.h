@@ -8,12 +8,12 @@
 #ifndef RAY_H_
 #define RAY_H_
 
-#include "Vector3D.h"
+#include "Vector4D.h"
 
 typedef struct t_ray
 {
-    Vector3D origin;
-    Vector3D direction;
+    Vector4D origin;
+    Vector4D direction;
 }Ray;
 
 #endif /* RAY_H_ */
