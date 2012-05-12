@@ -68,6 +68,16 @@ void Vector4D::normalize()
 
 
 
+Vector4D Vector4D::operator=( const Vector4D& a )
+{
+    x = a.x;
+    y = a.y;
+    z = a.z;
+    return *this;
+}
+
+
+
 Vector4D Vector4D::operator+=( const Vector4D& a )
 {
     x += a.x;

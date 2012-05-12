@@ -55,6 +55,7 @@ class Vector4D
          * Operators
          */
 
+        Vector4D operator=( const Vector4D& a );
         Vector4D operator+=( const Vector4D& a );
         Vector4D operator-=( const Vector4D& a );
         Vector4D operator*=( const double a );
