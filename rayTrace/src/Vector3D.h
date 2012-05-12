@@ -11,6 +11,7 @@
 class Vector3D
 {
 public:
+    Vector3D();
     Vector3D( double x, double y, double z );
     virtual ~Vector3D();
     double getX();
