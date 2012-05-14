@@ -14,7 +14,7 @@
 class Object
 {
 public:
-    virtual ~Object();
+    virtual ~Object(){}
     virtual bool computeRayIntersection( Ray ray, Vector4D& point ) = 0;
 };
 
