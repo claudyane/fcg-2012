@@ -1035,7 +1035,7 @@ static float apply(float c[9], float v[9])
 {
     return c[0]*v[0]+c[1]*v[1]+c[2]*v[2]+c[3]*v[3]+c[4]*v[4]+c[5]*v[5]+c[6]*v[6]+c[7]*v[7]+c[8]*v[8];
 }
-static float applyV(float c[9], float v[3*9], float out[3])
+static void applyV(float c[9], float v[3*9], float out[3])
 {
     out[0]= c[0]*v[0*3  ]+c[1]*v[1*3  ]+c[2]*v[2*3  ]+c[3]*v[3*3  ]+c[4]*v[4*3  ]+c[5]*v[5*3  ]+c[6]*v[6*3  ]+c[7]*v[7*3  ]+c[8]*v[8*3  ];
     out[0]= c[0]*v[0*3+1]+c[1]*v[1*3+1]+c[2]*v[2*3+1]+c[3]*v[3*3+1]+c[4]*v[4*3+1]+c[5]*v[5*3+1]+c[6]*v[6*3+1]+c[7]*v[7*3+1]+c[8]*v[8*3+1];
@@ -1215,7 +1215,6 @@ Image* imgEdges(Image* imgIn)
     /* arruma a imagem */
     for (y=0;y<h;y++) {
         for (x=0;x<w;x++) {
-            int k=y*w+x;
             if ((y==0)||(y==(h-1))||(x==0)||(x==(w-1))) /* borda */
                 imgOut_buf[x]=0.f;
             else
@@ -1540,8 +1539,8 @@ static float  MAX_LUM[] = { 1.0, 1.0, 1.0 };
 static float  MIN_LUM[] = { 0.0, 0.0, 0.0 };
 
 /******************************************************************************************************/
-/* A partir de uma imagem, calcula o histograma correspondente ao retangulo delimitado pelos pontos
-/*   (x0, y0) e (x1, y1), onde x1 > x0 e y1 > y0                                                   
+/* A partir de uma imagem, calcula o histograma correspondente ao retangulo delimitado pelos pontos   */
+/*   (x0, y0) e (x1, y1), onde x1 > x0 e y1 > y0                                                      */
 /******************************************************************************************************/
 static void CalculateGreyHistogram( int histograma[], Image* greyImage, int x0, int y0, int x1, int y1 )
 {
@@ -1582,12 +1581,12 @@ static int GetMiddleValue( int histograma[] )
 	return soma / pontos;
 }
 
-/******************************************************************************************************/
-/* Baseado no artigo "A Threshold Selection Method from Gray-Level Histograms",
-/*   de N. Otsu, disponível em http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=04310076
-/* Artigo citado em "Automatic Recognition Algorithm of Quick Response Code Based on Embedded System",
-/*   de Y. Liu e M. Liu, disponível em http://portal.acm.org/citation.cfm?id=1173502
-/******************************************************************************************************/
+/******************************************************************************************************
+ * Baseado no artigo "A Threshold Selection Method from Gray-Level Histograms",
+ *   de N. Otsu, disponível em http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=04310076
+ * Artigo citado em "Automatic Recognition Algorithm of Quick Response Code Based on Embedded System",
+ *   de Y. Liu e M. Liu, disponível em http://portal.acm.org/citation.cfm?id=1173502
+ ******************************************************************************************************/
 Image* imgBinOtsu( Image* greyImage )
 {
 	float  probabilidade[N_CORES], omega[N_CORES], mu[N_CORES];
@@ -1692,7 +1691,7 @@ Image* imgBinOhbuchi( Image* greyImage )
 	/*   do quadrado central.                */                                                  
 	tamanhoBloco = tamanhoQuadradoCentral / 3; /* tamanho de cada bloco */
 
-	/* Percorre-se os 9 blocos, montando o histograma para cada um deles e calculando a media.
+	/* Percorre-se os 9 blocos, montando o histograma para cada um deles e calculando a media.*/
 	/* A menor das medias sera o histograma global da imagem  */
 	thresholdGlobal = MAIOR_COR + 1;         /*  inicia a variavel com o maior valor  */
 		x0 = ( w - tamanhoQuadradoCentral ) / 2; /* ponto inicial do 1o bloco na coordenada X */
