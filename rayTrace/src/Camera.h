@@ -70,7 +70,9 @@ private:
     double _b;
 
     /** base of the eye space */
-    Vector4D _eyeBase;
+    Vector4D _xe;
+    Vector4D _ye;
+    Vector4D _ze;
 };
 
 #endif /* CAMERA_H_ */
