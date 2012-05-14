@@ -7,14 +7,31 @@
 
 #include "MainWindow.h"
 
+#include <gtk/gtk.h>
+#include <gtk/gtkdrawingarea.h>
+
 MainWindow::MainWindow()
 {
-    // TODO Auto-generated constructor stub
-    
+    _window = build();
+    gtk_widget_show_all( _window );
 }
 
 MainWindow::~MainWindow()
 {
-    // TODO Auto-generated destructor stub
+    gtk_widget_destroy( _window );
 }
 
+GtkWidget* MainWindow::build()
+{
+    GtkWidget* window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+
+
+
+    return window;
+}
+
+void MainWindow::buildRayTraceCanvas()
+{
+    _rayTraceCanvas = gtk_drawing_area_new();
+    gtk_drawing_area_size( GTK_DRAWING_AREA(_rayTraceCanvas), 800, 600 );
+}

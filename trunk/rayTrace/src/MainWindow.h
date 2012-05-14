@@ -8,6 +8,8 @@
 #ifndef MAINWINDOW_H_
 #define MAINWINDOW_H_
 
+#include <gtk/gtk.h>
+
 class MainWindow
 {
 public:
@@ -15,7 +17,11 @@ public:
     virtual ~MainWindow();
 
 private:
+    GtkWidget* build();
+    void buildRayTraceCanvas();
 
+    GtkWidget* _window;
+    GtkWidget* _rayTraceCanvas;
 };
 
 #endif /* MAINWINDOW_H_ */
