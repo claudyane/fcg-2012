@@ -16,12 +16,16 @@
 MainWindow::MainWindow()
 {
     _window = build();
-    gtk_widget_show_all( _window );
 }
 
 MainWindow::~MainWindow()
 {
     gtk_widget_destroy( _window );
+}
+
+void MainWindow::show()
+{
+    gtk_widget_show_all( _window );
 }
 
 GtkWidget* MainWindow::build()
