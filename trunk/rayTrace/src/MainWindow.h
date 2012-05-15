@@ -15,6 +15,7 @@ class MainWindow
 public:
     MainWindow();
     virtual ~MainWindow();
+    void show();
 
 private:
     GtkWidget* build();
