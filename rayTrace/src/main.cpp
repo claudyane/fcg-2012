@@ -10,6 +10,7 @@ int main( int argc, char** argv )
     gtk_gl_init( &argc, &argv );
     
     MainWindow* window = new MainWindow();
+    window->show();
     
     gtk_main();
     
