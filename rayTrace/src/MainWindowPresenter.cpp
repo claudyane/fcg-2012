@@ -6,11 +6,12 @@
  */
 
 #include "MainWindowPresenter.h"
+#include "MainWindow.h"
 
 MainWindowPresenter::MainWindowPresenter()
 {
-    // TODO Auto-generated constructor stub
-    
+    _image = NULL;
+    _scene  = NULL;
 }
 
 MainWindowPresenter::~MainWindowPresenter()
@@ -18,3 +19,7 @@ MainWindowPresenter::~MainWindowPresenter()
     // TODO Auto-generated destructor stub
 }
 
+Image* MainWindowPresenter::getImage()
+{
+    return _image;
+}

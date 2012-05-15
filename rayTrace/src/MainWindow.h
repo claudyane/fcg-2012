@@ -10,6 +10,8 @@
 
 #include <gtk/gtk.h>
 
+#include "MainWindowPresenter.h"
+
 class MainWindow
 {
 public:
@@ -26,6 +28,7 @@ private:
 
     GtkWidget* _window;
     GtkWidget* _rayTraceCanvas;
+    MainWindowPresenter* _presenter;
 };
 
 #endif /* MAINWINDOW_H_ */
