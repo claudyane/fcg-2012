@@ -5,6 +5,8 @@
  *      Author: walther
  */
 
+#include <cmath>
+
 #include "Sphere.h"
 #include "Object.h"
 
@@ -22,5 +24,22 @@ Sphere::~Sphere()
 
 bool Sphere::computeRayIntersection( Ray ray, Vector4D & point )
 {
-    return false;
+    double a = dot( ray.direction, ray.direction );
+    double b = dot( 2 * ray.direction, ray.origin - _center );
+    double c = dot( ray.origin - _center, ray.origin - _center ) - (_radius * _radius);
+    
+    double delta = ( b * b ) - 4 * a * c; //b² - 4ac
+    if( delta < 0 ) return false; //if there are no real solutions, there's no intersection
+    
+    double t = ( -b - sqrt( delta ) ) / ( 2 * a );
+    
+    if (t < 0)
+    {
+        t = ( -b + sqrt( delta ) ) / ( 2 * a );
+        if (t < 0) return false; //if t is negative the intersection was behind the camera
+    }
+    
+    point = ray.origin + ( t * ray.direction );
+    
+    return true;
 }
