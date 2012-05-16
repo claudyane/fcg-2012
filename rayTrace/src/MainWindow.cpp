@@ -12,6 +12,7 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkgl.h>
 #include <GL/gl.h>
+#include <iostream>
 
 MainWindow::MainWindow()
 {
@@ -37,17 +38,48 @@ GtkWidget* MainWindow::build()
     GtkWidget* mainBox = gtk_vbox_new( FALSE, 10 );
     gtk_container_add( GTK_CONTAINER(window), mainBox );
 
-    _rayTraceCanvas = buildRayTraceCanvas();
-    gtk_box_pack_start_defaults( GTK_BOX(mainBox), _rayTraceCanvas );
+    GtkWidget* buttonsBox = buildButtonsBox();
+    gtk_box_pack_start_defaults( GTK_BOX(mainBox), buttonsBox );
+    
+    GtkWidget* canvasBox = buildCanvasBox();
+    gtk_box_pack_start_defaults( GTK_BOX(mainBox), canvasBox );
 
     return window;
+}
+
+
+GtkWidget* MainWindow::buildButtonsBox()
+{
+    GtkWidget* buttonsBox = gtk_hbox_new(  FALSE, 5 );
+    
+    // creating button to load a scene
+    GtkWidget* openButton = gtk_button_new_with_label( "Open Scene" );
+    gtk_box_pack_start_defaults( GTK_BOX(buttonsBox), openButton );
+    g_signal_connect( openButton, "clicked", G_CALLBACK( cb_openScene ), this );
+    
+    //creating button to render the loaded scene
+    GtkWidget* renderButton = gtk_button_new_with_label( "Render" );
+    gtk_box_pack_start_defaults( GTK_BOX(buttonsBox), renderButton );
+    g_signal_connect( renderButton, "clicked", G_CALLBACK( cb_render ), this );
+    
+    return buttonsBox;
+}
+
+GtkWidget* MainWindow::buildCanvasBox()
+{
+    GtkWidget* canvasBox = gtk_hbox_new( FALSE, 0 );
+    
+    _rayTraceCanvas = buildRayTraceCanvas();
+    gtk_box_pack_start_defaults( GTK_BOX(canvasBox), _rayTraceCanvas );
+    
+    return canvasBox;
 }
 
 GtkWidget* MainWindow::buildRayTraceCanvas()
 {
     // Create the canvas and set  it's size
     GtkWidget* rayTraceCanvas = gtk_drawing_area_new();
-    gtk_drawing_area_size( GTK_DRAWING_AREA(rayTraceCanvas), 800, 600 );
+    gtk_drawing_area_size( GTK_DRAWING_AREA(rayTraceCanvas), 100, 100 );
 
     // OpenGL configuration for the canvas
     GdkGLConfig* glconfig = gdk_gl_config_new_by_mode( static_cast<GdkGLConfigMode>( GDK_GL_MODE_RGB | GDK_GL_MODE_DEPTH | GDK_GL_MODE_DOUBLE ) );
@@ -131,4 +163,14 @@ gboolean MainWindow::cb_configGLCanvas( GtkWidget* canvas, GdkEventConfigure* ev
     gdk_gl_drawable_gl_end( glDrawable );
 
     return true;
+}
+
+void MainWindow::cb_openScene( GtkWidget* button, gpointer user_data )
+{
+    std::cout << "open ALL the scenes!!!\n";
+}
+
+void MainWindow::cb_render( GtkWidget* button, gpointer user_data )
+{
+    std::cout << "render ALL the pixels!!!\n";
 }
