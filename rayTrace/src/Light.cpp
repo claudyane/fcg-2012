@@ -8,10 +8,12 @@
 #include "Light.h"
 
 
-Light::Light( Vector4D position, Vector4D diffuse )
+Light::Light( Vector4D position, float r, float g, float b )
 {
     _position = position;
-    _diffuse  = diffuse;
+    _diffuse[0] = r;
+    _diffuse[1] = g;
+    _diffuse[2] = b;
 }
 
 

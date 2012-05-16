@@ -13,15 +13,13 @@
 class Light
 {
     public:
-
-        Light( Vector4D position, Vector4D diffuse );
-
+        Light( Vector4D position, float r, float g, float b );
         virtual ~Light();
-
+        
     private:
 
         Vector4D _position;
-        Vector4D _diffuse;
+        float _diffuse[3];
 };
 
 #endif /* LIGHT_H_ */

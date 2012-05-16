@@ -53,7 +53,7 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
     char textureFilename[1024];
 
     Vector4D lightPosition;
-    Vector4D lightDiffuse;
+    float lightDiffuse[3];
 
     double radius;
     Vector4D position1, position2, position3;
@@ -93,10 +93,10 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
         {
 
         }
-        else if( sscanf( buffer, "LIGHT %lf %lf %lf %lf %lf %lf\n", &lightPosition.x, &lightPosition.y, &lightPosition.z,
-                &lightDiffuse.x, &lightDiffuse.y, &lightDiffuse.z ) == 6 )
+        else if( sscanf( buffer, "LIGHT %lf %lf %lf %f %f %f\n", &lightPosition.x, &lightPosition.y, &lightPosition.z,
+                &lightDiffuse[0], &lightDiffuse[1], &lightDiffuse[2] ) == 6 )
         {
-            Light* light = new Light( lightPosition, lightDiffuse );
+            Light* light = new Light( lightPosition, lightDiffuse[0], lightDiffuse[1], lightDiffuse[2] );
             scene->addLight( light );
         }
         else if( sscanf( buffer, "SPHERE %d %lf %lf %lf %lf\n", &material, &radius, &position1.x,&position1.y,&position1.z ) == 5 )
