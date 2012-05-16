@@ -41,6 +41,10 @@ bool MainWindowPresenter::buildScene( std::string filename )
     
     Rt4FileReader reader;
     reader.loadScene( filename, _scene );
+    
+    //TODO: remover
+    renderScene();
+    
     return true;
 }
 

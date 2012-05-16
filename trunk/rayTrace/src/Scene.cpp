@@ -82,11 +82,14 @@ void Scene::addObject( Object* object )
 
 
 void Scene::render( Image* image )
-{
-    if( !image ) return;
+{ 
+    if (image)
+        imgDestroy( image );
     
-    int width  = imgGetWidth( image );
-    int height = imgGetHeight( image );
+    int width, height;
+    _camera->getScreenSize( width, height );
+    
+    image = imgCreate( width, height, 3 );
     int numObjects = _objects.size();
     
     for (int x = 0; x < width; ++x)
