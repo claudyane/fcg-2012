@@ -80,6 +80,14 @@ void Scene::addObject( Object* object )
 
 
 
+Material* Scene::getMaterial( int index )
+{
+    return _materials[0];
+}
+
+
+
+
 
 
 

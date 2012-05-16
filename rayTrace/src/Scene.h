@@ -30,6 +30,8 @@ class Scene
 
         void addObject( Object* object );
 
+        Material* getMaterial( int index );
+
     private:
 
         std::vector<Object*> _objects;

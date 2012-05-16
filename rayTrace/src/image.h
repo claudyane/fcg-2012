@@ -220,7 +220,7 @@ int imgWriteBMP(char *filename, Image* bmp);
  *
  *	@return imagem criada.
  */
-Image* imgReadBMP (char *filename);
+Image* imgReadBMP ( const char *filename);
 
 
 /**
@@ -312,9 +312,9 @@ Image* imgBinOtsu(Image* img_cgrey);
 *	Reduz a imagem colorida para 2 tons (B&W ou Preto e Branco). 
 *
 *   Baseado no artigo "Barcode Readers using the Camera Device in Mobile Phones", de E. Ohbuchi,       
-*   disponível em http://portal.acm.org/citation.cfm?id=1033123                                      
+*   disponível em http://portal.acm.org/citation.cfm?id=1033123
 *   Artigo citado em "Automatic Recognition Algorithm of Quick Response Code Based on Embedded System",
-*   de Y. Liu e M. Liu, disponível em http://portal.acm.org/citation.cfm?id=1173502                    
+*   de Y. Liu e M. Liu, disponível em http://portal.acm.org/citation.cfm?id=1173502
 *
 *	@param img_cor    Handle para uma imagem em tons de cinza.
 *
