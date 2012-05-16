@@ -6,7 +6,7 @@
  */
 
 #include "Scene.h"
-#include "image.h"
+#include "Image.h"
 
 Scene::Scene()
 {
