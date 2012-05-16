@@ -47,7 +47,6 @@ GtkWidget* MainWindow::build()
     return window;
 }
 
-
 GtkWidget* MainWindow::buildButtonsBox()
 {
     GtkWidget* buttonsBox = gtk_hbox_new(  FALSE, 5 );
@@ -172,5 +171,7 @@ void MainWindow::cb_openScene( GtkWidget* button, gpointer user_data )
 
 void MainWindow::cb_render( GtkWidget* button, gpointer user_data )
 {
-    std::cout << "render ALL the pixels!!!\n";
+    MainWindow* window = (MainWindow*)user_data;
+    window->_presenter->renderScene();
+    gtk_widget_queue_draw( window->_rayTraceCanvas );
 }
