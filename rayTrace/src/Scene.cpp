@@ -102,7 +102,7 @@ Image* Scene::render()
                 if (_objects[objectId]->computeRayIntersection( ray, point, normal ))
                 {
                     float r, g, b, a;
-                    _objects[objectId]->getColor( point, r, g, b, a );
+                    _objects[objectId]->getColor( r, g, b, a );
                     imgSetPixel3f( image, x, y, r, g, b );
                 }
             }

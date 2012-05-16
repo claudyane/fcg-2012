@@ -95,7 +95,13 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
         else if( sscanf( buffer, "MATERIAL %lf %lf %lf %lf %lf %lf %lf %f %f %f %s\n", &diffuse.x, &diffuse.y, &diffuse.z,
                 &specular.x, &specular.y, &specular.z, &specularExponent, &reflective, &refractive, &opacity, textureFilename ) == 11 )
         {
-            Material* material = new Material( diffuse.x, diffuse.y, diffuse.z, specular.x, specular.y, specular.z, specularExponent );
+            Material* material = new Material( diffuse.x/255.0f, 
+                                               diffuse.y/255.0f,
+                                               diffuse.z/255.0f,
+                                               specular.x/255.0f, 
+                                               specular.y/255.0f, 
+                                               specular.z/255.0f, 
+                                               specularExponent );
             material->setReflectionFactor( reflective );
             material->setRefractionFactor( refractive );
             material->setOpacity( opacity );
