@@ -6,7 +6,7 @@
  */
 
 #include "MainWindow.h"
-#include "image.h"
+#include "Image.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>

@@ -8,7 +8,8 @@
 #ifndef MAINWINDOWPRESENTER_H_
 #define MAINWINDOWPRESENTER_H_
 
-#include "image.h"
+#include "Image.h"
+
 //stub forward declaration
 class Scene;
 
