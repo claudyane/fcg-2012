@@ -29,6 +29,7 @@ private:
     static gboolean cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event, gpointer user_data );
     static void cb_openScene( GtkWidget* button, gpointer user_data );
     static void cb_render( GtkWidget* button, gpointer user_data );
+    static gboolean cb_deleteWindow( GtkWidget* widget, GdkEvent* event, gpointer data );
 
     GtkWidget* _window;
     GtkWidget* _rayTraceCanvas;

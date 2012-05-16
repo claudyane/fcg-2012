@@ -28,12 +28,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::show()
 {
-    gtk_widget_show_all( _window );
+    gtk_main();
 }
 
 GtkWidget* MainWindow::build()
 {
     GtkWidget* window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+    g_signal_connect( window, "delete-event", G_CALLBACK (cb_deleteWindow), window );
 
     GtkWidget* mainBox = gtk_vbox_new( FALSE, 10 );
     gtk_container_add( GTK_CONTAINER(window), mainBox );
@@ -43,6 +44,8 @@ GtkWidget* MainWindow::build()
     
     GtkWidget* canvasBox = buildCanvasBox();
     gtk_box_pack_start_defaults( GTK_BOX(mainBox), canvasBox );
+
+    gtk_widget_show_all( window );
 
     return window;
 }
@@ -166,7 +169,44 @@ gboolean MainWindow::cb_configGLCanvas( GtkWidget* canvas, GdkEventConfigure* ev
 
 void MainWindow::cb_openScene( GtkWidget* button, gpointer user_data )
 {
-    std::cout << "open ALL the scenes!!!\n";
+    GtkWidget* fileChooser;
+    gchar* filename = 0;
+    MainWindow* window = (MainWindow*) user_data;
+
+    fileChooser = gtk_file_chooser_dialog_new("Abrir Arquivo",
+                                               GTK_WINDOW (window->_window),
+                                               GTK_FILE_CHOOSER_ACTION_OPEN,
+                                               GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                               GTK_STOCK_OPEN, GTK_RESPONSE_OK,
+                                               NULL);
+
+    GtkFileFilter* filter = gtk_file_filter_new();
+    gtk_file_filter_set_name( GTK_FILE_FILTER (filter), "(*.rt4, *.RT4)");
+    gtk_file_filter_add_pattern( GTK_FILE_FILTER (filter), "*.rt4" );
+    gtk_file_filter_add_pattern( GTK_FILE_FILTER (filter), "*.RT4" );
+    gtk_file_chooser_add_filter( GTK_FILE_CHOOSER (fileChooser), GTK_FILE_FILTER (filter) );
+
+    if (gtk_dialog_run( GTK_DIALOG (fileChooser) ) == GTK_RESPONSE_OK)
+    {
+        filename = gtk_file_chooser_get_filename( GTK_FILE_CHOOSER (fileChooser) );
+
+        if (!window->_presenter->buildScene( filename ))
+        {
+            printf("Cannot open file %s\n", filename );
+        }
+        else
+        {
+            int width  = imgGetWidth( window->_presenter->getImage() );
+            int heigth = imgGetHeight( window->_presenter->getImage()  );
+
+            gtk_drawing_area_size( GTK_DRAWING_AREA (window->_rayTraceCanvas) , width, heigth );
+            gtk_window_resize( GTK_WINDOW (window->_window), width, heigth );
+        }
+
+        g_free( filename );
+    }
+
+    gtk_widget_destroy( fileChooser );
 }
 
 void MainWindow::cb_render( GtkWidget* button, gpointer user_data )
@@ -174,4 +214,13 @@ void MainWindow::cb_render( GtkWidget* button, gpointer user_data )
     MainWindow* window = (MainWindow*)user_data;
     window->_presenter->renderScene();
     gtk_widget_queue_draw( window->_rayTraceCanvas );
+}
+
+
+
+gboolean MainWindow::cb_deleteWindow( GtkWidget* widget, GdkEvent* event, gpointer data )
+{
+    gtk_main_quit();
+
+    return TRUE;
 }

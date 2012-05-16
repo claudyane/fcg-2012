@@ -8,6 +8,7 @@
 #ifndef MAINWINDOWPRESENTER_H_
 #define MAINWINDOWPRESENTER_H_
 
+#include <string>
 #include "Image.h"
 
 //stub forward declaration
@@ -18,7 +19,7 @@ class MainWindowPresenter
 public:
     MainWindowPresenter();
     virtual ~MainWindowPresenter();
-    void buildScene();
+    bool buildScene( std::string filename );
     void renderScene();
     Image* getImage();
     
