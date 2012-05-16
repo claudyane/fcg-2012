@@ -13,10 +13,13 @@
 class Light
 {
     public:
-        Light();
+
+        Light( Vector4D position, Vector4D diffuse );
+
         virtual ~Light();
 
     private:
+
         Vector4D _position;
         Vector4D _diffuse;
 };

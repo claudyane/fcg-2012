@@ -20,6 +20,11 @@ public:
     Camera( Vector4D eye, Vector4D center, Vector4D up, double fovy, double near, int width, int height );
 
     /**
+     * Copy constructor
+     */
+    Camera( const Camera& copy );
+
+    /**
      * Desctructor
      */
     virtual ~Camera();
