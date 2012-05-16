@@ -35,6 +35,10 @@ Image* MainWindowPresenter::getImage()
 
 bool MainWindowPresenter::buildScene( std::string filename )
 {
+    if( _scene ) delete _scene;
+    
+    _scene = new Scene();
+    
     Rt4FileReader reader;
     reader.loadScene( filename, _scene );
     return true;

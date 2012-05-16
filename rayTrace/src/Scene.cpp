@@ -10,7 +10,7 @@
 
 Scene::Scene()
 {
-    _camera = 0;
+    _camera = NULL;
 
 }
 
@@ -45,7 +45,7 @@ Scene::~Scene()
 
 void Scene::setCamera( Camera* camera )
 {
-    if (_camera)
+    if (_camera != NULL)
         delete _camera;
 
     _camera = camera;
