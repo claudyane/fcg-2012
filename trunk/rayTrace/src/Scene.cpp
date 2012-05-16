@@ -80,6 +80,13 @@ void Scene::addObject( Object* object )
 
 
 
+void Scene::addMaterial( Material* material )
+{
+    _materials.push_back( material );
+}
+
+
+
 Material* Scene::getMaterial( int index )
 {
     return _materials[0];
