@@ -45,7 +45,7 @@
 #include <omp.h>
 #include <iostream>
 
-#include "image.h"
+#include "Image.h"
 
 #define ROUND(_) (int)floor( (_) + 0.5 )
 #define N_CORES   256

@@ -6,7 +6,6 @@
  */
 
 #include "Material.h"
-#include "image.h"
 
 Material::Material( float diffuseRed, float diffuseGreen, float diffuseBlue, float specularRed, float specularGreen, float specularBlue, float specularExponent )
 {

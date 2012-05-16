@@ -8,7 +8,7 @@
 #ifndef MATERIAL_H_
 #define MATERIAL_H_
 
-#include "image.h"
+#include "Image.h"
 
 class Material
 {
