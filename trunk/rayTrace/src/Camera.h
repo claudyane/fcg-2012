@@ -42,6 +42,8 @@ public:
      * @return Ray that starts in the eye position and goes through the pixel.
      */
     Ray computeRay( int x, int y );
+    
+    void getScreenSize( int& width, int& height );
 
 private:
     /** Position of the camera on world space */

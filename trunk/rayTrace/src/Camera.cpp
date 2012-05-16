@@ -76,3 +76,10 @@ Ray Camera::computeRay( int x, int y )
     return ray;
 }
 
+
+
+void Camera::getScreenSize( int& width, int& height )
+{
+    width = _width;
+    height= _height;
+}
