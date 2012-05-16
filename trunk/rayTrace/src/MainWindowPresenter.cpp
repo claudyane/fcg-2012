@@ -8,6 +8,7 @@
 #include "MainWindowPresenter.h"
 #include "MainWindow.h"
 #include "Scene.h"
+#include "Rt4FileReader.h"
 
 
 MainWindowPresenter::MainWindowPresenter()
@@ -34,7 +35,9 @@ Image* MainWindowPresenter::getImage()
 
 bool MainWindowPresenter::buildScene( std::string filename )
 {
-    return false;
+    Rt4FileReader reader;
+    reader.loadScene( filename, _scene );
+    return true;
 }
 
 
