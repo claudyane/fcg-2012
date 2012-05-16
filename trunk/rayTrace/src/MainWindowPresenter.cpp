@@ -52,5 +52,8 @@ bool MainWindowPresenter::buildScene( std::string filename )
 
 void MainWindowPresenter::renderScene()
 {
-    _scene->render( _image );
+    if (_image)
+        imgDestroy( _image );
+        
+    _image = _scene->render();
 }
