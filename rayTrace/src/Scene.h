@@ -30,6 +30,8 @@ class Scene
 
         void addObject( Object* object );
 
+        void addMaterial( Material* material );
+
         Material* getMaterial( int index );
 
     private:
