@@ -694,7 +694,7 @@ typedef long int LONG;
 typedef unsigned long int DWORD;
 
 
-Image* imgReadBMP(char *filename)
+Image* imgReadBMP( const char *filename)
 {
    FILE  *filePtr;            /* ponteiro do arquivo */
    Image*image;            /* imagem a ser criada */

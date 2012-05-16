@@ -71,10 +71,12 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
         {
              //Ignore File Version Information
         }
+
         else if(sscanf(buffer, "SOFTSHADOW %f %f", &aux, &aux) == 2)
         {
            // TODO:
         }
+
         else if( sscanf( buffer, "CAMERA %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d\n",
                 &eye.x, &eye.y, &eye.z, &center.x, &center.y, &center.z, &up.x, &up.y, &up.z, &fovy, &near, &far,
                 &width, &height ) == 14)
@@ -82,33 +84,41 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
             Camera* camera = new Camera( eye, center, up, fovy, near, width, height );
             scene->setCamera( camera );
         }
+
         else if( sscanf( buffer, "SCENE %lf %lf %lf %lf %lf %lf %s\n", &backgroundColor.x, &backgroundColor.y,
                 &backgroundColor.z, &ambientLight.x, &ambientLight.y, &ambientLight.z, backgroundFilename ) == 7 )
         {
             scene->setAmbientLight( ambientLight );
             scene->setBackgroundColor( backgroundColor );
         }
+
         else if( sscanf( buffer, "MATERIAL %lf %lf %lf %lf %lf %lf %lf %f %f %f %s\n", &diffuse.x, &diffuse.y, &diffuse.z,
                 &specular.x, &specular.y, &specular.z, &specularExponent, &reflective, &refractive, &opacity, textureFilename ) == 11 )
         {
-
+            // TODO:
         }
+
         else if( sscanf( buffer, "LIGHT %lf %lf %lf %f %f %f\n", &lightPosition.x, &lightPosition.y, &lightPosition.z,
                 &lightDiffuse[0], &lightDiffuse[1], &lightDiffuse[2] ) == 6 )
         {
             Light* light = new Light( lightPosition, lightDiffuse[0], lightDiffuse[1], lightDiffuse[2] );
             scene->addLight( light );
         }
+
         else if( sscanf( buffer, "SPHERE %d %lf %lf %lf %lf\n", &material, &radius, &position1.x,&position1.y,&position1.z ) == 5 )
         {
             Sphere* sphere = new Sphere( position1.x, position1.y, position1.z, radius );
-            // TODO: tratar material
+            sphere->setMaterial( scene->getMaterial( material ) );
+
+            scene->addObject( sphere );
         }
+
         else if( sscanf( buffer, "TRIANGLE %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", &material,
                 &position1.x, &position1.y, &position1.z, &position2.x, &position2.y, &position2.z, &position3.x, &position3.y,
                 &position3.z, &texture1.x, &texture1.y, &texture2.x, &texture2.y, &texture3.x, &texture3.y) == 16 )
         {
         }
+
         else if( sscanf( buffer, "BOX %d %lf %lf %lf %lf %lf %lf\n", &material, &position1.x, &position1.y, &position1.z,
                 &position2.x, &position2.y, &position2.z ) == 7 )
         {
