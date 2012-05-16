@@ -6,6 +6,7 @@
  */
 
 #include "Scene.h"
+#include "image.h"
 
 Scene::Scene()
 {
@@ -80,6 +81,37 @@ void Scene::addObject( Object* object )
 
 
 
+void Scene::render( Image* image )
+{
+    if( !image ) return;
+    
+    int width  = imgGetWidth( image );
+    int height = imgGetHeight( image );
+    int numObjects = _objects.size();
+    
+    for (int x = 0; x < width; ++x)
+    {
+        for (int y = 0; y < height; ++y)
+        {
+            Ray ray = _camera->computeRay( x, y );
+            
+            for (int objectId = 0; objectId < numObjects; ++objectId)
+            {
+                Vector4D point;
+                Vector4D normal;
+                if (_objects[objectId]->computeRayIntersection( ray, point, normal ))
+                {
+                    float r, g, b, a;
+                    _objects[objectId]->getColor( point, r, g, b, a );
+                    imgSetPixel3f( image, x, y, r, g, b );
+                }
+            }
+        }
+    }
+}
+
+
+
 void Scene::addMaterial( Material* material )
 {
     _materials.push_back( material );
@@ -91,11 +123,3 @@ Material* Scene::getMaterial( int index )
 {
     return _materials[0];
 }
-
-
-
-
-
-
-
-
