@@ -16,7 +16,7 @@ class Object
 public:
     virtual ~Object(){}
     virtual bool computeRayIntersection( Ray ray, Vector4D& point, Vector4D& normal ) = 0;
-    virtual void getColor( Vector4D& point, float& r, float& g, float& b, float& a ) = 0;
+    virtual void getColor( float& r, float& g, float& b, float& a ) = 0;
 };
 
 #endif /* OBJECT_H_ */

@@ -18,7 +18,7 @@ public:
 
     virtual ~Sphere();
     bool computeRayIntersection( Ray ray, Vector4D& point, Vector4D& normal );
-    void getColor( Vector4D& point, float& r, float& g, float& b, float& a );
+    void getColor( float& r, float& g, float& b, float& a );
     bool computeRayIntersection( Ray ray, Vector4D& point );
     void setMaterial( Material* material );
 

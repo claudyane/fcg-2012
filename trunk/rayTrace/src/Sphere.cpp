@@ -54,26 +54,10 @@ bool Sphere::computeRayIntersection( Ray ray, Vector4D & point, Vector4D& normal
 
 
 
-void Sphere::getColor( Vector4D& point, float& r, float& g, float& b, float& a )
+void Sphere::getColor( float& r, float& g, float& b, float& a )
 {
-    if ( point.norm2() <= ( _radius * _radius ) )
-    {
-        _material->getDiffuse( r, g, b );
-        a = _material->getOpacity();
-    }
-    else
-    {
-        r = 0.0f;
-        g = 0.0f;
-        b = 0.0f;
-        a = 0.0f;
-    }
-    
-    r = 1.0f;
-    g = 1.0f;
-    b = 1.0f;
-    a = 1.0f;
-    
+    _material->getDiffuse( r, g, b );
+    a = _material->getOpacity();
 }
 
 
