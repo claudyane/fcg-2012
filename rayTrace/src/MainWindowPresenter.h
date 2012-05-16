@@ -19,7 +19,7 @@ public:
     MainWindowPresenter();
     virtual ~MainWindowPresenter();
     void buildScene();
-    
+    void renderScene();
     Image* getImage();
     
 private:

@@ -7,6 +7,7 @@
 
 #include "MainWindowPresenter.h"
 #include "MainWindow.h"
+#include "Scene.h"
 
 MainWindowPresenter::MainWindowPresenter()
 {
@@ -22,4 +23,9 @@ MainWindowPresenter::~MainWindowPresenter()
 Image* MainWindowPresenter::getImage()
 {
     return _image;
+}
+
+void MainWindowPresenter::renderScene()
+{
+    _scene->render( _image );
 }
