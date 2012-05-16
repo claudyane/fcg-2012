@@ -44,6 +44,16 @@ Vector4D::~Vector4D()
 
 
 
+void Vector4D::set(double x, double y, double z, double w)
+{
+    this->x = x;
+    this->y = y;
+    this->z = z;
+    this->w = w;
+}
+
+
+
 double Vector4D::norm2()
 {
     return x*x + y*y + z*z;
