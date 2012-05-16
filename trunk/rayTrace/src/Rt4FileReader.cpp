@@ -8,6 +8,9 @@
 #include "Rt4FileReader.h"
 #include "Vector4D.h"
 #include <cstdio>
+#include "Camera.h"
+#include "Sphere.h"
+#include "Light.h"
 
 Rt4FileReader::Rt4FileReader()
 {
@@ -39,7 +42,7 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
     int height;
 
     Vector4D backgroundColor;
-    Vector4D ambientColor;
+    Vector4D ambientLight;
     char backgroundFilename[1024];
 
 
@@ -50,7 +53,7 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
     char textureFilename[1024];
 
     Vector4D lightPosition;
-    Vector4D lightdiffuse;
+    Vector4D lightDiffuse;
 
     double radius;
     Vector4D position1, position2, position3;
@@ -76,12 +79,14 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
                 &eye.x, &eye.y, &eye.z, &center.x, &center.y, &center.z, &up.x, &up.y, &up.z, &fovy, &near, &far,
                 &width, &height ) == 14)
         {
-
+            Camera* camera = new Camera( eye, center, up, fovy, near, width, height );
+            scene->setCamera( camera );
         }
         else if( sscanf( buffer, "SCENE %lf %lf %lf %lf %lf %lf %s\n", &backgroundColor.x, &backgroundColor.y,
-                &backgroundColor.z, &ambientColor.x, &ambientColor.y, &ambientColor.z, backgroundFilename ) == 7 )
+                &backgroundColor.z, &ambientLight.x, &ambientLight.y, &ambientLight.z, backgroundFilename ) == 7 )
         {
-
+            scene->setAmbientLight( ambientLight );
+            scene->setBackgroundColor( backgroundColor );
         }
         else if( sscanf( buffer, "MATERIAL %lf %lf %lf %lf %lf %lf %lf %f %f %f %s\n", &diffuse.x, &diffuse.y, &diffuse.z,
                 &specular.x, &specular.y, &specular.z, &specularExponent, &reflective, &refractive, &opacity, textureFilename ) == 11 )
@@ -89,11 +94,15 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
 
         }
         else if( sscanf( buffer, "LIGHT %lf %lf %lf %lf %lf %lf\n", &lightPosition.x, &lightPosition.y, &lightPosition.z,
-                &lightdiffuse.x, &lightdiffuse.y, &lightdiffuse.z ) == 6 )
+                &lightDiffuse.x, &lightDiffuse.y, &lightDiffuse.z ) == 6 )
         {
+            Light* light = new Light( lightPosition, lightDiffuse );
+            scene->addLight( light );
         }
         else if( sscanf( buffer, "SPHERE %d %lf %lf %lf %lf\n", &material, &radius, &position1.x,&position1.y,&position1.z ) == 5 )
         {
+            Sphere* sphere = new Sphere( position1.x, position1.y, position1.z, radius );
+            // TODO: tratar material
         }
         else if( sscanf( buffer, "TRIANGLE %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", &material,
                 &position1.x, &position1.y, &position1.z, &position2.x, &position2.y, &position2.z, &position3.x, &position3.y,

@@ -7,11 +7,14 @@
 
 #include "Light.h"
 
-Light::Light()
-{
-    // TODO Auto-generated constructor stub
 
+Light::Light( Vector4D position, Vector4D diffuse )
+{
+    _position = position;
+    _diffuse  = diffuse;
 }
+
+
 
 Light::~Light()
 {

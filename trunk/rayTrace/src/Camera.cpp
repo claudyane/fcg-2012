@@ -24,10 +24,33 @@ Camera::Camera( Vector4D eye, Vector4D center, Vector4D up, double fovy, double 
     computeDerivedParameters();
 }
 
+
+
+Camera::Camera( const Camera& copy )
+{
+    this->_eye    = copy._eye;
+    this->_up     = copy._up;
+    this->_center = copy._center;
+    this->_fovy   = copy._fovy;
+    this->_near   = copy._near;
+    this->_far    = copy._far;
+    this->_width  = copy._width;
+    this->_height = copy._height;
+    this->_a      = copy._a;
+    this->_b      = copy._b;
+    this->_xe     = copy._xe;
+    this->_ye     = copy._ye;
+    this->_ze     = copy._ze;
+}
+
+
+
 Camera::~Camera()
 {
     // TODO Auto-generated destructor stub
 }
+
+
 
 void Camera::computeDerivedParameters()
 {
@@ -41,6 +64,8 @@ void Camera::computeDerivedParameters()
     _ye = cross( _ze, _xe );
 }
 
+
+
 Ray Camera::computeRay( int x, int y )
 {
     Ray ray;
@@ -50,3 +75,4 @@ Ray Camera::computeRay( int x, int y )
 
     return ray;
 }
+
