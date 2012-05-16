@@ -30,6 +30,8 @@ class Scene
 
         void addObject( Object* object );
 
+        void render( Image* image );
+
         void addMaterial( Material* material );
 
         Material* getMaterial( int index );
