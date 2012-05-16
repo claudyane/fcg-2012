@@ -20,6 +20,14 @@ Light::Light( Vector4D position, float r, float g, float b )
 
 Light::~Light()
 {
-    // TODO Auto-generated destructor stub
+    //do nothing
 }
 
+
+
+void Light::getDiffuse(float& r, float& g, float& b)
+{
+    r = _diffuse[0];
+    g = _diffuse[1];
+    b = _diffuse[2];
+}
