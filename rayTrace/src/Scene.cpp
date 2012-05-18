@@ -94,18 +94,25 @@ Image* Scene::render()
         for (int y = 0; y < height; ++y)
         {
             Ray ray = _camera->computeRay( x, y );
+            double minimumT = 1.0;
+            float r, g, b, a;
             
             for (int objectId = 0; objectId < numObjects; ++objectId)
             {
-                Vector4D point;
+                double intersectionT;
                 Vector4D normal;
-                if (_objects[objectId]->computeRayIntersection( ray, point, normal ))
+                
+                if (_objects[objectId]->computeRayIntersection( ray, intersectionT, normal ))
                 {
-                    float r, g, b, a;
-                    _objects[objectId]->getColor( r, g, b, a );
-                    imgSetPixel3f( image, x, y, r, g, b );
+                    if (intersectionT < minimumT)
+                    {
+                        minimumT = intersectionT;
+                        _objects[objectId]->getColor( r, g, b, a );
+                    }
                 }
+                
             }
+            imgSetPixel3f( image, x, y, r, g, b );
         }
     }
     
