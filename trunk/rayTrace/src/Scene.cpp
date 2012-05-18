@@ -89,32 +89,26 @@ Image* Scene::render()
     _camera->getScreenSize( width, height );
     
     Image* image = imgCreate( width, height, 3 );
-    int numObjects = _objects.size();
     
     for (int x = 0; x < width; ++x)
     {
         for (int y = 0; y < height; ++y)
         {
             Ray ray = _camera->computeRay( x, y );
-            double minimumT = DBL_MAX;
-            float r, g, b, a;
+            Vector4D point, normal;
+            int objectId;
             
-            for (int objectId = 0; objectId < numObjects; ++objectId)
+            if (computeNearestRayIntersection( ray, point, normal, objectId))
             {
-                double intersectionT;
-                Vector4D normal;
-                
-                if (_objects[objectId]->computeRayIntersection( ray, intersectionT, normal ))
-                {
-                    if (intersectionT < minimumT)
-                    {
-                        minimumT = intersectionT;
-                        _objects[objectId]->getColor( r, g, b, a );
-                    }
-                }
-                
+                float r, g, b, a;       
+                Object* selectedObject = _objects[objectId];
+                selectedObject->getColor( r, g, b, a );
+                imgSetPixel3f( image, x, y, r, g, b );
             }
-            imgSetPixel3f( image, x, y, r, g, b );
+            else
+            {
+                imgSetPixel3f( image, x, y, 0.0f, 0.0f, 0.0f );
+            }            
         }
     }
     
@@ -132,7 +126,7 @@ void Scene::addMaterial( Material* material )
 
 Material* Scene::getMaterial( int index )
 {
-    return _materials[0];
+    return _materials[index];
 }
 
 
@@ -140,7 +134,9 @@ Material* Scene::getMaterial( int index )
 bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& normal, int& objectID )
 {
     int nObjects = _objects.size();
-    double tMax = DBL_MAX;
+    double tMin = DBL_MAX;
+    Vector4D nearestNormal;
+    int nearestId;
     
     for (int objID = 0; objID < nObjects; ++objID)
     {
@@ -149,9 +145,22 @@ bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& n
         Object* object = _objects[objID];
         bool intersected = object->computeRayIntersection( ray, t, currentNormal );
         
-        if (intersected && (t < tMax))
+        if (intersected && (t < tMin))
         {
-            tMax = t;
+            tMin = t;
+            nearestId = objID;
+            nearestNormal = currentNormal;
         }
     }
+    
+    if (tMin < DBL_MAX)
+    {
+        normal = nearestNormal;
+        objectID = nearestId;
+        point = ray.origin + tMin*ray.direction;
+        
+        return true;
+    }
+    
+    return false;
 }
