@@ -7,6 +7,7 @@
 
 #include "Scene.h"
 #include "Image.h"
+#include "MainWindowPresenter.h"
 #include <cfloat>
 
 Scene::Scene()
@@ -132,4 +133,25 @@ void Scene::addMaterial( Material* material )
 Material* Scene::getMaterial( int index )
 {
     return _materials[0];
+}
+
+
+
+bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& normal, int& objectID )
+{
+    int nObjects = _objects.size();
+    double tMax = DBL_MAX;
+    
+    for (int objID = 0; objID < nObjects; ++objID)
+    {
+        double t;
+        Vector4D currentNormal;
+        Object* object = _objects[objID];
+        bool intersected = object->computeRayIntersection( ray, t, currentNormal );
+        
+        if (intersected && (t < tMax))
+        {
+            tMax = t;
+        }
+    }
 }
