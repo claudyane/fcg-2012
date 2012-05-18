@@ -7,6 +7,7 @@
 
 #include "Scene.h"
 #include "Image.h"
+#include <cfloat>
 
 Scene::Scene()
 {
@@ -82,7 +83,7 @@ void Scene::addObject( Object* object )
 
 
 Image* Scene::render()
-{     
+{
     int width, height;
     _camera->getScreenSize( width, height );
     
@@ -94,7 +95,7 @@ Image* Scene::render()
         for (int y = 0; y < height; ++y)
         {
             Ray ray = _camera->computeRay( x, y );
-            double minimumT = 1.0;
+            double minimumT = DBL_MAX;
             float r, g, b, a;
             
             for (int objectId = 0; objectId < numObjects; ++objectId)
