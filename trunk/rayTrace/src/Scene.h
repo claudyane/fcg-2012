@@ -36,7 +36,7 @@ class Scene
 
         Material* getMaterial( int index );
         
-        bool computeNearestRayIntersection( Vector4D& point, Vector4D& normal, int& objectID );
+        bool computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& normal, int& objectID );
 
     private:
 
