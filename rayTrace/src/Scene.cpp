@@ -111,9 +111,9 @@ void Scene::computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut )
 {
     Vector4D point;
     Vector4D normal;
-    int objectId;
+    int objectID;
     
-    if (!computeNearestRayIntersection( ray, point, normal, objectId ))
+    if (!computeNearestRayIntersection( ray, point, normal, objectID ))
     {
         // no interceptions
         rOut = _backgroundColor.x;
@@ -123,8 +123,7 @@ void Scene::computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut )
     else
     {
         // Get shaded color of the objects material
-        Object* selectedObject = _objects[objectId];
-        shade( selectedObject->getMaterialId(), normal, point, rOut, gOut, bOut );
+        shade( objectID, normal, point, rOut, gOut, bOut );
     }
 }
 
@@ -177,22 +176,23 @@ bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& n
 
 
 
-void Scene::shade( int materialId, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut )
+void Scene::shade( int objectID, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut )
 {
     rOut = 0.0f;
     gOut = 0.0f;
     bOut = 0.0f;
     
-    addAmbienteComponent( materialId, rOut, gOut, bOut );
+    Object* object = _objects[objectID];
+    addAmbienteComponent( object->getMaterialId(), rOut, gOut, bOut );
     
     int numLights = _lights.size();
     
     for (int lightID = 0; lightID < numLights; ++lightID)
     {
-        if (!inShadow( point, lightID ))
+        if (!inShadow( point, lightID, objectID ))
         {
-            addLambertianComponent( materialId, lightID, normal, point, rOut, gOut, bOut );
-            addSpecularComponent( materialId, lightID, normal, point, rOut, gOut, bOut );
+            addLambertianComponent( object->getMaterialId(), lightID, normal, point, rOut, gOut, bOut );
+            addSpecularComponent( object->getMaterialId(), lightID, normal, point, rOut, gOut, bOut );
         }
     }
 }
@@ -211,7 +211,7 @@ void Scene::addAmbienteComponent(int materialID, float& red, float& green, float
 
 
 
-bool Scene::inShadow( Vector4D& point, int lightID )
+bool Scene::inShadow( Vector4D& point, int lightID, int objectID )
 {
     // create a ray from the point to the light source
     Ray toLight;
@@ -219,21 +219,31 @@ bool Scene::inShadow( Vector4D& point, int lightID )
     toLight.direction = _lights[lightID]->getPosition() - toLight.origin;
     toLight.direction.normalize();
     
-    Vector4D pointOfBlock;
-    Vector4D n; //will not be used
-    int o; //will no be used
+    // calcula o valor de t no ponto onde está a luz
+    double tLight;
+    if (toLight.direction.x != 0.0)
+        tLight = (_lights[lightID]->getPosition().x - toLight.origin.x) / toLight.direction.x;
+    else if (toLight.direction.y != 0.0)
+        tLight = (_lights[lightID]->getPosition().y - toLight.origin.y) / toLight.direction.y;
+    else if (toLight.direction.z != 0.0)
+        tLight = (_lights[lightID]->getPosition().z - toLight.origin.z) / toLight.direction.z;
+    else
+        return false;    
     
-    bool intersected = computeNearestRayIntersection( toLight, pointOfBlock, n, o );
-    
-    if (intersected)
+    unsigned int nObjects = _objects.size();
+    for (unsigned int id = 0; id < nObjects; id++)
     {
-        double distanceToBlock = (pointOfBlock - toLight.origin).norm2();
-        double distanceToLight = (_lights[lightID]->getPosition() - toLight.origin).norm2();
+        if (id == objectID)
+            continue;
         
-        if( distanceToBlock < distanceToLight ) return false; // is in the shadow
-    }
-    
-    return false; // is not in the shadow
+        double t;
+        Object* currentObject = _objects[id];
+        
+        if (currentObject->computeRayIntersection( toLight, t ) && t < tLight)
+        {
+            return true;
+        }        
+    }         
 }
 
 
