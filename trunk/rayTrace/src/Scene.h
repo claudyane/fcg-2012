@@ -42,6 +42,8 @@ class Scene
         
         void shade( int materialId, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut );
         
+        bool inShadow( Vector4D& point, int lightID );
+        
         void addLambertianComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue );
 
         void addSpecularComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue );
