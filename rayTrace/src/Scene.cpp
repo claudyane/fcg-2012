@@ -99,16 +99,12 @@ Image* Scene::render()
             int objectId;
             
             if (computeNearestRayIntersection( ray, point, normal, objectId))
-            {
-                // get the color from the object
-                float r, g, b, a;       
+            {  
                 Object* selectedObject = _objects[objectId];
-                _materials[selectedObject->getMaterialId()]->getDiffuse( r, g, b );
-                a = _materials[selectedObject->getMaterialId()]->getOpacity();
                 
                 // shade it
                 float shadedR, shadedG, shadedB;
-                shade( r, g, b, normal, point, shadedR, shadedG, shadedB );
+                shade( selectedObject->getMaterialId(), normal, point, shadedR, shadedG, shadedB );
                 
                 // print result
                 imgSetPixel3f( image, x, y, shadedR, shadedG, shadedB );
@@ -172,12 +168,16 @@ bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& n
 
 
 
-void Scene::shade( float rIn, float gIn, float bIn, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut )
+void Scene::shade( int materialId, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut )
 {
+    // recupera cor difusa do material
+    float diffuseR, diffuseG, diffuseB;
+    _materials[materialId]->getDiffuse( diffuseR, diffuseG, diffuseB );
+    
     // iluminação ambiente
-    rOut = _ambientLight.x * rIn;
-    gOut = _ambientLight.y * gIn;
-    bOut = _ambientLight.z * bIn;
+    rOut = _ambientLight.x * diffuseR;
+    gOut = _ambientLight.y * diffuseG;
+    bOut = _ambientLight.z * diffuseB;
     
     int numLights = _lights.size();
     
@@ -191,16 +191,23 @@ void Scene::shade( float rIn, float gIn, float bIn, Vector4D& normal, Vector4D& 
         _lights[lightID]->getDiffuse( lightR, lightG, lightB );
         
         // iluminação lambertiana
-        rOut += rIn * lightR * cosTheta;
-        gOut += gIn * lightG * cosTheta;
-        bOut += bIn * lightB * cosTheta;
+        rOut += diffuseR * lightR * cosTheta;
+        gOut += diffuseG * lightG * cosTheta;
+        bOut += diffuseB * lightB * cosTheta;
+        
+        // componente especular
+        float specularR, specularG, specularB, exponent;
+        _materials[materialId]->getSpecular( specularR, specularG, specularB, exponent );
         
         Vector4D r = ( 2 * dot( lightDir, normal ) * normal ) - lightDir;
         r.normalize();
         
         Vector4D eyeDir = _camera->getPosition() - point;
         eyeDir.normalize();
-        
-        // TODO: ao inves de receber color in, a função deveria receber o id do material de entrada, fica mais fácil pois precisamos do especular e tudo o mais.
+
+        float specularCoeficient = pow( dot(r, eyeDir), exponent );
+        rOut += specularR * lightR * specularCoeficient;
+        gOut += specularG * lightG * specularCoeficient;
+        bOut += specularB * lightB * specularCoeficient;
     }
 }
