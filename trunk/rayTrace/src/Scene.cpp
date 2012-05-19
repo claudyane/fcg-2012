@@ -173,11 +173,13 @@ bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& n
 
 void Scene::shade( float rIn, float gIn, float bIn, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut )
 {
-    int numLights = _lights.size();
+    // iluminação ambiente
+    rOut = _ambientLight.x * rIn;
+    gOut = _ambientLight.y * gIn;
+    bOut = _ambientLight.z * bIn;
     
-    rOut = 0.0f;
-    gOut = 0.0f;
-    bOut = 0.0f;
+    // iluminação lambertiana
+    int numLights = _lights.size();
     
     for (int lightID = 0; lightID < numLights; ++lightID)
     {
