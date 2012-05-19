@@ -100,10 +100,17 @@ Image* Scene::render()
             
             if (computeNearestRayIntersection( ray, point, normal, objectId))
             {
+                // get the color from the object
                 float r, g, b, a;       
                 Object* selectedObject = _objects[objectId];
                 selectedObject->getColor( r, g, b, a );
-                imgSetPixel3f( image, x, y, r, g, b );
+                
+                // shade it
+                float shadedR, shadedG, shadedB;
+                shade( r, g, b, normal, point, shadedR, shadedG, shadedB );
+                
+                // print result
+                imgSetPixel3f( image, x, y, shadedR, shadedG, shadedB );
             }
             else
             {
@@ -135,32 +142,54 @@ bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& n
 {
     int nObjects = _objects.size();
     double tMin = DBL_MAX;
-    Vector4D nearestNormal;
+
     int nearestId;
     
     for (int objID = 0; objID < nObjects; ++objID)
     {
         double t;
-        Vector4D currentNormal;
         Object* object = _objects[objID];
-        bool intersected = object->computeRayIntersection( ray, t, currentNormal );
+        bool intersected = object->computeRayIntersection( ray, t );
         
         if (intersected && (t < tMin))
         {
             tMin = t;
             nearestId = objID;
-            nearestNormal = currentNormal;
         }
     }
     
     if (tMin < DBL_MAX)
     {
-        normal = nearestNormal;
         objectID = nearestId;
         point = ray.origin + tMin*ray.direction;
-        
+        normal = _objects[objectID]->getNormal( point );
         return true;
     }
     
     return false;
+}
+
+
+
+void Scene::shade( float rIn, float gIn, float bIn, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut )
+{
+    int numLights = _lights.size();
+    
+    rOut = 0.0f;
+    gOut = 0.0f;
+    bOut = 0.0f;
+    
+    for (int lightID = 0; lightID < numLights; ++lightID)
+    {
+        Vector4D lightDir = _lights[lightID]->getPosition() - point;
+        lightDir.normalize();
+        double cosTheta = dot( normal, lightDir );
+        
+        float lightR, lightG, lightB;
+        _lights[lightID]->getDiffuse( lightR, lightG, lightB );
+        
+        rOut += rIn * lightR * cosTheta;
+        gOut += gIn * lightG * cosTheta;
+        bOut += bIn * lightB * cosTheta;
+    }
 }
