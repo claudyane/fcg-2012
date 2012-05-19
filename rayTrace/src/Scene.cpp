@@ -96,28 +96,36 @@ Image* Scene::render()
         for (int y = 0; y < height; ++y)
         {
             Ray ray = _camera->computeRay( x, y );
-            Vector4D point, normal;
-            int objectId;
-            
-            if (computeNearestRayIntersection( ray, point, normal, objectId))
-            {  
-                Object* selectedObject = _objects[objectId];
-                
-                // shade it
-                float shadedR, shadedG, shadedB;
-                shade( selectedObject->getMaterialId(), normal, point, shadedR, shadedG, shadedB );
-                
-                // print result
-                imgSetPixel3f( image, x, y, shadedR, shadedG, shadedB );
-            }
-            else
-            {
-                imgSetPixel3f( image, x, y, _backgroundColor.x, _backgroundColor.y, _backgroundColor.z );
-            }            
+            float r, g, b;
+            computeRayColor( ray, r, g, b );
+            imgSetPixel3f( image, x, y, r, g, b );
         }
     }
     
     return image;
+}
+
+
+
+void Scene::computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut )
+{
+    Vector4D point;
+    Vector4D normal;
+    int objectId;
+    
+    if (!computeNearestRayIntersection( ray, point, normal, objectId ))
+    {
+        // no interceptions
+        rOut = _backgroundColor.x;
+        gOut = _backgroundColor.y;
+        bOut = _backgroundColor.z;
+    }
+    else
+    {
+        // Get shaded color of the objects material
+        Object* selectedObject = _objects[objectId];
+        shade( selectedObject->getMaterialId(), normal, point, rOut, gOut, bOut );
+    }
 }
 
 
