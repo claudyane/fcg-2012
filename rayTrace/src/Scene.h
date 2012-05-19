@@ -41,7 +41,12 @@ class Scene
         void computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut );
         
         void shade( int materialId, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut );
+        
+        void addLambertianComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue );
 
+        void addSpecularComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue );
+        
+        void addAmbienteComponent( int materialID, float& red, float& green, float& blue );
     private:
 
         std::vector<Object*> _objects;

@@ -179,47 +179,81 @@ bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& n
 
 void Scene::shade( int materialId, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut )
 {
-    // recupera cor difusa do material
-    float diffuseR, diffuseG, diffuseB;
-    _materials[materialId]->getDiffuse( diffuseR, diffuseG, diffuseB );
+    rOut = 0.0f;
+    gOut = 0.0f;
+    bOut = 0.0f;
     
-    // iluminação ambiente
-    rOut = _ambientLight.x * diffuseR;
-    gOut = _ambientLight.y * diffuseG;
-    bOut = _ambientLight.z * diffuseB;   
+    addAmbienteComponent( materialId, rOut, gOut, bOut );
     
     int numLights = _lights.size();
     
     for (int lightID = 0; lightID < numLights; ++lightID)
     {
-        Vector4D lightDir = _lights[lightID]->getPosition() - point;
-        lightDir.normalize();
-        double cosTheta = dot( normal, lightDir );
-        
-        if (cosTheta < 0)
-            cosTheta = 0.0;
-        
-        float lightR, lightG, lightB;
-        _lights[lightID]->getDiffuse( lightR, lightG, lightB );
-        
-        // iluminação lambertiana
-        rOut += diffuseR * lightR * cosTheta;
-        gOut += diffuseG * lightG * cosTheta;
-        bOut += diffuseB * lightB * cosTheta;
-        
-        // componente especular
-        float specularR, specularG, specularB, exponent;
-        _materials[materialId]->getSpecular( specularR, specularG, specularB, exponent );
-        
-        Vector4D r = ( 2 * cosTheta * normal ) - lightDir;
-        r.normalize();
-        
-        Vector4D eyeDir = _camera->getPosition() - point;
-        eyeDir.normalize();
-
-        float specularCoeficient = pow( dot(r, eyeDir), exponent );
-        rOut += specularR * lightR * specularCoeficient;
-        gOut += specularG * lightG * specularCoeficient;
-        bOut += specularB * lightB * specularCoeficient;
+        addLambertianComponent( materialId, lightID, normal, point, rOut, gOut, bOut );
+        addSpecularComponent( materialId, lightID, normal, point, rOut, gOut, bOut );
     }
+}
+
+void Scene::addAmbienteComponent(int materialID, float& red, float& green, float& blue)
+{
+    // recupera cor difusa do material
+    float diffuseR, diffuseG, diffuseB;
+    _materials[materialID]->getDiffuse( diffuseR, diffuseG, diffuseB );
+    
+    // iluminação ambiente
+    red   += _ambientLight.x * diffuseR;
+    green += _ambientLight.y * diffuseG;
+    blue  += _ambientLight.z * diffuseB;   
+}
+
+
+void Scene::addLambertianComponent(int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue)
+{
+    Vector4D lightDir = _lights[lightID]->getPosition() - point;
+    lightDir.normalize();
+    double cosTheta = dot( normal, lightDir );
+
+    if (cosTheta < 0)
+        cosTheta = 0.0;
+
+    float lightR, lightG, lightB;
+    _lights[lightID]->getDiffuse( lightR, lightG, lightB );
+
+    float diffuseR, diffuseG, diffuseB;
+    _materials[materialID]->getDiffuse( diffuseR, diffuseG, diffuseB );
+    
+    // iluminação lambertiana
+    red   += diffuseR * lightR * cosTheta;
+    green += diffuseG * lightG * cosTheta;
+    blue  += diffuseB * lightB * cosTheta;
+}
+
+
+
+void Scene::addSpecularComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue )
+{
+    Vector4D lightDir = _lights[lightID]->getPosition() - point;
+    lightDir.normalize();
+    double cosTheta = dot( normal, lightDir );
+
+    if (cosTheta < 0)
+        cosTheta = 0.0;
+
+    float lightR, lightG, lightB;
+    _lights[lightID]->getDiffuse( lightR, lightG, lightB );
+
+    // componente especular
+    float specularR, specularG, specularB, exponent;
+    _materials[materialID]->getSpecular( specularR, specularG, specularB, exponent );
+
+    Vector4D r = ( 2 * cosTheta * normal ) - lightDir;
+    r.normalize();
+
+    Vector4D eyeDir = _camera->getPosition() - point;
+    eyeDir.normalize();
+
+    float specularCoeficient = pow( dot(r, eyeDir), exponent );
+    red   += specularR * lightR * specularCoeficient;
+    green += specularG * lightG * specularCoeficient;
+    blue  += specularB * lightB * specularCoeficient;
 }
