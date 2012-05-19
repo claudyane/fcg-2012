@@ -54,12 +54,12 @@ Camera::~Camera()
 
 void Camera::computeDerivedParameters()
 {
-    _a = 2.0 * _near * tan( _fovy / 2.0 );
+    _a = 2.0 * _near * tan( ((_fovy * M_PI)/180.0) / 2.0 );
     _b = _a * (double) _width / (double) _height;
 
     _ze = _eye - _center;
     _ze.normalize();
-    _xe = cross( _ze, _up );
+    _xe = cross( _up, _ze );
     _xe.normalize();
     _ye = cross( _ze, _xe );
 }
