@@ -44,6 +44,8 @@ public:
     Ray computeRay( int x, int y );
     
     void getScreenSize( int& width, int& height );
+    
+    Vector4D getPosition();
 
 private:
     /** Position of the camera on world space */
