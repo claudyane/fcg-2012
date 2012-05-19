@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include "Box.h"
 #include "Ray.h"
+#include <cmath>
 
 Box::Box( Vector4D min, Vector4D max )
 {
@@ -98,27 +99,27 @@ bool Box::computeRayIntersection( Ray ray, double& t )
 Vector4D Box::getNormal( Vector4D& point )
 {
     // Testa se está no plano x = xmin
-    if (abs(point.x - _min.x) < 0.0001)
+    if (fabs(point.x - _min.x) < 0.00001)
         return Vector4D( -1.0, 0.0, 0.0, 1.0 );
     
     // Testa se está no plano x = xmax
-    if (abs(point.x - _max.x) < 0.0001)
+    if (fabs(point.x - _max.x) < 0.00001)
         return Vector4D( 1.0, 0.0, 0.0, 1.0 );
     
     // Testa se está no plano y = ymin
-    if (abs(point.y - _min.y) < 0.0001)
+    if (fabs(point.y - _min.y) < 0.00001)
         return Vector4D( 0.0, -1.0, 0.0, 1.0 );
     
     // Testa se está no plano y = ymax
-    if (abs(point.y - _max.y) < 0.0001)
+    if (fabs(point.y - _max.y) < 0.00001)
         return Vector4D( 0.0, 1.0, 0.0, 1.0 );
         
     // Testa se está no plano z = zmin
-    if (abs(point.z - _min.z) < 0.0001)
+    if (fabs(point.z - _min.z) < 0.00001)
         return Vector4D( 0.0, 0.0, -1.0, 1.0 );
     
     // Testa se está no plano z = xmax
-    if (abs(point.z - _max.z) < 0.0001)
+    if (fabs(point.z - _max.z) < 0.00001)
         return Vector4D( 0.0, 0.0, 1.0, 1.0 );
     
     return Vector4D( 0.0, 0.0, 0.0, 1.0 );
