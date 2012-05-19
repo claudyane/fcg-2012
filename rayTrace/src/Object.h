@@ -17,6 +17,7 @@ public:
     virtual ~Object(){}
     virtual bool computeRayIntersection( Ray ray, double& t ) = 0;
     virtual Vector4D getNormal( Vector4D& point ) = 0;
+    virtual void setMaterial( int materialId ) = 0;
     virtual int getMaterialId() = 0;
 };
 

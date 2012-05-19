@@ -58,7 +58,7 @@ Vector4D Sphere::getNormal( Vector4D& point )
 
 
 
-void Sphere::setMaterialId( int materialId )
+void Sphere::setMaterial( int materialId )
 {
     _materialId = materialId;
 }

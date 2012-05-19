@@ -130,27 +130,27 @@ bool Box::computeRayIntersection( Ray ray, double& t )
 Vector4D Box::getNormal( Vector4D& point )
 {
     // Testa se está no plano x = xmin
-    if (fabs(point.x - _min.x) < 0.00001)
+    if (fabs(point.x - _min.x) < 0.0001)
         return Vector4D( -1.0, 0.0, 0.0, 1.0 );
     
     // Testa se está no plano x = xmax
-    if (fabs(point.x - _max.x) < 0.00001)
+    if (fabs(point.x - _max.x) < 0.0001)
         return Vector4D( 1.0, 0.0, 0.0, 1.0 );
     
     // Testa se está no plano y = ymin
-    if (fabs(point.y - _min.y) < 0.00001)
+    if (fabs(point.y - _min.y) < 0.0001)
         return Vector4D( 0.0, -1.0, 0.0, 1.0 );
     
     // Testa se está no plano y = ymax
-    if (fabs(point.y - _max.y) < 0.00001)
+    if (fabs(point.y - _max.y) < 0.0001)
         return Vector4D( 0.0, 1.0, 0.0, 1.0 );
         
     // Testa se está no plano z = zmin
-    if (fabs(point.z - _min.z) < 0.00001)
+    if (fabs(point.z - _min.z) < 0.0001)
         return Vector4D( 0.0, 0.0, -1.0, 1.0 );
     
     // Testa se está no plano z = xmax
-    if (fabs(point.z - _max.z) < 0.00001)
+    if (fabs(point.z - _max.z) < 0.0001)
         return Vector4D( 0.0, 0.0, 1.0, 1.0 );
     
     return Vector4D( 0.0, 0.0, 0.0, 1.0 );
