@@ -189,8 +189,11 @@ void Scene::shade( int materialId, Vector4D& normal, Vector4D& point, float& rOu
     
     for (int lightID = 0; lightID < numLights; ++lightID)
     {
-        addLambertianComponent( materialId, lightID, normal, point, rOut, gOut, bOut );
-        addSpecularComponent( materialId, lightID, normal, point, rOut, gOut, bOut );
+        if (!inShadow( point, lightID ))
+        {
+            addLambertianComponent( materialId, lightID, normal, point, rOut, gOut, bOut );
+            addSpecularComponent( materialId, lightID, normal, point, rOut, gOut, bOut );
+        }
     }
 }
 
@@ -205,6 +208,34 @@ void Scene::addAmbienteComponent(int materialID, float& red, float& green, float
     green += _ambientLight.y * diffuseG;
     blue  += _ambientLight.z * diffuseB;   
 }
+
+
+
+bool Scene::inShadow( Vector4D& point, int lightID )
+{
+    // create a ray from the point to the light source
+    Ray toLight;
+    toLight.origin = point;
+    toLight.direction = _lights[lightID]->getPosition() - toLight.origin;
+    toLight.direction.normalize();
+    
+    Vector4D pointOfBlock;
+    Vector4D n; //will not be used
+    int o; //will no be used
+    
+    bool intersected = computeNearestRayIntersection( toLight, pointOfBlock, n, o );
+    
+    if (intersected)
+    {
+        double distanceToBlock = (pointOfBlock - toLight.origin).norm2();
+        double distanceToLight = (_lights[lightID]->getPosition() - toLight.origin).norm2();
+        
+        if( distanceToBlock < distanceToLight ) return false; // is in the shadow
+    }
+    
+    return false; // is not in the shadow
+}
+
 
 
 void Scene::addLambertianComponent(int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue)
@@ -227,7 +258,6 @@ void Scene::addLambertianComponent(int materialID, int lightID, Vector4D& normal
     green += diffuseG * lightG * cosTheta;
     blue  += diffuseB * lightB * cosTheta;
 }
-
 
 
 void Scene::addSpecularComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue )
