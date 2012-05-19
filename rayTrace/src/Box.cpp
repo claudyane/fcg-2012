@@ -13,8 +13,39 @@
 
 Box::Box( Vector4D min, Vector4D max )
 {
-    _min = min;
-    _max = max;
+    // garante coerencia
+    if (min.x < max.x)
+    {
+        _min.x = min.x;
+        _max.x = max.x;        
+    }
+    else
+    {
+        _min.x = max.x;
+        _max.x = min.x;        
+    }
+
+    if (min.y < max.y)
+    {
+        _min.y = min.y;
+        _max.y = max.y;        
+    }
+    else
+    {
+        _min.y = max.y;
+        _max.y = min.y;        
+    }
+    
+    if (min.z < max.z)
+    {
+        _min.z = min.z;
+        _max.z = max.z;        
+    }
+    else
+    {
+        _min.z = max.z;
+        _max.z = min.z;        
+    }
 }
 
 
