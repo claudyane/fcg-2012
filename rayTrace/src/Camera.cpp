@@ -83,3 +83,10 @@ void Camera::getScreenSize( int& width, int& height )
     width = _width;
     height= _height;
 }
+
+
+
+Vector4D Camera::getPosition()
+{
+    return _eye;
+}
