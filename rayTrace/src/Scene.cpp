@@ -243,7 +243,9 @@ bool Scene::inShadow( Vector4D& point, int lightID, int objectID )
         {
             return true;
         }        
-    }         
+    }
+    
+    return false;
 }
 
 
