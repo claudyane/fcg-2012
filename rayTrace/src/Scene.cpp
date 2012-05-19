@@ -178,7 +178,6 @@ void Scene::shade( float rIn, float gIn, float bIn, Vector4D& normal, Vector4D& 
     gOut = _ambientLight.y * gIn;
     bOut = _ambientLight.z * bIn;
     
-    // iluminação lambertiana
     int numLights = _lights.size();
     
     for (int lightID = 0; lightID < numLights; ++lightID)
@@ -190,8 +189,17 @@ void Scene::shade( float rIn, float gIn, float bIn, Vector4D& normal, Vector4D& 
         float lightR, lightG, lightB;
         _lights[lightID]->getDiffuse( lightR, lightG, lightB );
         
+        // iluminação lambertiana
         rOut += rIn * lightR * cosTheta;
         gOut += gIn * lightG * cosTheta;
         bOut += bIn * lightB * cosTheta;
+        
+        Vector4D r = ( 2 * dot( lightDir, normal ) * normal ) - lightDir;
+        r.normalize();
+        
+        Vector4D eyeDir = _camera->getPosition() - point;
+        eyeDir.normalize();
+        
+        // TODO: ao inves de receber color in, a função deveria receber o id do material de entrada, fica mais fácil pois precisamos do especular e tudo o mais.
     }
 }
