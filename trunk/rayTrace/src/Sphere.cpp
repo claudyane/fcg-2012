@@ -27,7 +27,7 @@ Sphere::~Sphere()
 }
 
 
-bool Sphere::computeRayIntersection( Ray ray, double& t, Vector4D& normal )
+bool Sphere::computeRayIntersection( Ray ray, double& t )
 {
     double a = dot( ray.direction, ray.direction );
     double b = dot( 2 * ray.direction, ray.origin - _center );
@@ -44,9 +44,16 @@ bool Sphere::computeRayIntersection( Ray ray, double& t, Vector4D& normal )
         if (t < 0) return false; //if t is negative the intersection was behind the camera
     }
     
-    normal.normalize();
-    
     return true;
+}
+
+
+
+Vector4D Sphere::getNormal( Vector4D& point )
+{
+    Vector4D normal = point - _center;
+    normal.normalize();
+    return normal;
 }
 
 
