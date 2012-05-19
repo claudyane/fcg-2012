@@ -31,3 +31,10 @@ void Light::getDiffuse(float& r, float& g, float& b)
     g = _diffuse[1];
     b = _diffuse[2];
 }
+
+
+
+Vector4D Light::getPosition()
+{
+    return _position;
+}

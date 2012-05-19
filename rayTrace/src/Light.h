@@ -35,6 +35,8 @@ class Light
          */
         void getDiffuse( float& r, float& g, float& b );
         
+        Vector4D getPosition();
+        
     private:
 
         /** position of the light in the world. In world coordinates */
