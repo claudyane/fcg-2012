@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "Sphere.h"
 #include "Light.h"
+#include "Box.h"
 
 Rt4FileReader::Rt4FileReader()
 {
@@ -134,6 +135,10 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
         else if( sscanf( buffer, "BOX %d %lf %lf %lf %lf %lf %lf\n", &material, &position1.x, &position1.y, &position1.z,
                 &position2.x, &position2.y, &position2.z ) == 7 )
         {
+            Box* box = new Box( position1, position2 );
+            box->setMaterial( scene->getMaterial( material ) );
+            
+            scene->addObject( box );
         }
         //else if( sscanf( buffer, "MESH %d %lf %lf %lf %lf %lf %lf %s\n", &material, &pos1.x, &pos1.y, &pos1.z, &pos2.x, &pos2.y, &pos2.z, buffer ) == 8 )
         //{

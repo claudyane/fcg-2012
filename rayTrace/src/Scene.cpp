@@ -114,7 +114,7 @@ Image* Scene::render()
             }
             else
             {
-                imgSetPixel3f( image, x, y, 0.0f, 0.0f, 0.0f );
+                imgSetPixel3f( image, x, y, _backgroundColor.x, _backgroundColor.y, _backgroundColor.z );
             }            
         }
     }
