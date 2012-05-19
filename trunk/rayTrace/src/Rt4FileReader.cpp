@@ -12,6 +12,7 @@
 #include "Sphere.h"
 #include "Light.h"
 #include "Box.h"
+#include "Triangle.h"
 
 Rt4FileReader::Rt4FileReader()
 {
@@ -121,7 +122,7 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
         else if( sscanf( buffer, "SPHERE %d %lf %lf %lf %lf\n", &material, &radius, &position1.x,&position1.y,&position1.z ) == 5 )
         {
             Sphere* sphere = new Sphere( position1.x, position1.y, position1.z, radius );
-            sphere->setMaterialId( material );
+            sphere->setMaterial( material );
 
             scene->addObject( sphere );
         }
@@ -130,6 +131,10 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
                 &position1.x, &position1.y, &position1.z, &position2.x, &position2.y, &position2.z, &position3.x, &position3.y,
                 &position3.z, &texture1.x, &texture1.y, &texture2.x, &texture2.y, &texture3.x, &texture3.y) == 16 )
         {
+            Triangle* triangle = new Triangle( position1, position2, position3, texture1, texture2, texture3 );
+            triangle->setMaterial( material );
+            
+            scene->addObject( triangle );
         }
 
         else if( sscanf( buffer, "BOX %d %lf %lf %lf %lf %lf %lf\n", &material, &position1.x, &position1.y, &position1.z,

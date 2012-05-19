@@ -19,7 +19,7 @@ public:
     virtual ~Sphere();
     bool computeRayIntersection( Ray ray, double& t );
     Vector4D getNormal( Vector4D& point );
-    void setMaterialId( int materialId );
+    void setMaterial( int materialId );
     int getMaterialId();
 
 private:
