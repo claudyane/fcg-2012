@@ -9,6 +9,7 @@
 #include "Image.h"
 #include "MainWindowPresenter.h"
 #include <cfloat>
+#include <cstdio>
 
 Scene::Scene()
 {
@@ -177,7 +178,7 @@ void Scene::shade( int materialId, Vector4D& normal, Vector4D& point, float& rOu
     // iluminação ambiente
     rOut = _ambientLight.x * diffuseR;
     gOut = _ambientLight.y * diffuseG;
-    bOut = _ambientLight.z * diffuseB;
+    bOut = _ambientLight.z * diffuseB;   
     
     int numLights = _lights.size();
     
@@ -186,6 +187,9 @@ void Scene::shade( int materialId, Vector4D& normal, Vector4D& point, float& rOu
         Vector4D lightDir = _lights[lightID]->getPosition() - point;
         lightDir.normalize();
         double cosTheta = dot( normal, lightDir );
+        
+        if (cosTheta < 0)
+            cosTheta = 0.0;
         
         float lightR, lightG, lightB;
         _lights[lightID]->getDiffuse( lightR, lightG, lightB );
@@ -199,7 +203,7 @@ void Scene::shade( int materialId, Vector4D& normal, Vector4D& point, float& rOu
         float specularR, specularG, specularB, exponent;
         _materials[materialId]->getSpecular( specularR, specularG, specularB, exponent );
         
-        Vector4D r = ( 2 * dot( lightDir, normal ) * normal ) - lightDir;
+        Vector4D r = ( 2 * cosTheta * normal ) - lightDir;
         r.normalize();
         
         Vector4D eyeDir = _camera->getPosition() - point;
