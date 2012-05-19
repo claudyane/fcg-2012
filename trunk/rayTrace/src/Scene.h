@@ -38,6 +38,8 @@ class Scene
         
         bool computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& normal, int& objectID );
         
+        void computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut );
+        
         void shade( int materialId, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut );
 
     private:
