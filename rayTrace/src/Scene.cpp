@@ -216,19 +216,9 @@ bool Scene::inShadow( Vector4D& point, int lightID, int objectID )
     // create a ray from the point to the light source
     Ray toLight;
     toLight.origin = point;
-    toLight.direction = _lights[lightID]->getPosition() - toLight.origin;
+    toLight.direction = _lights[lightID]->getPosition() - toLight.origin;    
+    double tLight = toLight.direction.norm();        
     toLight.direction.normalize();
-    
-    // calcula o valor de t no ponto onde está a luz
-    double tLight;
-    if (toLight.direction.x != 0.0)
-        tLight = (_lights[lightID]->getPosition().x - toLight.origin.x) / toLight.direction.x;
-    else if (toLight.direction.y != 0.0)
-        tLight = (_lights[lightID]->getPosition().y - toLight.origin.y) / toLight.direction.y;
-    else if (toLight.direction.z != 0.0)
-        tLight = (_lights[lightID]->getPosition().z - toLight.origin.z) / toLight.direction.z;
-    else
-        return false;    
     
     unsigned int nObjects = _objects.size();
     for (unsigned int id = 0; id < nObjects; id++)
@@ -239,7 +229,7 @@ bool Scene::inShadow( Vector4D& point, int lightID, int objectID )
         double t;
         Object* currentObject = _objects[id];
         
-        if (currentObject->computeRayIntersection( toLight, t ) && t > 0 && t < tLight)
+        if (currentObject->computeRayIntersection( toLight, t ) && t > 0.01 && t < tLight)
         {
             return true;
         }        
