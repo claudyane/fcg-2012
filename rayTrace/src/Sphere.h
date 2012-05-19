@@ -19,13 +19,13 @@ public:
     virtual ~Sphere();
     bool computeRayIntersection( Ray ray, double& t );
     Vector4D getNormal( Vector4D& point );
-    void getColor( float& r, float& g, float& b, float& a );
-    void setMaterial( Material* material );
+    void setMaterialId( int materialId );
+    int getMaterialId();
 
 private:
     Vector4D _center;
     double _radius;
-    Material* _material;
+    int _materialId;
 };
 
 #endif /* SPHERE_H_ */

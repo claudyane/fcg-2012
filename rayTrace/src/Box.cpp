@@ -126,16 +126,15 @@ Vector4D Box::getNormal( Vector4D& point )
 
 
 
-void Box::getColor( float& r, float& g, float& b, float& a )
+void Box::setMaterial( int materialId )
 {
-    _material->getDiffuse( r, g, b );
-    a = _material->getOpacity();
+   _materialId = materialId;
 }
 
 
 
-void Box::setMaterial( Material* material )
+int Box::getMaterialId()
 {
-    _material = material;
+    return _materialId;
 }
 

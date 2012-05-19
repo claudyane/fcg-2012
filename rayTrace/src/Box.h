@@ -25,13 +25,13 @@ public:
     
     Vector4D getNormal( Vector4D& point );
     
-    void getColor( float& r, float& g, float& b, float& a );
+    void setMaterial( int materialId );
     
-    void setMaterial( Material* material );
+    int getMaterialId();
     
 private:
 
-    Material* _material;
+    int _materialId;
     
     Vector4D _min;
     

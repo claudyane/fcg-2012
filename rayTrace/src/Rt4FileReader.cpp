@@ -121,7 +121,7 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
         else if( sscanf( buffer, "SPHERE %d %lf %lf %lf %lf\n", &material, &radius, &position1.x,&position1.y,&position1.z ) == 5 )
         {
             Sphere* sphere = new Sphere( position1.x, position1.y, position1.z, radius );
-            sphere->setMaterial( scene->getMaterial( material ) );
+            sphere->setMaterialId( material );
 
             scene->addObject( sphere );
         }
@@ -136,7 +136,7 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
                 &position2.x, &position2.y, &position2.z ) == 7 )
         {
             Box* box = new Box( position1, position2 );
-            box->setMaterial( scene->getMaterial( material ) );
+            box->setMaterial( material );
             
             scene->addObject( box );
         }

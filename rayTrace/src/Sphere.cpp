@@ -17,7 +17,7 @@ Sphere::Sphere( double centerX, double centerY, double centerZ, double radius )
     _center.z = centerZ;
     _radius = radius;
 
-    _material = 0;
+    _materialId = 0;
 }
 
 
@@ -58,15 +58,14 @@ Vector4D Sphere::getNormal( Vector4D& point )
 
 
 
-void Sphere::getColor( float& r, float& g, float& b, float& a )
+void Sphere::setMaterialId( int materialId )
 {
-    _material->getDiffuse( r, g, b );
-    a = _material->getOpacity();
+    _materialId = materialId;
 }
 
 
 
-void Sphere::setMaterial( Material* material )
+int Sphere::getMaterialId()
 {
-    _material = material;
+    return _materialId;
 }
