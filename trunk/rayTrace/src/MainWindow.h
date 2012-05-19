@@ -33,6 +33,7 @@ private:
 
     GtkWidget* _window;
     GtkWidget* _rayTraceCanvas;
+    GtkWidget* _messageBar;
     MainWindowPresenter* _presenter;
 };
 

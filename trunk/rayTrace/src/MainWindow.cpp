@@ -13,6 +13,7 @@
 #include <gtk/gtkgl.h>
 #include <GL/gl.h>
 #include <iostream>
+#include <sstream>
 
 MainWindow::MainWindow()
 {
@@ -44,6 +45,9 @@ GtkWidget* MainWindow::build()
     
     GtkWidget* canvasBox = buildCanvasBox();
     gtk_box_pack_start_defaults( GTK_BOX(mainBox), canvasBox );
+    
+    _messageBar = gtk_label_new( "Created by Eliana Goldner and Walther Maciel" );
+    gtk_box_pack_start_defaults( GTK_BOX(mainBox), _messageBar );
 
     gtk_widget_show_all( window );
 
@@ -212,8 +216,16 @@ void MainWindow::cb_openScene( GtkWidget* button, gpointer user_data )
 void MainWindow::cb_render( GtkWidget* button, gpointer user_data )
 {
     MainWindow* window = (MainWindow*)user_data;
+    
+    time_t begin = time(NULL);
     window->_presenter->renderScene();
-    gtk_widget_queue_draw( window->_rayTraceCanvas );
+    time_t end = time(NULL);
+    
+    long long elapsed = end - begin;
+    std::stringstream message;
+    message << "Time elapsed: " << elapsed << " seconds.";
+    
+    gtk_label_set_label( GTK_LABEL(window->_messageBar), message.str().c_str() );
 }
 
 
