@@ -239,7 +239,7 @@ bool Scene::inShadow( Vector4D& point, int lightID, int objectID )
         double t;
         Object* currentObject = _objects[id];
         
-        if (currentObject->computeRayIntersection( toLight, t ) && t < tLight)
+        if (currentObject->computeRayIntersection( toLight, t ) && t > 0 && t < tLight)
         {
             return true;
         }        
