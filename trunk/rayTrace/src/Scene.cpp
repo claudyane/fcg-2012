@@ -103,7 +103,8 @@ Image* Scene::render()
                 // get the color from the object
                 float r, g, b, a;       
                 Object* selectedObject = _objects[objectId];
-                selectedObject->getColor( r, g, b, a );
+                _materials[selectedObject->getMaterialId()]->getDiffuse( r, g, b );
+                a = _materials[selectedObject->getMaterialId()]->getOpacity();
                 
                 // shade it
                 float shadedR, shadedG, shadedB;
