@@ -88,8 +88,8 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
         else if( sscanf( buffer, "SCENE %lf %lf %lf %lf %lf %lf %s\n", &backgroundColor.x, &backgroundColor.y,
                 &backgroundColor.z, &ambientLight.x, &ambientLight.y, &ambientLight.z, backgroundFilename ) == 7 )
         {
-            scene->setAmbientLight( ambientLight );
-            scene->setBackgroundColor( backgroundColor );
+            scene->setAmbientLight( ambientLight * (1/255.0) );
+            scene->setBackgroundColor( backgroundColor * (1/255.0) );
         }
 
         else if( sscanf( buffer, "MATERIAL %lf %lf %lf %lf %lf %lf %lf %f %f %f %s\n", &diffuse.x, &diffuse.y, &diffuse.z,
@@ -113,7 +113,7 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
         else if( sscanf( buffer, "LIGHT %lf %lf %lf %f %f %f\n", &lightPosition.x, &lightPosition.y, &lightPosition.z,
                 &lightDiffuse[0], &lightDiffuse[1], &lightDiffuse[2] ) == 6 )
         {
-            Light* light = new Light( lightPosition, lightDiffuse[0], lightDiffuse[1], lightDiffuse[2] );
+            Light* light = new Light( lightPosition, lightDiffuse[0]/255.0f, lightDiffuse[1]/255.0f, lightDiffuse[2]/255.0f );
             scene->addLight( light );
         }
 
