@@ -252,7 +252,7 @@ gboolean MainWindow::cb_configGLCanvas( GtkWidget* canvas, GdkEventConfigure* ev
 void MainWindow::cb_openScene( GtkWidget* button, gpointer user_data )
 {
     GtkWidget* fileChooser;
-    gchar* filename = 0;
+    gchar* filepath = 0;
     MainWindow* window = (MainWindow*) user_data;
 
     fileChooser = gtk_file_chooser_dialog_new("Abrir Arquivo",
@@ -270,22 +270,34 @@ void MainWindow::cb_openScene( GtkWidget* button, gpointer user_data )
 
     if (gtk_dialog_run( GTK_DIALOG (fileChooser) ) == GTK_RESPONSE_OK)
     {
-        filename = gtk_file_chooser_get_filename( GTK_FILE_CHOOSER (fileChooser) );
+        filepath = gtk_file_chooser_get_filename( GTK_FILE_CHOOSER (fileChooser) );
 
-        if (!window->_presenter->buildScene( filename ))
+        if (!window->_presenter->buildScene( filepath ))
         {
             std::string message = "Error loading file";
             gtk_label_set_text( GTK_LABEL (window->_fileLabel), message.c_str()  ); 
         }
         else
         {
-            gtk_label_set_text( GTK_LABEL (window->_fileLabel), filename );                        
+            std::string strFilePath = filepath;
+            size_t pos = strFilePath.find_last_of( "/\\" );
+            
+            if (pos != std::string::npos)
+            {
+                std::string filename = strFilePath.substr( pos + 1 );
+                gtk_label_set_text( GTK_LABEL (window->_fileLabel), filename.c_str() );
+            }
+            else
+            {
+                gtk_label_set_text( GTK_LABEL (window->_fileLabel), filepath );
+            }
+            
         }
 
         gtk_label_set_label( GTK_LABEL(window->_messageBar), "Created by Eliana Goldner and Walther Maciel" );
         gtk_widget_queue_draw( window->_rayTraceCanvas );
         
-        g_free( filename );
+        g_free( filepath );
     }
 
     gtk_widget_destroy( fileChooser );
