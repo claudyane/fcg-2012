@@ -18,6 +18,7 @@ class Scene
 {
     public:
         Scene();
+        
         virtual ~Scene();
 
         void setCamera( Camera* camera );
@@ -36,6 +37,16 @@ class Scene
 
         Material* getMaterial( int index );               
                 
+        void toggleAmbient( bool isActive );
+        
+        void toggleDiffuse( bool isActive );
+        
+        void toggleSpecular( bool isActive );
+        
+        void toggleShadow( bool isActive );
+        
+        void toggleAntiAlias( bool isActive );
+        
     private:
 
         bool computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& normal, int& objectID );        
@@ -59,6 +70,12 @@ class Scene
 
         Vector4D _ambientLight;
         Vector4D _backgroundColor;
+        
+        bool _ambient;
+        bool _diffuse;
+        bool _specular;
+        bool _shadow;
+        bool _antiAlias;
 
 };
 

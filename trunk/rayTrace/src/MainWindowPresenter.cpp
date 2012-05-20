@@ -54,3 +54,39 @@ void MainWindowPresenter::renderScene()
         
     _image = _scene->render();
 }
+
+
+
+void MainWindowPresenter::toggleAmbient( bool isActive )
+{
+    
+}
+    
+
+
+void MainWindowPresenter::toggleDiffuse( bool isActive )
+{
+    
+}
+
+
+
+void MainWindowPresenter::toggleSpecular( bool isActive )
+{
+    
+}
+    
+
+
+void MainWindowPresenter::toggleShadow( bool isActive )
+{
+     
+}
+    
+
+
+void MainWindowPresenter::toggleAntiAlias( bool isActive )
+{
+    
+}
+
