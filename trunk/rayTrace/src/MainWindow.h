@@ -24,6 +24,7 @@ private:
     GtkWidget* buildButtonsBox();
     GtkWidget* buildCanvasBox();
     GtkWidget* buildRayTraceCanvas();
+    GtkWidget* buildToggleBox();
 
     static gboolean cb_configGLCanvas( GtkWidget* canvas, GdkEventConfigure* event, gpointer user_data );
     static gboolean cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event, gpointer user_data );
@@ -34,6 +35,8 @@ private:
     GtkWidget* _window;
     GtkWidget* _rayTraceCanvas;
     GtkWidget* _messageBar;
+    GtkWidget* _fileLabel;
+    
     MainWindowPresenter* _presenter;
 };
 

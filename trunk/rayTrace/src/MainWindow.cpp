@@ -14,6 +14,9 @@
 #include <GL/gl.h>
 #include <iostream>
 #include <sstream>
+#include <gtk-2.0/gtk/gtklabel.h>
+#include <gtk-2.0/gtk/gtkbox.h>
+
 
 MainWindow::MainWindow()
 {
@@ -21,30 +24,44 @@ MainWindow::MainWindow()
     _presenter = new MainWindowPresenter();
 }
 
+
+
 MainWindow::~MainWindow()
 {
     gtk_widget_destroy( _window );
     delete _presenter;
 }
 
+
+
+
 void MainWindow::show()
 {
     gtk_main();
 }
 
+
+
 GtkWidget* MainWindow::build()
 {
     GtkWidget* window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+    gtk_container_set_border_width( GTK_CONTAINER (window), 5 );
+    gtk_window_set_title( GTK_WINDOW (window), "Raytracing");
+    gtk_window_set_resizable( GTK_WINDOW (window), FALSE ); 
     g_signal_connect( window, "delete-event", G_CALLBACK (cb_deleteWindow), window );
 
-    GtkWidget* mainBox = gtk_vbox_new( FALSE, 10 );
+    GtkWidget* mainBox = gtk_vbox_new( FALSE, 2 );
     gtk_container_add( GTK_CONTAINER(window), mainBox );
 
     GtkWidget* buttonsBox = buildButtonsBox();
     gtk_box_pack_start_defaults( GTK_BOX(mainBox), buttonsBox );
     
+    gtk_box_pack_start( GTK_BOX (mainBox), gtk_hseparator_new(), TRUE , TRUE , 5  );
+    
     GtkWidget* canvasBox = buildCanvasBox();
     gtk_box_pack_start_defaults( GTK_BOX(mainBox), canvasBox );
+    
+    gtk_box_pack_start( GTK_BOX (mainBox), gtk_hseparator_new(), TRUE , TRUE , 5  );
     
     _messageBar = gtk_label_new( "Created by Eliana Goldner and Walther Maciel" );
     gtk_box_pack_start_defaults( GTK_BOX(mainBox), _messageBar );
@@ -54,38 +71,46 @@ GtkWidget* MainWindow::build()
     return window;
 }
 
+
+
 GtkWidget* MainWindow::buildButtonsBox()
 {
     GtkWidget* buttonsBox = gtk_hbox_new(  FALSE, 5 );
     
     // creating button to load a scene
-    GtkWidget* openButton = gtk_button_new_with_label( "Open Scene" );
-    gtk_box_pack_start_defaults( GTK_BOX(buttonsBox), openButton );
-    g_signal_connect( openButton, "clicked", G_CALLBACK( cb_openScene ), this );
+    GtkWidget* loadButton = gtk_button_new_with_label( "Load Scene" );
+    gtk_widget_set_size_request( loadButton, 100, 30 );
+    gtk_box_pack_start( GTK_BOX(buttonsBox), loadButton, FALSE, FALSE, 2 );
+    g_signal_connect( loadButton, "clicked", G_CALLBACK( cb_openScene ), this );    
     
-    //creating button to render the loaded scene
-    GtkWidget* renderButton = gtk_button_new_with_label( "Render" );
-    gtk_box_pack_start_defaults( GTK_BOX(buttonsBox), renderButton );
-    g_signal_connect( renderButton, "clicked", G_CALLBACK( cb_render ), this );
+    _fileLabel = gtk_label_new( "" );
+    gtk_box_pack_start( GTK_BOX(buttonsBox), _fileLabel, FALSE, FALSE, 2 );
     
     return buttonsBox;
 }
 
+
+
 GtkWidget* MainWindow::buildCanvasBox()
 {
-    GtkWidget* canvasBox = gtk_hbox_new( FALSE, 0 );
+    GtkWidget* canvasBox = gtk_hbox_new( FALSE, 2 );
     
     _rayTraceCanvas = buildRayTraceCanvas();
-    gtk_box_pack_start_defaults( GTK_BOX(canvasBox), _rayTraceCanvas );
+    gtk_box_pack_start( GTK_BOX(canvasBox), _rayTraceCanvas, FALSE, FALSE, 2 );
+    
+    GtkWidget* toggles = buildToggleBox();
+    gtk_box_pack_start( GTK_BOX(canvasBox), toggles, FALSE, FALSE, 2 );
     
     return canvasBox;
 }
+
+
 
 GtkWidget* MainWindow::buildRayTraceCanvas()
 {
     // Create the canvas and set  it's size
     GtkWidget* rayTraceCanvas = gtk_drawing_area_new();
-    gtk_drawing_area_size( GTK_DRAWING_AREA(rayTraceCanvas), 100, 100 );
+    gtk_drawing_area_size( GTK_DRAWING_AREA(rayTraceCanvas), 300, 300 );
 
     // OpenGL configuration for the canvas
     GdkGLConfig* glconfig = gdk_gl_config_new_by_mode( static_cast<GdkGLConfigMode>( GDK_GL_MODE_RGB | GDK_GL_MODE_DEPTH | GDK_GL_MODE_DOUBLE ) );
@@ -99,6 +124,40 @@ GtkWidget* MainWindow::buildRayTraceCanvas()
 
     return rayTraceCanvas;
 }
+
+
+
+GtkWidget* MainWindow::buildToggleBox()
+{
+    GtkWidget* vbox = gtk_vbox_new( FALSE, 2 );
+    
+    GtkWidget* ambientToggle  = gtk_check_button_new_with_label( "Ambient"    );
+    GtkWidget* diffuseToggle  = gtk_check_button_new_with_label( "Diffuse"    );
+    GtkWidget* specularToggle = gtk_check_button_new_with_label( "Specular"   );
+    GtkWidget* shadowToggle   = gtk_check_button_new_with_label( "Shadow"     );
+    GtkWidget* aliasToggle    = gtk_check_button_new_with_label( "Anti-Alias" );    
+    
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (ambientToggle) , TRUE );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (diffuseToggle) , TRUE );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (specularToggle), TRUE );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (shadowToggle)  , TRUE );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (aliasToggle)   , TRUE );
+    
+    gtk_box_pack_start( GTK_BOX (vbox), ambientToggle , FALSE, FALSE, 2 );
+    gtk_box_pack_start( GTK_BOX (vbox), diffuseToggle , FALSE, FALSE, 2 );
+    gtk_box_pack_start( GTK_BOX (vbox), specularToggle, FALSE, FALSE, 2 );
+    gtk_box_pack_start( GTK_BOX (vbox), shadowToggle  , FALSE, FALSE, 2 );
+    gtk_box_pack_start( GTK_BOX (vbox), aliasToggle   , FALSE, FALSE, 2 );
+        
+    GtkWidget* applyButton = gtk_button_new_with_label( "Apply" );
+    gtk_widget_set_size_request( applyButton, 100, 30 );
+    gtk_box_pack_start( GTK_BOX(vbox), applyButton, FALSE, FALSE, 2 );
+    g_signal_connect( applyButton, "clicked", G_CALLBACK( cb_render ), this );
+    
+    return vbox;
+}
+
+
 
 gboolean MainWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event, gpointer user_data )
 {
@@ -149,6 +208,8 @@ gboolean MainWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event
     return TRUE;
 }
 
+
+
 gboolean MainWindow::cb_configGLCanvas( GtkWidget* canvas, GdkEventConfigure* event, gpointer user_data )
 {
     GdkGLContext *glContext = gtk_widget_get_gl_context( canvas );
@@ -170,6 +231,8 @@ gboolean MainWindow::cb_configGLCanvas( GtkWidget* canvas, GdkEventConfigure* ev
 
     return true;
 }
+
+
 
 void MainWindow::cb_openScene( GtkWidget* button, gpointer user_data )
 {
@@ -196,15 +259,12 @@ void MainWindow::cb_openScene( GtkWidget* button, gpointer user_data )
 
         if (!window->_presenter->buildScene( filename ))
         {
-            printf("Cannot open file %s\n", filename );
+            std::string message = "Error loading file";
+            gtk_label_set_text( GTK_LABEL (window->_fileLabel), message.c_str()  ); 
         }
         else
         {
-            int width  = imgGetWidth( window->_presenter->getImage() );
-            int heigth = imgGetHeight( window->_presenter->getImage()  );
-
-            gtk_drawing_area_size( GTK_DRAWING_AREA (window->_rayTraceCanvas) , width, heigth );
-            gtk_window_resize( GTK_WINDOW (window->_window), width, heigth );
+            gtk_label_set_text( GTK_LABEL (window->_fileLabel), filename );                        
         }
 
         g_free( filename );
@@ -213,13 +273,24 @@ void MainWindow::cb_openScene( GtkWidget* button, gpointer user_data )
     gtk_widget_destroy( fileChooser );
 }
 
+
+
 void MainWindow::cb_render( GtkWidget* button, gpointer user_data )
 {
     MainWindow* window = (MainWindow*)user_data;
-    
+       
     time_t begin = time(NULL);
     window->_presenter->renderScene();
     time_t end = time(NULL);
+       
+    if (!window->_presenter->getImage())
+        return;
+    
+    int width  = imgGetWidth( window->_presenter->getImage() );
+    int heigth = imgGetHeight( window->_presenter->getImage()  );
+
+    gtk_drawing_area_size( GTK_DRAWING_AREA (window->_rayTraceCanvas) , width, heigth );
+    gtk_window_resize( GTK_WINDOW (window->_window), width, heigth );            
     
     long long elapsed = end - begin;
     std::stringstream message;
