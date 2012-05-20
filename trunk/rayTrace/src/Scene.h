@@ -75,6 +75,7 @@ class Scene
         bool _diffuse;
         bool _specular;
         bool _shadow;
+        bool _reflections;
         bool _antiAlias;
 
 };

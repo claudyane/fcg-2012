@@ -15,12 +15,12 @@ Scene::Scene()
 {
     _camera = NULL;
     
-    _ambient   = true;
-    _diffuse   = true;
-    _specular  = true;
-    _shadow    = true;
-    _antiAlias = true;
-
+    _ambient     = true;
+    _diffuse     = true;
+    _specular    = true;
+    _shadow      = true;
+    _antiAlias   = true;
+    _reflections = true;
 }
 
 
