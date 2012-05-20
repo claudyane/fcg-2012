@@ -257,8 +257,8 @@ void Scene::addAmbienteComponent(int materialID, float& red, float& green, float
 
 bool Scene::inShadow( Vector4D& point, int lightID, int objectID )
 {
-    // check if shadow is on
-    if( _shadow ) return false;
+    // check if shadow is off
+    if( !_shadow ) return false;
     
     // create a ray from the point to the light source
     Ray toLight;
