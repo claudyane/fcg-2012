@@ -145,11 +145,11 @@ GtkWidget* MainWindow::buildToggleBox()
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (shadowToggle)  , TRUE );
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (aliasToggle)   , TRUE );
     
-    g_signal_connect( ambientToggle , "toggled", G_CALLBACK (cb_toggleButton), _window );
-    g_signal_connect( diffuseToggle , "toggled", G_CALLBACK (cb_toggleButton), _window );
-    g_signal_connect( specularToggle, "toggled", G_CALLBACK (cb_toggleButton), _window );
-    g_signal_connect( shadowToggle  , "toggled", G_CALLBACK (cb_toggleButton), _window );
-    g_signal_connect( aliasToggle   , "toggled", G_CALLBACK (cb_toggleButton), _window );
+    g_signal_connect( ambientToggle , "toggled", G_CALLBACK (cb_toggleButton), this );
+    g_signal_connect( diffuseToggle , "toggled", G_CALLBACK (cb_toggleButton), this );
+    g_signal_connect( specularToggle, "toggled", G_CALLBACK (cb_toggleButton), this );
+    g_signal_connect( shadowToggle  , "toggled", G_CALLBACK (cb_toggleButton), this );
+    g_signal_connect( aliasToggle   , "toggled", G_CALLBACK (cb_toggleButton), this );
     
     gtk_widget_set_name( ambientToggle , "ambientToggle"  );
     gtk_widget_set_name( diffuseToggle , "diffuseToggle"  );
