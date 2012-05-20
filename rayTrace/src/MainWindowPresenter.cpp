@@ -59,34 +59,49 @@ void MainWindowPresenter::renderScene()
 
 void MainWindowPresenter::toggleAmbient( bool isActive )
 {
+    if (!_scene)
+        return;
     
+    _scene->toggleAmbient( isActive );
 }
     
 
 
 void MainWindowPresenter::toggleDiffuse( bool isActive )
 {
+    if (!_scene)
+        return;
     
+    _scene->toggleDiffuse( isActive );
 }
 
 
 
 void MainWindowPresenter::toggleSpecular( bool isActive )
 {
+    if (!_scene)
+        return;
     
+    _scene->toggleSpecular( isActive );
 }
     
 
 
 void MainWindowPresenter::toggleShadow( bool isActive )
 {
-     
+    if (!_scene)
+        return;
+    
+     _scene->toggleShadow( isActive );
 }
     
 
 
 void MainWindowPresenter::toggleAntiAlias( bool isActive )
 {
+    if (!_scene)
+        return;
     
+    _scene->toggleAntiAlias( isActive );
 }
 

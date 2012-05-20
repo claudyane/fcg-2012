@@ -16,6 +16,7 @@
 #include <sstream>
 #include <gtk-2.0/gtk/gtklabel.h>
 #include <gtk-2.0/gtk/gtkbox.h>
+#include <string.h>
 
 
 MainWindow::MainWindow()
@@ -142,6 +143,18 @@ GtkWidget* MainWindow::buildToggleBox()
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (specularToggle), TRUE );
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (shadowToggle)  , TRUE );
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (aliasToggle)   , TRUE );
+    
+    g_signal_connect( ambientToggle , "toggled", G_CALLBACK (cb_toggleButton), _window );
+    g_signal_connect( diffuseToggle , "toggled", G_CALLBACK (cb_toggleButton), _window );
+    g_signal_connect( specularToggle, "toggled", G_CALLBACK (cb_toggleButton), _window );
+    g_signal_connect( shadowToggle  , "toggled", G_CALLBACK (cb_toggleButton), _window );
+    g_signal_connect( aliasToggle   , "toggled", G_CALLBACK (cb_toggleButton), _window );
+    
+    gtk_widget_set_name( ambientToggle , "ambientToggle"  );
+    gtk_widget_set_name( diffuseToggle , "diffuseToggle"  );
+    gtk_widget_set_name( specularToggle, "specularToggle" );
+    gtk_widget_set_name( shadowToggle  , "shadowToggle"   );
+    gtk_widget_set_name( aliasToggle   , "aliasToggle"    );    
     
     gtk_box_pack_start( GTK_BOX (vbox), ambientToggle , FALSE, FALSE, 2 );
     gtk_box_pack_start( GTK_BOX (vbox), diffuseToggle , FALSE, FALSE, 2 );
@@ -308,3 +321,33 @@ gboolean MainWindow::cb_deleteWindow( GtkWidget* widget, GdkEvent* event, gpoint
 
     return TRUE;
 }
+
+
+
+void MainWindow::cb_toggleButton( GtkToggleButton* togglebutton, gpointer user_data )
+{
+    MainWindow* window = (MainWindow*) user_data;    
+    const gchar* name = gtk_widget_get_name( GTK_WIDGET (togglebutton) );
+    
+    if (strcmp( name, "ambientToggle") == 0)
+    {
+        window->_presenter->toggleAmbient( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)) );
+    }
+    else if (strcmp( name, "diffuseToggle") == 0)
+    {
+        window->_presenter->toggleDiffuse( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)) );
+    }
+    else if (strcmp( name, "specularToggle") == 0)
+    {
+        window->_presenter->toggleSpecular( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)) );
+    }
+    else if (strcmp( name, "shadowToggle") == 0)
+    {
+        window->_presenter->toggleShadow( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)) );
+    }
+    else if (strcmp( name, "aliasToggle") == 0)
+    {
+        window->_presenter->toggleAntiAlias( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)) );
+    }
+}
+
