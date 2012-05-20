@@ -42,6 +42,9 @@ bool MainWindowPresenter::buildScene( std::string filename )
     Rt4FileReader reader;
     reader.loadScene( filename, _scene );
 
+    if (_image)
+        imgClear( _image, 0.0f, 0.0f, 0.0f );
+    
     return true;
 }
 
@@ -97,11 +100,11 @@ void MainWindowPresenter::toggleShadow( bool isActive )
     
 
 
-void MainWindowPresenter::toggleAntiAlias( bool isActive )
+void MainWindowPresenter::toggleReflection( bool isActive )
 {
     if (!_scene)
         return;
     
-    _scene->toggleAntiAlias( isActive );
+    _scene->toggleReflection( isActive );
 }
 

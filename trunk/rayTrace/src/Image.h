@@ -79,6 +79,15 @@ void    imgDestroy (Image*image);
 Image* imgCopy(Image* image);
 
 /**
+ * Limpa a imagem com a cor recebida
+ * @param image Imagem a ser editada
+ * @param r Componente vermelha da cor
+ * @param g Componente verde da cor 
+ * @param b Componente azul da cor
+ */
+void imgClear( Image* image, float r, float g, float b );
+
+/**
  *	Cria uma nova nova copia imagem dada em tons de cinza.
  *
  *	@param image imagem a ser copiada em tons de cinza.

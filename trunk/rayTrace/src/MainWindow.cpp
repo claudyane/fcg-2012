@@ -18,6 +18,7 @@
 #include <gtk-2.0/gtk/gtkbox.h>
 #include <string.h>
 #include <glib-2.0/glib/gtypes.h>
+#include <gtk-2.0/gtk/gtkwidget.h>
 
 
 MainWindow::MainWindow()
@@ -133,35 +134,35 @@ GtkWidget* MainWindow::buildToggleBox()
 {
     GtkWidget* vbox = gtk_vbox_new( FALSE, 2 );
     
-    GtkWidget* ambientToggle  = gtk_check_button_new_with_label( "Ambient"    );
-    GtkWidget* diffuseToggle  = gtk_check_button_new_with_label( "Diffuse"    );
-    GtkWidget* specularToggle = gtk_check_button_new_with_label( "Specular"   );
-    GtkWidget* shadowToggle   = gtk_check_button_new_with_label( "Shadow"     );
-    GtkWidget* aliasToggle    = gtk_check_button_new_with_label( "Anti-Alias" );    
+    GtkWidget* ambientToggle    = gtk_check_button_new_with_label( "Ambient"    );
+    GtkWidget* diffuseToggle    = gtk_check_button_new_with_label( "Diffuse"    );
+    GtkWidget* specularToggle   = gtk_check_button_new_with_label( "Specular"   );
+    GtkWidget* shadowToggle     = gtk_check_button_new_with_label( "Shadow"     );
+    GtkWidget* reflectionToggle = gtk_check_button_new_with_label( "Reflection" );    
     
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (ambientToggle) , TRUE );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (diffuseToggle) , TRUE );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (specularToggle), TRUE );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (shadowToggle)  , TRUE );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (aliasToggle)   , TRUE );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (ambientToggle)   , TRUE );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (diffuseToggle)   , TRUE );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (specularToggle)  , TRUE );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (shadowToggle)    , TRUE );
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (reflectionToggle), TRUE );
     
-    g_signal_connect( ambientToggle , "toggled", G_CALLBACK (cb_toggleButton), this );
-    g_signal_connect( diffuseToggle , "toggled", G_CALLBACK (cb_toggleButton), this );
-    g_signal_connect( specularToggle, "toggled", G_CALLBACK (cb_toggleButton), this );
-    g_signal_connect( shadowToggle  , "toggled", G_CALLBACK (cb_toggleButton), this );
-    g_signal_connect( aliasToggle   , "toggled", G_CALLBACK (cb_toggleButton), this );
+    g_signal_connect( ambientToggle   , "toggled", G_CALLBACK (cb_toggleButton), this );
+    g_signal_connect( diffuseToggle   , "toggled", G_CALLBACK (cb_toggleButton), this );
+    g_signal_connect( specularToggle  , "toggled", G_CALLBACK (cb_toggleButton), this );
+    g_signal_connect( shadowToggle    , "toggled", G_CALLBACK (cb_toggleButton), this );
+    g_signal_connect( reflectionToggle, "toggled", G_CALLBACK (cb_toggleButton), this );
     
-    gtk_widget_set_name( ambientToggle , "ambientToggle"  );
-    gtk_widget_set_name( diffuseToggle , "diffuseToggle"  );
-    gtk_widget_set_name( specularToggle, "specularToggle" );
-    gtk_widget_set_name( shadowToggle  , "shadowToggle"   );
-    gtk_widget_set_name( aliasToggle   , "aliasToggle"    );    
+    gtk_widget_set_name( ambientToggle   , "ambientToggle"    );
+    gtk_widget_set_name( diffuseToggle   ,  "diffuseToggle"   );
+    gtk_widget_set_name( specularToggle  , "specularToggle"   );
+    gtk_widget_set_name( shadowToggle    , "shadowToggle"     );
+    gtk_widget_set_name( reflectionToggle, "reflectionToggle" );    
     
     gtk_box_pack_start( GTK_BOX (vbox), ambientToggle , FALSE, FALSE, 2 );
     gtk_box_pack_start( GTK_BOX (vbox), diffuseToggle , FALSE, FALSE, 2 );
     gtk_box_pack_start( GTK_BOX (vbox), specularToggle, FALSE, FALSE, 2 );
     gtk_box_pack_start( GTK_BOX (vbox), shadowToggle  , FALSE, FALSE, 2 );
-    gtk_box_pack_start( GTK_BOX (vbox), aliasToggle   , FALSE, FALSE, 2 );
+    gtk_box_pack_start( GTK_BOX (vbox), reflectionToggle   , FALSE, FALSE, 2 );
         
     GtkWidget* applyButton = gtk_button_new_with_label( "Apply" );
     gtk_widget_set_size_request( applyButton, 100, 30 );
@@ -281,6 +282,9 @@ void MainWindow::cb_openScene( GtkWidget* button, gpointer user_data )
             gtk_label_set_text( GTK_LABEL (window->_fileLabel), filename );                        
         }
 
+        gtk_label_set_label( GTK_LABEL(window->_messageBar), "Created by Eliana Goldner and Walther Maciel" );
+        gtk_widget_queue_draw( window->_rayTraceCanvas );
+        
         g_free( filename );
     }
 
@@ -358,12 +362,12 @@ void MainWindow::cb_toggleButton( GtkToggleButton* togglebutton, gpointer user_d
         else
             window->_presenter->toggleShadow( false );
     }
-    else if (strcmp( name, "aliasToggle") == 0)
+    else if (strcmp( name, "reflectionToggle") == 0)
     {
         if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)))
-            window->_presenter->toggleAntiAlias( true );
+            window->_presenter->toggleReflection( true );
         else
-            window->_presenter->toggleAntiAlias( false );
+            window->_presenter->toggleReflection( false );
     }
 }
 
