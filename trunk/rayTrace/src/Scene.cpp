@@ -222,9 +222,10 @@ void Scene::shade( int objectID, Vector4D& normal, Vector4D& point, float& rOut,
     rOut = 0.0f;
     gOut = 0.0f;
     bOut = 0.0f;
-    
     Object* object = _objects[objectID];
-    addAmbienteComponent( object->getMaterialId(), rOut, gOut, bOut );
+    int materialID = object->getMaterialId();
+    
+    addAmbienteComponent( materialID, rOut, gOut, bOut );
     
     int numLights = _lights.size();
     
@@ -232,8 +233,8 @@ void Scene::shade( int objectID, Vector4D& normal, Vector4D& point, float& rOut,
     {
         if (!inShadow( point, lightID, objectID ))
         {
-            addLambertianComponent( object->getMaterialId(), lightID, normal, point, rOut, gOut, bOut );
-            addSpecularComponent( object->getMaterialId(), lightID, normal, point, rOut, gOut, bOut );
+            addLambertianComponent( materialID, lightID, normal, point, rOut, gOut, bOut );
+            addSpecularComponent( materialID, lightID, normal, point, rOut, gOut, bOut );
         }
     }
 }
