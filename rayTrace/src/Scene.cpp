@@ -129,7 +129,7 @@ void Scene::computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut )
     else
     {
         // Get shaded color of the objects material
-        shade( objectID, normal, point, rOut, gOut, bOut );
+        shade( ray, objectID, normal, point, rOut, gOut, bOut );
     }
 }
 
@@ -217,7 +217,7 @@ bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& n
 
 
 
-void Scene::shade( int objectID, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut )
+void Scene::shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut )
 {
     rOut = 0.0f;
     gOut = 0.0f;
@@ -239,9 +239,8 @@ void Scene::shade( int objectID, Vector4D& normal, Vector4D& point, float& rOut,
     }
 }
 
-void Scene::addReflectionComponent( int materialID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue )
+void Scene::addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue )
 {
-    
 }
 
 void Scene::addAmbienteComponent(int materialID, float& red, float& green, float& blue)
