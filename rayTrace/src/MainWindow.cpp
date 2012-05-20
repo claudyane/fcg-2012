@@ -17,6 +17,7 @@
 #include <gtk-2.0/gtk/gtklabel.h>
 #include <gtk-2.0/gtk/gtkbox.h>
 #include <string.h>
+#include <glib-2.0/glib/gtypes.h>
 
 
 MainWindow::MainWindow()
@@ -331,23 +332,38 @@ void MainWindow::cb_toggleButton( GtkToggleButton* togglebutton, gpointer user_d
     
     if (strcmp( name, "ambientToggle") == 0)
     {
-        window->_presenter->toggleAmbient( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)) );
+        if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)))
+            window->_presenter->toggleAmbient( true );
+        else
+            window->_presenter->toggleAmbient( false );
     }
     else if (strcmp( name, "diffuseToggle") == 0)
     {
-        window->_presenter->toggleDiffuse( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)) );
+        if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)))
+            window->_presenter->toggleDiffuse( true );
+        else
+            window->_presenter->toggleDiffuse( false );
     }
     else if (strcmp( name, "specularToggle") == 0)
     {
-        window->_presenter->toggleSpecular( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)) );
+        if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)))
+            window->_presenter->toggleSpecular( true );
+        else
+            window->_presenter->toggleSpecular( false );
     }
     else if (strcmp( name, "shadowToggle") == 0)
     {
-        window->_presenter->toggleShadow( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)) );
+        if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)))
+            window->_presenter->toggleShadow( true );
+        else
+            window->_presenter->toggleShadow( false );
     }
     else if (strcmp( name, "aliasToggle") == 0)
     {
-        window->_presenter->toggleAntiAlias( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)) );
+        if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)))
+            window->_presenter->toggleAntiAlias( true );
+        else
+            window->_presenter->toggleAntiAlias( false );
     }
 }
 
