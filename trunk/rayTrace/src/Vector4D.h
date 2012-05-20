@@ -91,6 +91,14 @@ Vector4D cross( const Vector4D& a, const Vector4D& b );
 double dot( const Vector4D& a, const Vector4D& b );
 
 /**
+ * Computes de reflection of a vector
+ * @param normal Axis in which the incident vector will be reflected
+ * @param in Incident vector that will be reflected
+ * @return Reflected vector
+ */
+Vector4D reflect( const Vector4D& normal, const Vector4D& in );
+
+/**
  * Operators
  */
 Vector4D operator+( const Vector4D& a, const Vector4D& b );
