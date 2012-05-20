@@ -63,6 +63,8 @@ class Scene
         
         void addAmbienteComponent( int materialID, float& red, float& green, float& blue );
         
+        void addReflectionComponent( int materialID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue );
+        
         std::vector<Object*> _objects;
         std::vector<Light*> _lights;
         std::vector<Material*> _materials;

@@ -239,6 +239,11 @@ void Scene::shade( int objectID, Vector4D& normal, Vector4D& point, float& rOut,
     }
 }
 
+void Scene::addReflectionComponent( int materialID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue )
+{
+    
+}
+
 void Scene::addAmbienteComponent(int materialID, float& red, float& green, float& blue)
 {
     // check if the ambient component should be added
