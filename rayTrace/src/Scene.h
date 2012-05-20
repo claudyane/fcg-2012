@@ -51,9 +51,9 @@ class Scene
 
         bool computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& normal, int& objectID );        
         
-        void computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut );
+        void computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut, int count );
         
-        void shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut );
+        void shade( int objectID, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut );
         
         bool inShadow( Vector4D& point, int lightID, int objectID );
         
@@ -63,7 +63,7 @@ class Scene
         
         void addAmbienteComponent( int materialID, float& red, float& green, float& blue );
         
-        void addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue );
+        void addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue, int depth );
         
         std::vector<Object*> _objects;
         std::vector<Light*> _lights;
@@ -77,7 +77,6 @@ class Scene
         bool _diffuse;
         bool _specular;
         bool _shadow;
-        bool _reflections;
         bool _reflection;
 
 };

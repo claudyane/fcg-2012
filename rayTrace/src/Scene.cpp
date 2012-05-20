@@ -11,6 +11,8 @@
 #include <cfloat>
 #include <cstdio>
 
+#define MAX_DEPTH 6
+
 Scene::Scene()
 {
     _camera = NULL;
@@ -20,7 +22,6 @@ Scene::Scene()
     _specular    = true;
     _shadow      = true;
     _reflection   = true;
-    _reflections = true;
 }
 
 
@@ -103,7 +104,7 @@ Image* Scene::render()
         {
             Ray ray = _camera->computeRay( x, y );
             float r, g, b;
-            computeRayColor( ray, r, g, b );
+            computeRayColor( ray, r, g, b, 0 );
             imgSetPixel3f( image, x, y, r, g, b );
         }
     }
@@ -113,23 +114,33 @@ Image* Scene::render()
 
 
 
-void Scene::computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut )
+void Scene::computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut, int depth )
 {
     Vector4D point;
     Vector4D normal;
     int objectID;
     
-    if (!computeNearestRayIntersection( ray, point, normal, objectID ))
+    if ((depth > MAX_DEPTH) || !computeNearestRayIntersection( ray, point, normal, objectID ))
     {
         // no interceptions
         rOut = _backgroundColor.x;
         gOut = _backgroundColor.y;
         bOut = _backgroundColor.z;
+        
+        return;
     }
-    else
+    
+    // Get shaded color of the objects material
+    shade( objectID, normal, point, rOut, gOut, bOut );
+    
+    Object* object = _objects[objectID];
+    Material* material = _materials[object->getMaterialId()];
+    
+    // Get reflection color
+    double reflectionFactor = material->getReflectionFactor();
+    if( reflectionFactor > 0.0 )
     {
-        // Get shaded color of the objects material
-        shade( ray, objectID, normal, point, rOut, gOut, bOut );
+        addReflectionComponent( object->getMaterialId(), ray, normal, point, rOut, gOut, bOut, depth+1 );
     }
 }
 
@@ -197,7 +208,7 @@ bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& n
         Object* object = _objects[objID];
         bool intersected = object->computeRayIntersection( ray, t );
         
-        if (intersected && (t < tMin))
+        if (intersected && (t < tMin) && (t > 0.01))
         {
             tMin = t;
             nearestId = objID;
@@ -217,7 +228,7 @@ bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& n
 
 
 
-void Scene::shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut )
+void Scene::shade( int objectID, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut )
 {
     rOut = 0.0f;
     gOut = 0.0f;
@@ -239,8 +250,27 @@ void Scene::shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, fl
     }
 }
 
-void Scene::addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue )
+void Scene::addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue, int depth )
 {
+    // if reflections are not being taken in consideration. return.
+    if( (!_reflection) || (depth > MAX_DEPTH) ) return;
+    
+    // create the reflected ray
+    Ray reflectedRay;
+    reflectedRay.origin = point;
+    reflectedRay.direction = reflect( normal, ray.direction );
+    
+    // compute the color of the reflected ray
+    float rRed, rGreen, rBlue;
+    computeRayColor( reflectedRay,  rRed, rGreen, rBlue, depth );
+    
+    // get reflection factor
+    double reflectionFactor = _materials[materialID]->getReflectionFactor();
+    
+    // mix the two colors
+    red   = red   + ( reflectionFactor ) * rRed;
+    green = green + ( reflectionFactor ) * rGreen;
+    blue  = blue  + ( reflectionFactor ) * rBlue;
 }
 
 void Scene::addAmbienteComponent(int materialID, float& red, float& green, float& blue)
