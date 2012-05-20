@@ -43,8 +43,14 @@ public:
      */
     Ray computeRay( int x, int y );
     
+    /**
+     * Returns the screen size
+     */
     void getScreenSize( int& width, int& height );
     
+    /**
+     * Returns the camera's position in world coordinates
+     */
     Vector4D getPosition();
 
 private:
