@@ -240,6 +240,9 @@ void Scene::shade( int objectID, Vector4D& normal, Vector4D& point, float& rOut,
 
 void Scene::addAmbienteComponent(int materialID, float& red, float& green, float& blue)
 {
+    // check if the ambient component should be added
+    if( !_ambient ) return;
+    
     // recupera cor difusa do material
     float diffuseR, diffuseG, diffuseB;
     _materials[materialID]->getDiffuse( diffuseR, diffuseG, diffuseB );
@@ -254,6 +257,9 @@ void Scene::addAmbienteComponent(int materialID, float& red, float& green, float
 
 bool Scene::inShadow( Vector4D& point, int lightID, int objectID )
 {
+    // check if shadow is on
+    if( _shadow ) return false;
+    
     // create a ray from the point to the light source
     Ray toLight;
     toLight.origin = point;
@@ -283,6 +289,9 @@ bool Scene::inShadow( Vector4D& point, int lightID, int objectID )
 
 void Scene::addLambertianComponent(int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue)
 {
+    // check if lambertian is ON
+    if (!_diffuse) return;
+    
     Vector4D lightDir = _lights[lightID]->getPosition() - point;
     lightDir.normalize();
     double cosTheta = dot( normal, lightDir );
@@ -305,6 +314,9 @@ void Scene::addLambertianComponent(int materialID, int lightID, Vector4D& normal
 
 void Scene::addSpecularComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue )
 {
+    // check if specular is ON
+    if (!_specular) return;
+    
     Vector4D lightDir = _lights[lightID]->getPosition() - point;
     lightDir.normalize();
     double cosTheta = dot( normal, lightDir );
