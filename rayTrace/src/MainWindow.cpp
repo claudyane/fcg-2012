@@ -279,6 +279,7 @@ void MainWindow::cb_render( GtkWidget* button, gpointer user_data )
 {
     MainWindow* window = (MainWindow*)user_data;
        
+    //gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON );
     time_t begin = time(NULL);
     window->_presenter->renderScene();
     time_t end = time(NULL);

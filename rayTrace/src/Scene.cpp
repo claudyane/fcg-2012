@@ -14,6 +14,12 @@
 Scene::Scene()
 {
     _camera = NULL;
+    
+    _ambient   = true;
+    _diffuse   = true;
+    _specular  = true;
+    _shadow    = true;
+    _antiAlias = true;
 
 }
 
@@ -139,6 +145,41 @@ void Scene::addMaterial( Material* material )
 Material* Scene::getMaterial( int index )
 {
     return _materials[index];
+}
+
+
+
+void Scene::toggleAmbient( bool isActive )
+{
+    _ambient = isActive;
+}
+    
+
+
+void Scene::toggleDiffuse( bool isActive )
+{
+    _diffuse = isActive;
+}
+
+
+
+void Scene::toggleSpecular( bool isActive )
+{
+    _specular = isActive;
+}
+    
+
+
+void Scene::toggleShadow( bool isActive )
+{
+     _shadow = isActive;
+}
+    
+
+
+void Scene::toggleAntiAlias( bool isActive )
+{
+    _antiAlias = isActive;
 }
 
 
