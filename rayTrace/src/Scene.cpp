@@ -19,7 +19,7 @@ Scene::Scene()
     _diffuse     = true;
     _specular    = true;
     _shadow      = true;
-    _antiAlias   = true;
+    _reflection   = true;
     _reflections = true;
 }
 
@@ -177,9 +177,9 @@ void Scene::toggleShadow( bool isActive )
     
 
 
-void Scene::toggleAntiAlias( bool isActive )
+void Scene::toggleReflection( bool isActive )
 {
-    _antiAlias = isActive;
+    _reflection = isActive;
 }
 
 

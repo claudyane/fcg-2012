@@ -45,7 +45,7 @@ class Scene
         
         void toggleShadow( bool isActive );
         
-        void toggleAntiAlias( bool isActive );
+        void toggleReflection( bool isActive );
         
     private:
 
@@ -78,7 +78,7 @@ class Scene
         bool _specular;
         bool _shadow;
         bool _reflections;
-        bool _antiAlias;
+        bool _reflection;
 
 };
 

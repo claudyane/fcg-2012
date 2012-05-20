@@ -27,7 +27,7 @@ public:
     void toggleDiffuse( bool isActive );
     void toggleSpecular( bool isActive );
     void toggleShadow( bool isActive );
-    void toggleAntiAlias( bool isActive );
+    void toggleReflection( bool isActive );
     
     
 private:

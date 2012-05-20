@@ -284,6 +284,22 @@ Image* imgCopy(Image* image)
 
 
 
+void imgClear( Image* image, float r, float g, float b )
+{
+    int w = imgGetWidth( image );
+    int h = imgGetHeight( image );
+    
+    for (int y = 0; y < h; y++)
+    {
+        for (int x = 0; x < w; x++)
+        {
+            imgSetPixel3f( image, x, y, r, g, b );
+        }
+    }
+}
+
+
+
 Image* imgGrey(Image* image)
 {
    int w = imgGetWidth(image);
