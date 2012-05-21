@@ -184,7 +184,6 @@ Vector4D operator*( const Vector4D& a, const double b )
 
 
 Vector4D reflect( const Vector4D& normal, const Vector4D& in )
-{
-    const double cosI = -dot( normal, in );
-    return in + 2 * cosI * normal;
+{    
+    return(2 * dot( in, normal ) * normal) - in;
 }
