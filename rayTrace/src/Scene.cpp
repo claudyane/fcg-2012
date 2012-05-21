@@ -120,7 +120,7 @@ void Scene::computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut, int
     Vector4D normal;
     int objectID;
     
-    if ((depth > MAX_DEPTH) || !computeNearestRayIntersection( ray, point, normal, objectID ))
+    if (!computeNearestRayIntersection( ray, point, normal, objectID ))
     {
         // no interceptions
         rOut = _backgroundColor.x;
@@ -131,7 +131,7 @@ void Scene::computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut, int
     }
     
     // Get shaded color of the objects material
-    shade( objectID, normal, point, rOut, gOut, bOut );
+    shade( ray, objectID, normal, point, rOut, gOut, bOut );
     
     Object* object = _objects[objectID];
     Material* material = _materials[object->getMaterialId()];
@@ -140,7 +140,7 @@ void Scene::computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut, int
     double reflectionFactor = material->getReflectionFactor();
     if( reflectionFactor > 0.0 )
     {
-        addReflectionComponent( object->getMaterialId(), ray, normal, point, rOut, gOut, bOut, depth+1 );
+        addReflectionComponent( object->getMaterialId(), ray, normal, point, rOut, gOut, bOut, depth );
     }
 }
 
@@ -228,7 +228,7 @@ bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& n
 
 
 
-void Scene::shade( int objectID, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut )
+void Scene::shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut )
 {
     rOut = 0.0f;
     gOut = 0.0f;
@@ -245,7 +245,7 @@ void Scene::shade( int objectID, Vector4D& normal, Vector4D& point, float& rOut,
         if (!inShadow( point, lightID, objectID ))
         {
             addLambertianComponent( materialID, lightID, normal, point, rOut, gOut, bOut );
-            addSpecularComponent( materialID, lightID, normal, point, rOut, gOut, bOut );
+            addSpecularComponent( ray, materialID, lightID, normal, point, rOut, gOut, bOut );
         }
     }
 }
@@ -258,11 +258,11 @@ void Scene::addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, 
     // create the reflected ray
     Ray reflectedRay;
     reflectedRay.origin = point;
-    reflectedRay.direction = reflect( normal, ray.direction );
+    reflectedRay.direction = reflect( normal, -ray.direction );
     
     // compute the color of the reflected ray
     float rRed, rGreen, rBlue;
-    computeRayColor( reflectedRay,  rRed, rGreen, rBlue, depth );
+    computeRayColor( reflectedRay,  rRed, rGreen, rBlue, depth+1 );
     
     // get reflection factor
     double reflectionFactor = _materials[materialID]->getReflectionFactor();
@@ -347,17 +347,13 @@ void Scene::addLambertianComponent(int materialID, int lightID, Vector4D& normal
 }
 
 
-void Scene::addSpecularComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue )
+void Scene::addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue )
 {
     // check if specular is ON
     if (!_specular) return;
     
     Vector4D lightDir = _lights[lightID]->getPosition() - point;
     lightDir.normalize();
-    double cosTheta = dot( normal, lightDir );
-
-    if (cosTheta < 0)
-        cosTheta = 0.0;
 
     float lightR, lightG, lightB;
     _lights[lightID]->getDiffuse( lightR, lightG, lightB );
@@ -366,13 +362,18 @@ void Scene::addSpecularComponent( int materialID, int lightID, Vector4D& normal,
     float specularR, specularG, specularB, exponent;
     _materials[materialID]->getSpecular( specularR, specularG, specularB, exponent );
 
-    Vector4D r = ( 2 * cosTheta * normal ) - lightDir;
+    Vector4D r = reflect( normal, lightDir );
     r.normalize();
 
-    Vector4D eyeDir = _camera->getPosition() - point;
+    Vector4D eyeDir = ray.origin - point;
     eyeDir.normalize();
 
-    float specularCoeficient = pow( dot(r, eyeDir), exponent );
+    float cosAlpha = dot(r, eyeDir);
+    
+    if (cosAlpha < 0.0)
+        return;
+    
+    float specularCoeficient = pow( cosAlpha, exponent );
     red   += specularR * lightR * specularCoeficient;
     green += specularG * lightG * specularCoeficient;
     blue  += specularB * lightB * specularCoeficient;
