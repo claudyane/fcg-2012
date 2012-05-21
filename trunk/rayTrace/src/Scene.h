@@ -53,13 +53,13 @@ class Scene
         
         void computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut, int count );
         
-        void shade( int objectID, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut );
+        void shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut );
         
         bool inShadow( Vector4D& point, int lightID, int objectID );
         
         void addLambertianComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue );
 
-        void addSpecularComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue );
+        void addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue );
         
         void addAmbienteComponent( int materialID, float& red, float& green, float& blue );
         
