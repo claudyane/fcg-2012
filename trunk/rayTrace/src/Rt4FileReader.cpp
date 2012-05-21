@@ -13,6 +13,7 @@
 #include "Light.h"
 #include "Box.h"
 #include "Triangle.h"
+#include "Color.h"
 
 Rt4FileReader::Rt4FileReader()
 {
@@ -43,13 +44,13 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
     int width;
     int height;
 
-    Vector4D backgroundColor;
-    Vector4D ambientLight;
+    Color backgroundColor;
+    Color ambientLight;
     char backgroundFilename[1024];
 
 
-    Vector4D diffuse;
-    Vector4D specular;
+    Color diffuse;
+    Color specular;
     double specularExponent;
     float reflective, refractive, opacity;
     char textureFilename[1024];
@@ -87,23 +88,17 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
             scene->setCamera( camera );
         }
 
-        else if( sscanf( buffer, "SCENE %lf %lf %lf %lf %lf %lf %s\n", &backgroundColor.x, &backgroundColor.y,
-                &backgroundColor.z, &ambientLight.x, &ambientLight.y, &ambientLight.z, backgroundFilename ) == 7 )
+        else if( sscanf( buffer, "SCENE %f %f %f %f %f %f %s\n", &backgroundColor.r, &backgroundColor.g,
+                &backgroundColor.b, &ambientLight.r, &ambientLight.g, &ambientLight.b, backgroundFilename ) == 7 )
         {
             scene->setAmbientLight( ambientLight * (1/255.0) );
             scene->setBackgroundColor( backgroundColor * (1/255.0) );
         }
 
-        else if( sscanf( buffer, "MATERIAL %lf %lf %lf %lf %lf %lf %lf %f %f %f %s\n", &diffuse.x, &diffuse.y, &diffuse.z,
-                &specular.x, &specular.y, &specular.z, &specularExponent, &reflective, &refractive, &opacity, textureFilename ) == 11 )
+        else if( sscanf( buffer, "MATERIAL %f %f %f %f %f %f %lf %f %f %f %s\n", &diffuse.r, &diffuse.g, &diffuse.b,
+                &specular.r, &specular.g, &specular.b, &specularExponent, &reflective, &refractive, &opacity, textureFilename ) == 11 )
         {
-            Material* material = new Material( diffuse.x/255.0f, 
-                                               diffuse.y/255.0f,
-                                               diffuse.z/255.0f,
-                                               specular.x/255.0f, 
-                                               specular.y/255.0f, 
-                                               specular.z/255.0f, 
-                                               specularExponent );
+            Material* material = new Material( (diffuse * (1/255.0)), (specular * (1/255.0)), specularExponent );
             material->setReflectionFactor( reflective );
             material->setRefractionFactor( refractive );
             material->setOpacity( opacity );

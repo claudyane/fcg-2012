@@ -7,15 +7,10 @@
 
 #include "Material.h"
 
-Material::Material( float diffuseRed, float diffuseGreen, float diffuseBlue, float specularRed, float specularGreen, float specularBlue, float specularExponent )
+Material::Material( Color diffuse, Color specular, float specularExponent )
 {
-    _diffuse[0] = diffuseRed;
-    _diffuse[1] = diffuseGreen;
-    _diffuse[2] = diffuseBlue;
-
-    _specular[0] = specularRed;
-    _specular[1] = specularGreen;
-    _specular[2] = specularBlue;
+    _diffuse = diffuse;
+    _specular = specular;
 
     _specularExponent = specularExponent;
 
@@ -39,22 +34,17 @@ Material::~Material()
 
 
 
-void Material::getDiffuse( float& diffuseRed, float& diffuseGreen, float& diffuseBlue )
+Color Material::getDiffuse()
 {
-    diffuseRed   = _diffuse[0];
-    diffuseGreen = _diffuse[1];
-    diffuseBlue  = _diffuse[2];
+    return _diffuse;
 }
 
 
 
-void Material::getSpecular( float& specularRed, float& specularGreen, float& specularBlue, float& specularExponent )
+Color Material::getSpecular( float& specularExponent )
 {
-    specularRed   = _specular[0];
-    specularGreen = _specular[1];
-    specularBlue  = _specular[2];
-
      specularExponent = _specularExponent;
+     return _specular;
 }
 
 

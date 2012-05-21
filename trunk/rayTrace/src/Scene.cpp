@@ -63,14 +63,14 @@ void Scene::setCamera( Camera* camera )
 
 
 
-void Scene::setAmbientLight( Vector4D ambientLight )
+void Scene::setAmbientLight( Color ambientLight )
 {
     _ambientLight = ambientLight;
 }
 
 
 
-void Scene::setBackgroundColor( Vector4D backgroungColor )
+void Scene::setBackgroundColor( Color backgroungColor )
 {
     _backgroundColor = backgroungColor;
 }
@@ -123,9 +123,9 @@ void Scene::computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut, int
     if (!computeNearestRayIntersection( ray, point, normal, objectID ))
     {
         // no interceptions
-        rOut = _backgroundColor.x;
-        gOut = _backgroundColor.y;
-        bOut = _backgroundColor.z;
+        rOut = _backgroundColor.r;
+        gOut = _backgroundColor.g;
+        bOut = _backgroundColor.b;
         
         return;
     }
@@ -279,13 +279,12 @@ void Scene::addAmbienteComponent(int materialID, float& red, float& green, float
     if( !_ambient ) return;
     
     // recupera cor difusa do material
-    float diffuseR, diffuseG, diffuseB;
-    _materials[materialID]->getDiffuse( diffuseR, diffuseG, diffuseB );
-    
+    Color diffuse = _materials[materialID]->getDiffuse();
+        
     // iluminação ambiente
-    red   += _ambientLight.x * diffuseR;
-    green += _ambientLight.y * diffuseG;
-    blue  += _ambientLight.z * diffuseB;   
+    red   = _ambientLight.r * diffuse.r;
+    green = _ambientLight.g * diffuse.g;
+    blue  = _ambientLight.b * diffuse.b;   
 }
 
 
@@ -337,13 +336,12 @@ void Scene::addLambertianComponent(int materialID, int lightID, Vector4D& normal
     float lightR, lightG, lightB;
     _lights[lightID]->getDiffuse( lightR, lightG, lightB );
 
-    float diffuseR, diffuseG, diffuseB;
-    _materials[materialID]->getDiffuse( diffuseR, diffuseG, diffuseB );
+    Color diffuse = _materials[materialID]->getDiffuse();
     
     // iluminação lambertiana
-    red   += diffuseR * lightR * cosTheta;
-    green += diffuseG * lightG * cosTheta;
-    blue  += diffuseB * lightB * cosTheta;
+    red   += diffuse.r * lightR * cosTheta;
+    green += diffuse.g * lightG * cosTheta;
+    blue  += diffuse.b * lightB * cosTheta;
 }
 
 
@@ -359,8 +357,8 @@ void Scene::addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4
     _lights[lightID]->getDiffuse( lightR, lightG, lightB );
 
     // componente especular
-    float specularR, specularG, specularB, exponent;
-    _materials[materialID]->getSpecular( specularR, specularG, specularB, exponent );
+    float exponent;
+    Color specular = _materials[materialID]->getSpecular( exponent );
 
     Vector4D r = reflect( normal, lightDir );
     r.normalize();
@@ -374,7 +372,7 @@ void Scene::addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4
         return;
     
     float specularCoeficient = pow( cosAlpha, exponent );
-    red   += specularR * lightR * specularCoeficient;
-    green += specularG * lightG * specularCoeficient;
-    blue  += specularB * lightB * specularCoeficient;
+    red   += specular.r * lightR * specularCoeficient;
+    green += specular.g * lightG * specularCoeficient;
+    blue  += specular.b * lightB * specularCoeficient;
 }
