@@ -9,7 +9,7 @@
 #define MATERIAL_H_
 
 #include "Image.h"
-
+#include "Color.h"
 class Material
 {
     public:
@@ -17,7 +17,7 @@ class Material
         /**
          * Constructor
          */
-        Material( float diffuseRed, float diffuseGreen, float diffuseBlue, float specularRed, float specularGreen, float specularBlue, float specularExponent );
+        Material( Color diffuse, Color specular, float specularExponent );
 
         /**
          * Destructor
@@ -27,12 +27,12 @@ class Material
         /**
          * Returns material's diffuse color
          */
-        void getDiffuse( float& diffuseRed, float& diffuseGreen, float& diffuseBlue );
+        Color getDiffuse();
 
         /**
          * Returns material's specular color and exponent
          */
-        void getSpecular( float& specularRed, float& specularGreen, float& specularBlue, float& specularExponent );
+        Color getSpecular( float& specularExponent );
 
         /**
          * Returns material's reflection factor
@@ -77,10 +77,10 @@ class Material
     private:
 
         /** Diffuse color of the material */
-        float _diffuse[3];
+        Color _diffuse;
 
         /** Specular color of the material */
-        float _specular[3];
+        Color _specular;
 
         /** Specular exponent to control material's shininess */
         float _specularExponent;

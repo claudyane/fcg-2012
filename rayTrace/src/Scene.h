@@ -13,6 +13,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include "Material.h"
+#include "Color.h"
 
 class Scene
 {
@@ -23,9 +24,9 @@ class Scene
 
         void setCamera( Camera* camera );
 
-        void setAmbientLight( Vector4D ambientLight );
+        void setAmbientLight( Color ambientLight );
 
-        void setBackgroundColor( Vector4D backgroungColor );
+        void setBackgroundColor( Color backgroungColor );
 
         void addLight( Light* light );
 
@@ -70,8 +71,8 @@ class Scene
         std::vector<Material*> _materials;
         Camera* _camera;
 
-        Vector4D _ambientLight;
-        Vector4D _backgroundColor;
+        Color _ambientLight;
+        Color _backgroundColor;
         
         bool _ambient;
         bool _diffuse;
