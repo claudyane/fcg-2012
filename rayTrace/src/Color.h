@@ -42,7 +42,7 @@ public:
      * @param g Green component
      * @param b Blue component
      */
-    void set( double r, double g, double b );
+    void set( float r, float g, float b );
     
     /**
      * Operators

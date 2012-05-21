@@ -35,7 +35,7 @@ Color::~Color()
 
 
 
-void Color::set( double r, double g, double b )
+void Color::set( float r, float g, float b )
 {
     this->r = r;
     this->g = g;
