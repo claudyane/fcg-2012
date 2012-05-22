@@ -48,6 +48,8 @@ class Scene
         
         void toggleShadow( bool isActive );
         
+        void toggleSoftShadow( bool isActive );
+        
         void toggleReflection( bool isActive );
         
     private:
