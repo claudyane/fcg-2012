@@ -128,7 +128,7 @@ void Scene::computeRayColor( Ray ray, Color& colorOut, int depth )
     }
     
     // Get shaded color of the objects material
-    shade( ray, objectID, normal, point, colorOut.r, colorOut.g, colorOut.b );
+    shade( ray, objectID, normal, point, colorOut );
     
     Object* object = _objects[objectID];
     Material* material = _materials[object->getMaterialId()];
@@ -225,15 +225,13 @@ bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& n
 
 
 
-void Scene::shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut )
+void Scene::shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, Color& colorOut )
 {
-    rOut = 0.0f;
-    gOut = 0.0f;
-    bOut = 0.0f;
+    colorOut.set( 0.0f, 0.0f, 0.0f );
     Object* object = _objects[objectID];
     int materialID = object->getMaterialId();
     
-    addAmbienteComponent( materialID, rOut, gOut, bOut );
+    addAmbienteComponent( materialID, colorOut.r, colorOut.g, colorOut.b );
     
     int numLights = _lights.size();
     
@@ -241,8 +239,8 @@ void Scene::shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, fl
     {
         if (!inShadow( point, lightID, objectID ))
         {
-            addLambertianComponent( materialID, lightID, normal, point, rOut, gOut, bOut );
-            addSpecularComponent( ray, materialID, lightID, normal, point, rOut, gOut, bOut );
+            addLambertianComponent( materialID, lightID, normal, point, colorOut.r, colorOut.g, colorOut.b );
+            addSpecularComponent( ray, materialID, lightID, normal, point, colorOut.r, colorOut.g, colorOut.b );
         }
     }
 }
