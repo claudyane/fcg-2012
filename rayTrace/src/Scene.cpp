@@ -223,7 +223,14 @@ void Scene::toggleShadow( bool isActive )
 {
      _shadow = isActive;
 }
-    
+
+
+
+void Scene::toggleSoftShadow(bool isActive)
+{
+    _softShadow = isActive;
+}
+
 
 
 void Scene::toggleReflection( bool isActive )

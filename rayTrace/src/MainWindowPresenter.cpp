@@ -100,7 +100,17 @@ void MainWindowPresenter::toggleShadow( bool isActive )
     
      _scene->toggleShadow( isActive );
 }
+
+
+
+void MainWindowPresenter::toggleSoftShadow( bool isActive )
+{
+    if (!_scene)
+        return;
     
+     _scene->toggleSoftShadow( isActive );
+}
+
 
 
 void MainWindowPresenter::toggleReflection( bool isActive )
