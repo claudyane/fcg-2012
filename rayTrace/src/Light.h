@@ -27,15 +27,7 @@ class Light
          * Destructor
          */
         virtual ~Light();
-        
-        /**
-         * Getter for the diffuse color
-         * @param r red value of the diffuse color. [out]
-         * @param g green value of the diffuse color. [out]
-         * @param b blue value of the diffuse color. [out]
-         */
-        void getDiffuse( float& r, float& g, float& b );
-        
+                
         /**
          * Getter for the diffuse color
          * @return Color of the light
