@@ -22,6 +22,9 @@ Scene::Scene()
     _specular    = true;
     _shadow      = true;
     _reflection   = true;
+    
+    _softShadowRadius = 0.0f;
+    _nSoftShadowLights = 0;
 }
 
 

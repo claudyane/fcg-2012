@@ -68,6 +68,7 @@ class Scene
         
         std::vector<Object*> _objects;
         std::vector<Light*> _lights;
+        std::vector<Light*> _softShadowLights;
         std::vector<Material*> _materials;
         Camera* _camera;
 
@@ -79,7 +80,10 @@ class Scene
         bool _specular;
         bool _shadow;
         bool _reflection;
-
+        bool _softShadow;
+        
+        float _softShadowRadius;
+        int _nSoftShadowLights;
 };
 
 #endif /* SCENE_H_ */
