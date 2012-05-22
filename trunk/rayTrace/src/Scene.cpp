@@ -84,6 +84,35 @@ void Scene::setBackgroundColor( Color backgroungColor )
 void Scene::addLight( Light* light )
 {
     _lights.push_back( light );
+    
+    Color color = light->getDiffuse();    
+    color /= _nSoftShadowLights;
+    
+    float delta = _softShadowRadius / _nSoftShadowLights;         
+    
+    // Cria luzes para efeito de soft shadow
+    for (int i = 0; i < _nSoftShadowLights; i++)
+    {                       
+        // Coloca uma luz de cada lado, em cada direção
+        for (int j = -1; j != 1; j = 1 )
+        {
+            // Cria luzes no eixo x
+            Vector4D positionX = light->getPosition();
+            Vector4D positionY = positionX;
+            Vector4D positionZ = positionX;
+            
+            positionX.x += i*j*delta;
+            positionY.y += i*j*delta;
+            positionZ.z += i*j*delta;
+
+            Light* lightX = new Light( positionX, color );
+            Light* lightY = new Light( positionY, color );
+            Light* lightZ = new Light( positionZ, color );
+            _softShadowLights.push_back( lightX );
+            _softShadowLights.push_back( lightY );
+            _softShadowLights.push_back( lightZ );
+        }
+    }
 }
 
 
@@ -257,6 +286,8 @@ void Scene::shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, Co
     }
 }
 
+
+
 void Scene::addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, Vector4D& point, Color& colorOut, int depth )
 {
     // if reflections are not being taken in consideration. return.
@@ -277,6 +308,8 @@ void Scene::addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, 
     // mix the two colors
     colorOut += ( reflectionFactor ) * reflectedColor;
 }
+
+
 
 void Scene::addAmbienteComponent( int materialID, Color& colorOut )
 {

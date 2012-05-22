@@ -16,6 +16,14 @@ Light::Light( Vector4D position, float r, float g, float b )
 
 
 
+Light::Light( Vector4D position, Color color )
+{
+    _position = position;
+    _color = color;
+}
+
+
+
 Light::~Light()
 {
     //do nothing
