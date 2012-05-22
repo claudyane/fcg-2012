@@ -24,6 +24,13 @@ class Light
         Light( Vector4D position, float r, float g, float b );
         
         /**
+         * Constructor
+         * @param position Vector4D with position of the light in world. In World coordinates.
+         * @param color Diffuse light color.
+         */
+        Light( Vector4D position, Color color );
+        
+        /**
          * Destructor
          */
         virtual ~Light();
@@ -42,7 +49,6 @@ class Light
         Vector4D _position;
         
         /** diffuse color of the light */
-        float _diffuse[3];
         Color _color;
 };
 
