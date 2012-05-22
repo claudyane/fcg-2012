@@ -379,7 +379,7 @@ void MainWindow::cb_toggleButton( GtkToggleButton* togglebutton, gpointer user_d
         else
             window->_presenter->toggleShadow( false );
     }
-    else if (strcmp( name, "shadowToggle") == 0)
+    else if (strcmp( name, "softShadowToggle") == 0)
     {
         if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)))
             window->_presenter->toggleSoftShadow( true );
