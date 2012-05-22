@@ -9,6 +9,7 @@
 #define LIGHT_H_
 
 #include "Vector4D.h"
+#include "Color.h"
 
 class Light
 {
@@ -35,6 +36,12 @@ class Light
          */
         void getDiffuse( float& r, float& g, float& b );
         
+        /**
+         * Getter for the diffuse color
+         * @return Color of the light
+         */
+        Color getDiffuse();
+        
         Vector4D getPosition();
         
     private:
@@ -44,6 +51,7 @@ class Light
         
         /** diffuse color of the light */
         float _diffuse[3];
+        Color _color;
 };
 
 #endif /* LIGHT_H_ */
