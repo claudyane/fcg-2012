@@ -94,7 +94,7 @@ void Scene::addLight( Light* light )
     for (int i = 1; i <= _nSoftShadowLights; i++)
     {                       
         // Coloca uma luz de cada lado, em cada direção
-        for (int j = -1; j <= 1; j = 1 )
+        for (int j = -1; j <= 1; j += 2 )
         {
             // Cria luzes no eixo x
             Vector4D positionX = light->getPosition();
