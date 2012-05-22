@@ -54,7 +54,7 @@ class Scene
         
         void computeRayColor( Ray ray, Color& colorOut, int depth );
         
-        void shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, float& rOut, float& gOut, float& bOut );
+        void shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, Color& colorOut );
         
         bool inShadow( Vector4D& point, int lightID, int objectID );
         
