@@ -23,15 +23,6 @@ Light::~Light()
 
 
 
-void Light::getDiffuse(float& r, float& g, float& b)
-{
-    r = _color.r;
-    g = _color.g;
-    b = _color.b;
-}
-
-
-
 Color Light::getDiffuse()
 {
     return _color;

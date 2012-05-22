@@ -333,15 +333,13 @@ void Scene::addLambertianComponent(int materialID, int lightID, Vector4D& normal
     if (cosTheta < 0)
         cosTheta = 0.0;
 
-    float lightR, lightG, lightB;
-    _lights[lightID]->getDiffuse( lightR, lightG, lightB );
-
+    Color lightColor = _lights[lightID]->getDiffuse();
     Color diffuse = _materials[materialID]->getDiffuse();
     
     // iluminação lambertiana
-    red   += diffuse.r * lightR * cosTheta;
-    green += diffuse.g * lightG * cosTheta;
-    blue  += diffuse.b * lightB * cosTheta;
+    red   += diffuse.r * lightColor.r * cosTheta;
+    green += diffuse.g * lightColor.g * cosTheta;
+    blue  += diffuse.b * lightColor.b * cosTheta;
 }
 
 
@@ -353,8 +351,7 @@ void Scene::addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4
     Vector4D lightDir = _lights[lightID]->getPosition() - point;
     lightDir.normalize();
 
-    float lightR, lightG, lightB;
-    _lights[lightID]->getDiffuse( lightR, lightG, lightB );
+    Color lightColor = _lights[lightID]->getDiffuse();
 
     // componente especular
     float exponent;
@@ -372,7 +369,7 @@ void Scene::addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4
         return;
     
     float specularCoeficient = pow( cosAlpha, exponent );
-    red   += specular.r * lightR * specularCoeficient;
-    green += specular.g * lightG * specularCoeficient;
-    blue  += specular.b * lightB * specularCoeficient;
+    red   += specular.r * lightColor.r * specularCoeficient;
+    green += specular.g * lightColor.g * specularCoeficient;
+    blue  += specular.b * lightColor.b * specularCoeficient;
 }
