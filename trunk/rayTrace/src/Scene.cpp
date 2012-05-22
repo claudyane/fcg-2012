@@ -17,11 +17,12 @@ Scene::Scene()
 {
     _camera = NULL;
     
-    _ambient     = true;
-    _diffuse     = true;
-    _specular    = true;
-    _shadow      = true;
-    _reflection   = true;
+    _ambient    = true;
+    _diffuse    = true;
+    _specular   = true;
+    _shadow     = true;
+    _reflection = true;
+    _softShadow = true;
     
     _softShadowRadius = 0.0f;
     _nSoftShadowLights = 0;
@@ -90,6 +91,14 @@ void Scene::addLight( Light* light )
 void Scene::addObject( Object* object )
 {
     _objects.push_back( object );
+}
+
+
+
+void Scene::setSoftShadow( int nSoftLights, float softShadowRadius )
+{
+    _nSoftShadowLights = nSoftLights;
+    _softShadowRadius = softShadowRadius;
 }
 
 
