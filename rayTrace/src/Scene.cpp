@@ -114,7 +114,7 @@ Image* Scene::render()
 
 
 
-void Scene::computeRayColor( Ray ray, Color colorOut, int depth )
+void Scene::computeRayColor( Ray ray, Color& colorOut, int depth )
 {
     Vector4D point;
     Vector4D normal;
