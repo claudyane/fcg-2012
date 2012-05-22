@@ -37,6 +37,10 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
 
     float version;
     float aux;
+ 
+    int nSoftLights;
+    float radiusSoftLight;
+    
     Vector4D eye, center, up;
     double fovy;
     double near;
@@ -75,9 +79,9 @@ void Rt4FileReader::loadScene( const std::string filename, Scene* scene )
              //Ignore File Version Information
         }
 
-        else if(sscanf(buffer, "SOFTSHADOW %f %f", &aux, &aux) == 2)
+        else if(sscanf(buffer, "SOFTSHADOW %d %f", &nSoftLights, &radiusSoftLight) == 2)
         {
-           // TODO:
+            scene->setSoftShadow( nSoftLights, radiusSoftLight );
         }
 
         else if( sscanf( buffer, "CAMERA %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d\n",
