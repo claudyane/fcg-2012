@@ -91,7 +91,7 @@ void Scene::addLight( Light* light )
     float delta = _softShadowRadius / _nSoftShadowLights;         
     
     // Cria luzes para efeito de soft shadow
-    for (int i = 0; i < _nSoftShadowLights; i++)
+    for (int i = 1; i <= _nSoftShadowLights; i++)
     {                       
         // Coloca uma luz de cada lado, em cada direção
         for (int j = -1; j != 1; j = 1 )
