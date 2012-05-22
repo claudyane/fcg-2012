@@ -11,9 +11,7 @@
 Light::Light( Vector4D position, float r, float g, float b )
 {
     _position = position;
-    _diffuse[0] = r;
-    _diffuse[1] = g;
-    _diffuse[2] = b;
+    _color.set( r, g, b );
 }
 
 
@@ -27,9 +25,16 @@ Light::~Light()
 
 void Light::getDiffuse(float& r, float& g, float& b)
 {
-    r = _diffuse[0];
-    g = _diffuse[1];
-    b = _diffuse[2];
+    r = _color.r;
+    g = _color.g;
+    b = _color.b;
+}
+
+
+
+Color Light::getDiffuse()
+{
+    return _color;
 }
 
 
