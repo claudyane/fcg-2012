@@ -103,9 +103,9 @@ Image* Scene::render()
         for (int y = 0; y < height; ++y)
         {
             Ray ray = _camera->computeRay( x, y );
-            float r, g, b;
-            computeRayColor( ray, r, g, b, 0 );
-            imgSetPixel3f( image, x, y, r, g, b );
+            Color pixelColor;
+            computeRayColor( ray, pixelColor, 0 );
+            imgSetPixel3f( image, x, y, pixelColor.r, pixelColor.g, pixelColor.b );
         }
     }
     
@@ -114,7 +114,7 @@ Image* Scene::render()
 
 
 
-void Scene::computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut, int depth )
+void Scene::computeRayColor( Ray ray, Color colorOut, int depth )
 {
     Vector4D point;
     Vector4D normal;
@@ -123,15 +123,12 @@ void Scene::computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut, int
     if (!computeNearestRayIntersection( ray, point, normal, objectID ))
     {
         // no interceptions
-        rOut = _backgroundColor.r;
-        gOut = _backgroundColor.g;
-        bOut = _backgroundColor.b;
-        
+        colorOut = _backgroundColor; 
         return;
     }
     
     // Get shaded color of the objects material
-    shade( ray, objectID, normal, point, rOut, gOut, bOut );
+    shade( ray, objectID, normal, point, colorOut.r, colorOut.g, colorOut.b );
     
     Object* object = _objects[objectID];
     Material* material = _materials[object->getMaterialId()];
@@ -140,7 +137,7 @@ void Scene::computeRayColor( Ray ray, float& rOut, float& gOut, float& bOut, int
     double reflectionFactor = material->getReflectionFactor();
     if( reflectionFactor > 0.0 )
     {
-        addReflectionComponent( object->getMaterialId(), ray, normal, point, rOut, gOut, bOut, depth );
+        addReflectionComponent( object->getMaterialId(), ray, normal, point, colorOut.r, colorOut.g, colorOut.b, depth );
     }
 }
 
@@ -261,16 +258,16 @@ void Scene::addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, 
     reflectedRay.direction = reflect( normal, -ray.direction );
     
     // compute the color of the reflected ray
-    float rRed, rGreen, rBlue;
-    computeRayColor( reflectedRay,  rRed, rGreen, rBlue, depth+1 );
+    Color reflectedColor;
+    computeRayColor( reflectedRay,  reflectedColor, depth+1 );
     
     // get reflection factor
     double reflectionFactor = _materials[materialID]->getReflectionFactor();
     
     // mix the two colors
-    red   = red   + ( reflectionFactor ) * rRed;
-    green = green + ( reflectionFactor ) * rGreen;
-    blue  = blue  + ( reflectionFactor ) * rBlue;
+    red   = red   + ( reflectionFactor ) * reflectedColor.r;
+    green = green + ( reflectionFactor ) * reflectedColor.g;
+    blue  = blue  + ( reflectionFactor ) * reflectedColor.b;
 }
 
 void Scene::addAmbienteComponent(int materialID, float& red, float& green, float& blue)
