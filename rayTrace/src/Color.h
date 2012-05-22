@@ -66,6 +66,7 @@ Color operator+( const Color& a, const Color& b );
 Color operator-( const Color& a, const Color& b );
 Color operator*( const double a, const Color& b );
 Color operator*( const Color& a, const double b );
+Color operator*( const Color& a, const Color& b );
 
 
 #endif	/* COLOR_H */
