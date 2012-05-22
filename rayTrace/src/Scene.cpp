@@ -280,16 +280,15 @@ void Scene::shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, Co
     int materialID = object->getMaterialId();
     
     addAmbienteComponent( materialID, colorOut );
-    
+        
     int numLights = _lights.size();
     
     for (int lightID = 0; lightID < numLights; ++lightID)
     {
-        if (!inShadow( point, lightID, objectID ))
-        {
-            addLambertianComponent( materialID, lightID, normal, point, colorOut );
-            addSpecularComponent( ray, materialID, lightID, normal, point, colorOut );
-        }
+        double shadowFactor = computeShadowFactor( point, lightID, objectID );
+
+        addLambertianComponent( materialID, lightID, normal, point, colorOut, shadowFactor );
+        addSpecularComponent( ray, materialID, lightID, normal, point, colorOut, shadowFactor );
     }
 }
 
@@ -332,7 +331,37 @@ void Scene::addAmbienteComponent( int materialID, Color& colorOut )
 
 
 
-bool Scene::inShadow( Vector4D& point, int lightID, int objectID )
+double Scene::computeShadowFactor( Vector4D& point, int lightID, int objectID )
+{
+    // Se possui softShadow, calcula a media do numeros de luzes que iluminam o ponto
+    if (_softShadow)
+    {
+        int nLights = 6 * _nSoftShadowLights;
+        int firstLight = lightID*nLights;
+        double factor = 0.0;
+        for (int i = 0; i < nLights; i++)
+        {
+            if (!inShadow( point, _softShadowLights[firstLight + i], objectID ))
+                factor += 1.0;
+        }
+        
+        return factor/nLights;
+    }
+    else if (_shadow) // Se está calculando sombra simples, só precisa chamar inShadow
+    {
+        if (inShadow( point, _lights[lightID], objectID))
+            return 0.0;
+        else
+            return 1.0;
+    }
+    
+    // Se não entrou em um dos ifs não está sendo calculada sombra e o fator é 1
+    return 1.0;    
+}
+
+
+
+bool Scene::inShadow( Vector4D& point, Light* light, int objectID )
 {
     // check if shadow is off
     if( !_shadow ) return false;
@@ -340,7 +369,7 @@ bool Scene::inShadow( Vector4D& point, int lightID, int objectID )
     // create a ray from the point to the light source
     Ray toLight;
     toLight.origin = point;
-    toLight.direction = _lights[lightID]->getPosition() - toLight.origin;    
+    toLight.direction = light->getPosition() - toLight.origin;    
     double tLight = toLight.direction.norm();        
     toLight.direction.normalize();
     
@@ -364,7 +393,7 @@ bool Scene::inShadow( Vector4D& point, int lightID, int objectID )
 
 
 
-void Scene::addLambertianComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut )
+void Scene::addLambertianComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut, double shadowFactor )
 {
     // check if lambertian is ON
     if (!_diffuse) return;
@@ -380,11 +409,11 @@ void Scene::addLambertianComponent( int materialID, int lightID, Vector4D& norma
     Color diffuse = _materials[materialID]->getDiffuse();
     
     // iluminação lambertiana
-    colorOut   += diffuse * lightColor * cosTheta;
+    colorOut   += diffuse * lightColor * cosTheta * shadowFactor;
 }
 
 
-void Scene::addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut )
+void Scene::addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut, double shadowFactor )
 {
     // check if specular is ON
     if (!_specular) return;
@@ -411,5 +440,5 @@ void Scene::addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4
     
     float specularCoeficient = pow( cosAlpha, exponent );
     
-    colorOut += specular * lightColor * specularCoeficient;
+    colorOut += specular * lightColor * specularCoeficient * shadowFactor;
 }

@@ -60,11 +60,13 @@ class Scene
         
         void shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, Color& colorOut );
         
-        bool inShadow( Vector4D& point, int lightID, int objectID );
+        double computeShadowFactor( Vector4D& point, int lightID, int objectID );
         
-        void addLambertianComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut );
+        bool inShadow( Vector4D& point, Light* light, int objectID );
+        
+        void addLambertianComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut, double shadowFactor );
 
-        void addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut );
+        void addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut, double shadowFactor );
         
         void addAmbienteComponent( int materialID, Color& colorOut );
         
