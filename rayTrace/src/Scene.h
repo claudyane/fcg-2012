@@ -21,6 +21,8 @@ class Scene
         Scene();
         
         virtual ~Scene();
+        
+        void setSoftShadow( int nSoftLights, float softShadowRadius );
 
         void setCamera( Camera* camera );
 
