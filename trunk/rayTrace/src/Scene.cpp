@@ -137,7 +137,7 @@ void Scene::computeRayColor( Ray ray, Color& colorOut, int depth )
     double reflectionFactor = material->getReflectionFactor();
     if( reflectionFactor > 0.0 )
     {
-        addReflectionComponent( object->getMaterialId(), ray, normal, point, colorOut.r, colorOut.g, colorOut.b, depth );
+        addReflectionComponent( object->getMaterialId(), ray, normal, point, colorOut, depth );
     }
 }
 
@@ -231,7 +231,7 @@ void Scene::shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, Co
     Object* object = _objects[objectID];
     int materialID = object->getMaterialId();
     
-    addAmbienteComponent( materialID, colorOut.r, colorOut.g, colorOut.b );
+    addAmbienteComponent( materialID, colorOut );
     
     int numLights = _lights.size();
     
@@ -239,13 +239,13 @@ void Scene::shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, Co
     {
         if (!inShadow( point, lightID, objectID ))
         {
-            addLambertianComponent( materialID, lightID, normal, point, colorOut.r, colorOut.g, colorOut.b );
-            addSpecularComponent( ray, materialID, lightID, normal, point, colorOut.r, colorOut.g, colorOut.b );
+            addLambertianComponent( materialID, lightID, normal, point, colorOut );
+            addSpecularComponent( ray, materialID, lightID, normal, point, colorOut );
         }
     }
 }
 
-void Scene::addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue, int depth )
+void Scene::addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, Vector4D& point, Color& colorOut, int depth )
 {
     // if reflections are not being taken in consideration. return.
     if( (!_reflection) || (depth > MAX_DEPTH) ) return;
@@ -263,12 +263,10 @@ void Scene::addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, 
     double reflectionFactor = _materials[materialID]->getReflectionFactor();
     
     // mix the two colors
-    red   = red   + ( reflectionFactor ) * reflectedColor.r;
-    green = green + ( reflectionFactor ) * reflectedColor.g;
-    blue  = blue  + ( reflectionFactor ) * reflectedColor.b;
+    colorOut += ( reflectionFactor ) * reflectedColor;
 }
 
-void Scene::addAmbienteComponent(int materialID, float& red, float& green, float& blue)
+void Scene::addAmbienteComponent( int materialID, Color& colorOut )
 {
     // check if the ambient component should be added
     if( !_ambient ) return;
@@ -277,9 +275,7 @@ void Scene::addAmbienteComponent(int materialID, float& red, float& green, float
     Color diffuse = _materials[materialID]->getDiffuse();
         
     // iluminação ambiente
-    red   = _ambientLight.r * diffuse.r;
-    green = _ambientLight.g * diffuse.g;
-    blue  = _ambientLight.b * diffuse.b;   
+    colorOut = _ambientLight * diffuse;
 }
 
 
@@ -316,7 +312,7 @@ bool Scene::inShadow( Vector4D& point, int lightID, int objectID )
 
 
 
-void Scene::addLambertianComponent(int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue)
+void Scene::addLambertianComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut )
 {
     // check if lambertian is ON
     if (!_diffuse) return;
@@ -332,13 +328,11 @@ void Scene::addLambertianComponent(int materialID, int lightID, Vector4D& normal
     Color diffuse = _materials[materialID]->getDiffuse();
     
     // iluminação lambertiana
-    red   += diffuse.r * lightColor.r * cosTheta;
-    green += diffuse.g * lightColor.g * cosTheta;
-    blue  += diffuse.b * lightColor.b * cosTheta;
+    colorOut   += diffuse * lightColor * cosTheta;
 }
 
 
-void Scene::addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4D& normal, Vector4D& point, float& red, float& green, float& blue )
+void Scene::addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut )
 {
     // check if specular is ON
     if (!_specular) return;
@@ -364,7 +358,6 @@ void Scene::addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4
         return;
     
     float specularCoeficient = pow( cosAlpha, exponent );
-    red   += specular.r * lightColor.r * specularCoeficient;
-    green += specular.g * lightColor.g * specularCoeficient;
-    blue  += specular.b * lightColor.b * specularCoeficient;
+    
+    colorOut += specular * lightColor * specularCoeficient;
 }
