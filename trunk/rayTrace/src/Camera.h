@@ -41,7 +41,7 @@ public:
      * @param y Vertical position of the pixel in the screen.
      * @return Ray that starts in the eye position and goes through the pixel.
      */
-    Ray computeRay( int x, int y );
+    Ray computeRay( double x, double y );
     
     /**
      * Returns the screen size
