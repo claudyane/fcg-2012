@@ -52,6 +52,8 @@ class Scene
         
         void toggleReflection( bool isActive );
         
+        void toggleAntiAlias( bool isActive );
+        
     private:
 
         bool computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& normal, int& objectID );        
@@ -87,6 +89,7 @@ class Scene
         bool _shadow;
         bool _reflection;
         bool _softShadow;
+        bool _antiAlias;
         
         float _softShadowRadius;
         int _nSoftShadowLights;

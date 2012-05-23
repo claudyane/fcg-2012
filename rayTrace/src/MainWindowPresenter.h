@@ -29,6 +29,7 @@ public:
     void toggleShadow( bool isActive );
     void toggleSoftShadow( bool isActive );
     void toggleReflection( bool isActive );
+    void toggleAntiAlias( bool isActive );
     
     
 private:
