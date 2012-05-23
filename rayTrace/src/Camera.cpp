@@ -66,12 +66,12 @@ void Camera::computeDerivedParameters()
 
 
 
-Ray Camera::computeRay( int x, int y )
+Ray Camera::computeRay( double x, double y )
 {
     Ray ray;
 
     ray.origin = _eye;
-    ray.direction = -_near * _ze + _a * _ye * (((double)y/(double)_height) - 0.5) + _b * _xe * (((double)x/(double)_width)-0.5);
+    ray.direction = -_near * _ze + _a * _ye * ((y/(double)_height) - 0.5) + _b * _xe * ((x/(double)_width)-0.5);
 
     return ray;
 }
