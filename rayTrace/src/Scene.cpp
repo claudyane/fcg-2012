@@ -131,14 +131,44 @@ Image* Scene::render()
     
     Image* image = imgCreate( width, height, 3 );
     
-    for (int x = 0; x < width; ++x)
+    if( _antiAlias )
     {
-        for (int y = 0; y < height; ++y)
+        for (int x = 0; x < width; ++x)
         {
-            Ray ray = _camera->computeRay( x, y );
-            Color pixelColor;
-            computeRayColor( ray, pixelColor, 0 );
-            imgSetPixel3f( image, x, y, pixelColor.r, pixelColor.g, pixelColor.b );
+            for (int y = 0; y < height; ++y)
+            {
+                Ray ray0 = _camera->computeRay( x + 0.25, y + 0.25 );
+                Ray ray1 = _camera->computeRay( x + 0.25, y - 0.25 );
+                Ray ray2 = _camera->computeRay( x - 0.25, y + 0.25 );
+                Ray ray3 = _camera->computeRay( x - 0.25, y - 0.25 );
+
+                Color pixelColor0;
+                Color pixelColor1;
+                Color pixelColor2;
+                Color pixelColor3;
+
+                computeRayColor( ray0, pixelColor0, 0 );
+                computeRayColor( ray1, pixelColor1, 0 );
+                computeRayColor( ray2, pixelColor2, 0 );
+                computeRayColor( ray3, pixelColor3, 0 );
+
+                Color pixelColor = ( pixelColor0 * 0.25 + pixelColor1 * 0.25 + pixelColor2 * 0.25 + pixelColor3 * 0.25 );
+
+                imgSetPixel3f( image, x, y, pixelColor.r, pixelColor.g, pixelColor.b );
+            }
+        }
+    }
+    else
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            for (int y = 0; y < height; ++y)
+            {
+                Ray ray = _camera->computeRay( x + 0.25, y + 0.25 );
+                Color pixelColor;
+                computeRayColor( ray, pixelColor, 0 );
+                imgSetPixel3f( image, x, y, pixelColor.r, pixelColor.g, pixelColor.b );
+            }
         }
     }
     
