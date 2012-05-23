@@ -232,6 +232,13 @@ void Scene::toggleReflection( bool isActive )
 
 
 
+void Scene::toggleAntiAlias( bool isActive )
+{
+    _antiAlias = isActive;
+}
+
+
+
 bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& normal, int& objectID )
 {
     int nObjects = _objects.size();

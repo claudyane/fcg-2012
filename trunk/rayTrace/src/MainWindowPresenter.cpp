@@ -121,3 +121,14 @@ void MainWindowPresenter::toggleReflection( bool isActive )
     _scene->toggleReflection( isActive );
 }
 
+
+
+void MainWindowPresenter::toggleAntiAlias( bool isActive )
+{
+    if (!_scene)
+        return;
+    
+    _scene->toggleAntiAlias( isActive );
+}
+
+
