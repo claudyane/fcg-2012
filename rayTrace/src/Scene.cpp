@@ -10,6 +10,8 @@
 #include "MainWindowPresenter.h"
 #include <cfloat>
 #include <cstdio>
+#include <time.h>
+#include <stdlib.h>
 
 #define MAX_DEPTH 6
 
@@ -86,32 +88,22 @@ void Scene::addLight( Light* light )
     _lights.push_back( light );
     
     Color color = light->getDiffuse();    
-    color /= _nSoftShadowLights;
     
-    float delta = _softShadowRadius / _nSoftShadowLights;         
+    Vector4D position;
     
     // Cria luzes para efeito de soft shadow
-    for (int i = 1; i <= _nSoftShadowLights; i++)
-    {                       
-        // Coloca uma luz de cada lado, em cada direção
-        for (int j = -1; j <= 1; j += 2 )
-        {
-            // Cria luzes no eixo x
-            Vector4D positionX = light->getPosition();
-            Vector4D positionY = positionX;
-            Vector4D positionZ = positionX;
-            
-            positionX.x += i*j*delta;
-            positionY.y += i*j*delta;
-            positionZ.z += i*j*delta;
-
-            Light* lightX = new Light( positionX, color );
-            Light* lightY = new Light( positionY, color );
-            Light* lightZ = new Light( positionZ, color );
-            _softShadowLights.push_back( lightX );
-            _softShadowLights.push_back( lightY );
-            _softShadowLights.push_back( lightZ );
-        }
+    for (int i = 0; i <  _nSoftShadowLights; ++i)
+    {
+        float phi = (((float)rand())/(float)RAND_MAX) * M_PI;
+        float theta = (((float)rand())/(float)RAND_MAX) * M_PI * 2.0;
+        
+        position = light->getPosition();
+        
+        position.x += _softShadowRadius * cos( theta ) * sin( phi );
+        position.y += _softShadowRadius * sin( theta ) * sin( phi );
+        position.z += _softShadowRadius * cos( phi );
+        
+        _softShadowLights.push_back( new Light( position, color ) );
     }
 }
 
@@ -336,7 +328,7 @@ double Scene::computeShadowFactor( Vector4D& point, int lightID, int objectID )
     // Se possui softShadow, calcula a media do numeros de luzes que iluminam o ponto
     if (_softShadow)
     {
-        int nLights = 6 * _nSoftShadowLights;
+        int nLights = _nSoftShadowLights;
         int firstLight = lightID*nLights;
         double factor = 0.0;
         for (int i = 0; i < nLights; i++)
