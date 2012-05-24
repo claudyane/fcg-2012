@@ -74,3 +74,13 @@ Object::ObjectType Sphere::getType()
 {
     return Object::SPHERE;
 }
+
+Vector4D Sphere::getCenter()
+{
+    return _center;
+}
+
+Vector4D Sphere::getRadius()
+{
+    return _radius;
+}
