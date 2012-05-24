@@ -29,7 +29,11 @@ public:
     
     int getMaterialId();
     
-    virtual ObjectType getType();
+    ObjectType getType();
+    
+    void getVertices( Vector4D& v0, Vector4D& v1, Vector4D& v2 );
+    
+    void getTextureCoordinates( Vector4D& tex0, Vector4D& tex1, Vector4D& tex2 );
     
 private:
     

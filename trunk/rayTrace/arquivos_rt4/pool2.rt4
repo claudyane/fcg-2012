@@ -14,7 +14,7 @@ MATERIAL 250.  80. 250.   255. 255. 255.  100.  .1  0.  1.   null !  magenta   8
 MATERIAL 200. 200. 200.     0.   0.   0.   70.  0.  0.  1.   null !  parede    9
 MATERIAL 30.  30.  30.     0.   0.   0.   15.  0.  0.  1.   null !  quadro    10
 MATERIAL 85.  60.   0.     0.   0.   0.   15.  0.  0.  1.   null !  madeira   11
-MATERIAL 150. 130.   0.     0.   0.   0.   15.  0.  0.  1.   ../../images/marmore.bmp !  taco      12
+MATERIAL 150. 130.   0.     0.   0.   0.   15.  0.  0.  1.   ../../images/marmoreb.bmp !  taco      12
 MATERIAL 0.   0.   0.     0.   0.   0.   15.  0.  0.  1.   null !  ponteira  13
 MATERIAL 200. 200. 200.     0.   0.   0.   15.  0.  0.  1.   null !  giz       14
 LIGHT 0. -450. 600. 255 255 255
