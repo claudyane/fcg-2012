@@ -100,7 +100,8 @@ Image* Material::getTextureImage()
 
 void Material::setTextureImage( std::string filename )
 {
-    _texture = imgReadBMP( filename.c_str() );
+    if (filename != "null")
+        _texture = imgReadBMP( filename.c_str() );
 }
 
 

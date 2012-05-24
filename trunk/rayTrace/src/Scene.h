@@ -66,13 +66,13 @@ class Scene
         
         bool inShadow( Vector4D& point, Light* light, int objectID );
         
-        void addLambertianComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut, double shadowFactor );
+        void addLambertianComponent( int objectID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut, double shadowFactor );
 
-        void addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut, double shadowFactor );
+        void addSpecularComponent( Ray& ray, int objectID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut, double shadowFactor );
         
-        void addAmbienteComponent( int materialID, Color& colorOut );
+        void addAmbienteComponent( int objectID, Color& colorOut );
         
-        void addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, Vector4D& point, Color& colorOut, int depth );
+        void addReflectionComponent( int objectID, Ray& ray, Vector4D& normal, Vector4D& point, Color& colorOut, int depth );
         
         std::vector<Object*> _objects;
         std::vector<Light*> _lights;
