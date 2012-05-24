@@ -12,6 +12,11 @@
 #include "Color.h"
 #include "Object.h"
 
+//forward declarations
+class Sphere;
+class Box;
+class Triangle;
+
 class Material
 {
     public:
@@ -75,6 +80,12 @@ class Material
          * Define material's texture image
          */
         void setTextureImage( std::string filename );
+        
+        Color getSphericalTextureColor( Vector4D point, Sphere* sphere );
+        
+        Color getBoxTextureColor( Vector4D point, Box* box );
+        
+        Color getTriangleTextureColor( Vector4D point, Triangle* triangle );
 
     private:
 
