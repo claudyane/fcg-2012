@@ -75,3 +75,8 @@ int Triangle::getMaterialId()
     return _materialId;
 }
 
+
+Object::ObjectType Triangle::getType()
+{
+    return Object::TRIANGLE;
+}
