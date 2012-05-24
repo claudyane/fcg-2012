@@ -11,6 +11,8 @@
 #include "Box.h"
 #include "Triangle.h"
 
+#include <cmath>
+
 Material::Material( Color diffuse, Color specular, float specularExponent )
 {
     _diffuse = diffuse;
@@ -55,8 +57,7 @@ Color Material::getDiffuse( Object* object, Vector4D& point )
             break;
             
         case Object::SPHERE:
-            //do sphere
-            return _diffuse;
+            return getSphericalTextureColor( point, (Sphere*)object );
             break;
             
         case Object::TRIANGLE:
@@ -140,7 +141,31 @@ void Material::setTextureImage( std::string filename )
 
 Color Material::getSphericalTextureColor(Vector4D point, Sphere* sphere)
 {
+    double radius = sphere->getRadius();
     
+//    double s = acos( point.z / radius ) * M_1_PI;
+//    double t = acos( point.x / ( radius * sin( M_PI * s ) ) ) * 0.5 * M_1_PI;
+    
+    Vector4D vn( 0.0, 1.0, 0.0, 1.0 );
+    Vector4D ve( 1.0, 0.0, 0.0, 1.0 );
+    Vector4D vp = point - sphere->getCenter();
+    vp.normalize();
+    
+    double s = acos( -dot( vn, vp )) / M_PI;
+    double t = ( acos( dot( vp, ve ) / sin( M_PI * s )) ) / ( 2 * M_PI);
+    
+    if ( dot( cross( vn, ve ), vp ) < 0 )
+    {
+        t = -t;
+    }
+    
+    float r, g, b;
+    int width = imgGetWidth( _texture ) - 1;
+    int height = imgGetHeight( _texture ) - 1;
+    imgGetPixel3f( _texture, (int)( s * width ), (int)(t * height), &r, &g, &b );
+    Color textureColor( r, g, b );
+    
+    return textureColor;
 }
 
 
