@@ -3,7 +3,7 @@ SOFTSHADOW 1. 1.
 CAMERA 0. 1. 5. 0. 0. 0.  0. 1. 1.   100. 1. 100. 400 400 
 SCENE 20. 20. 80. 40. 40. 40. null
 MATERIAL 0.  255. 0.  255. 255. 255.  20.  1.  0.  1.  null
-MATERIAL 0.  0.  0.  255. 255. 255.  40.  1.  0.  1. ../images/formica.bmp
+MATERIAL 0.  0.  0.  255. 255. 255.  40.  1.  0.  1. ../../images/formica.bmp
 MATERIAL 255.  0.  0.  255. 255. 255.  20.  1.  0.  1. null
 MATERIAL 0.  0.  255.  255. 255. 255.  20.  1.  0.  1. null
 MATERIAL 0.  255.  255.  255. 255. 255.  20.  1.  0.  1. null

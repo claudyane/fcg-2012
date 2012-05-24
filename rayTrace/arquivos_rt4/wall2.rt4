@@ -2,7 +2,7 @@ RT 4.0
 SOFTSHADOW 0. 0.
 CAMERA 35. 2. 1.7   0. -15. 0.    0. 0. 1. 60. 1. 100. 400 400
 SCENE 0. 0. 110. 30. 30.  30. null
-MATERIAL 255. 0. 0.    0.  0.  0.   50.   0.  0.  1. ../images/RedBricks.bmp
+MATERIAL 255. 0. 0.    0.  0.  0.   50.   0.  0.  1. ../../images/RedBricks.bmp
 LIGHT 35. 2. 2.     255 255 255
 TRIANGLE  0   30.   0.  0.      0.  0. 0.     0.   0.  3.   0. 0.   30. 0.   30. 1. 
 TRIANGLE  0   30.   0.  0.      0.  0. 3.    30.   0.  3.   0. 0.   30. 1.    0. 1. 

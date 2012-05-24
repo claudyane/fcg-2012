@@ -32,8 +32,8 @@ SCENE 110. 110. 110. 30. 30.  80. null
 ! o        - opacidade (0 = transparente, 1 = opaco)        !
 ! img.ext  - textura a ser utilizada (NULL para nao usar)   !
 !-----------------------------------------------------------!
-MATERIAL   0.   0. 255.    255.  255.  255.   50.   0.  0.  1. ../images/estrela.bmp
-MATERIAL 180. 180.   0.    255.  255.  255.   40.   0.  0.  1. ../images/marmore.bmp
+MATERIAL   0.   0. 255.    255.  255.  255.   50.   0.  0.  1. ../../images/estrela.bmp
+MATERIAL 180. 180.   0.    255.  255.  255.   40.   0.  0.  1. ../../images/marmore.bmp
 !-----------------------------------------------------------!
 !Parametros da luz :                                        !
 ! x. y. z. - posicao                                        !
