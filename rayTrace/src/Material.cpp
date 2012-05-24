@@ -60,8 +60,8 @@ Color Material::getDiffuse( Object* object, Vector4D& point )
             break;
             
         case Object::TRIANGLE:
-            //do triangle
-            return _diffuse;
+            return getTriangleTextureColor( point, (Triangle*) object );
+            //return _diffuse;
             break;
             
         default:
@@ -154,5 +154,37 @@ Color Material::getBoxTextureColor(Vector4D point, Box* box)
 
 Color Material::getTriangleTextureColor(Vector4D point, Triangle* triangle)
 {
+    // Recupera coordenadas de textura dos vertices
+    Vector4D tex0, tex1, tex2;
+    triangle->getTextureCoordinates( tex0, tex1, tex2 );
+
+    // Recupera coordenadas dos vertices
+    Vector4D v0, v1, v2;
+    triangle->getVertices( v0, v1, v2 );    
     
+    // Calcula coordenadas baricentricas
+    float a0 = cross( v1 - point, v2 - point).norm() / 2.0f;
+    float a1 = cross( point - v0, v2 - v0).norm() / 2.0f;
+    float a2 = cross( v1 - v0, point - v0).norm() / 2.0f;
+    float at = cross( v1 - v0, v2 - v0).norm() / 2.0f;
+            
+    float l0 = a0/at;
+    float l1 = a1/at;
+    float l2 = a2/at;
+    
+    // Calcula coordenadas de textura a partir das coordenadas baricentricas
+    Vector4D texCoord = l0 * tex0 + l1 * tex1 + l2 * tex2;
+    
+    // Calcula x,y da imagem correspondentes a essa coordenadas de textura
+    int width = imgGetWidth( _texture );
+    int height = imgGetHeight( _texture );
+    
+    int x = (int)(texCoord.x * (width - 1 )) % width;
+    int y = (int)(texCoord.y * (height - 1 ))% height;
+    
+    // Recupera a cor da imagem neste ponto
+    Color diffuse;
+    imgGetPixel3f( _texture, x, y, &diffuse.r, &diffuse.g, &diffuse.b );
+    
+    return diffuse;
 }

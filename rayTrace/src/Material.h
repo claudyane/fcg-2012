@@ -81,14 +81,14 @@ class Material
          */
         void setTextureImage( std::string filename );
         
+    private:
+
         Color getSphericalTextureColor( Vector4D point, Sphere* sphere );
         
         Color getBoxTextureColor( Vector4D point, Box* box );
         
         Color getTriangleTextureColor( Vector4D point, Triangle* triangle );
-
-    private:
-
+        
         /** Diffuse color of the material */
         Color _diffuse;
 

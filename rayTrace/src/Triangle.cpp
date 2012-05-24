@@ -76,7 +76,26 @@ int Triangle::getMaterialId()
 }
 
 
+
 Object::ObjectType Triangle::getType()
 {
     return Object::TRIANGLE;
+}
+
+
+
+void Triangle::getVertices( Vector4D& v0, Vector4D& v1, Vector4D& v2 )
+{
+    v0 = _v0;
+    v1 = _v1;
+    v2 = _v2;
+}
+
+
+
+void Triangle::getTextureCoordinates( Vector4D& tex0, Vector4D& tex1, Vector4D& tex2 )
+{
+    tex0 = _tex0;
+    tex1 = _tex1;
+    tex2 = _tex2;
 }
