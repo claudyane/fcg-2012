@@ -200,7 +200,7 @@ void Scene::computeRayColor( Ray ray, Color& colorOut, int depth )
     double reflectionFactor = material->getReflectionFactor();
     if( reflectionFactor > 0.0 )
     {
-        addReflectionComponent( object->getMaterialId(), ray, normal, point, colorOut, depth );
+        addReflectionComponent( objectID, ray, normal, point, colorOut, depth );
     }
 }
 
@@ -304,11 +304,8 @@ bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& n
 
 void Scene::shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, Color& colorOut )
 {
-    colorOut.set( 0.0f, 0.0f, 0.0f );
-    Object* object = _objects[objectID];
-    int materialID = object->getMaterialId();
-    
-    addAmbienteComponent( materialID, colorOut );
+    colorOut.set( 0.0f, 0.0f, 0.0f );   
+    addAmbienteComponent( objectID, colorOut );
         
     int numLights = _lights.size();
     
@@ -316,17 +313,19 @@ void Scene::shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, Co
     {
         double shadowFactor = computeShadowFactor( point, lightID, objectID );
 
-        addLambertianComponent( materialID, lightID, normal, point, colorOut, shadowFactor );
-        addSpecularComponent( ray, materialID, lightID, normal, point, colorOut, shadowFactor );
+        addLambertianComponent( objectID, lightID, normal, point, colorOut, shadowFactor );
+        addSpecularComponent( ray, objectID, lightID, normal, point, colorOut, shadowFactor );
     }
 }
 
 
 
-void Scene::addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, Vector4D& point, Color& colorOut, int depth )
+void Scene::addReflectionComponent( int objectID, Ray& ray, Vector4D& normal, Vector4D& point, Color& colorOut, int depth )
 {
     // if reflections are not being taken in consideration. return.
     if( (!_reflection) || (depth > MAX_DEPTH) ) return;
+    
+    int materialID = _objects[objectID]->getMaterialId();
     
     // create the reflected ray
     Ray reflectedRay;
@@ -346,10 +345,12 @@ void Scene::addReflectionComponent( int materialID, Ray& ray, Vector4D& normal, 
 
 
 
-void Scene::addAmbienteComponent( int materialID, Color& colorOut )
+void Scene::addAmbienteComponent( int objectID, Color& colorOut )
 {
     // check if the ambient component should be added
     if( !_ambient ) return;
+    
+    int materialID = _objects[objectID]->getMaterialId();
     
     // recupera cor difusa do material
     Color diffuse = _materials[materialID]->getDiffuse();
@@ -422,10 +423,12 @@ bool Scene::inShadow( Vector4D& point, Light* light, int objectID )
 
 
 
-void Scene::addLambertianComponent( int materialID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut, double shadowFactor )
+void Scene::addLambertianComponent( int objectID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut, double shadowFactor )
 {
     // check if lambertian is ON
     if (!_diffuse) return;
+    
+    int materialID = _objects[objectID]->getMaterialId();
     
     Vector4D lightDir = _lights[lightID]->getPosition() - point;
     lightDir.normalize();
@@ -442,10 +445,12 @@ void Scene::addLambertianComponent( int materialID, int lightID, Vector4D& norma
 }
 
 
-void Scene::addSpecularComponent( Ray& ray, int materialID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut, double shadowFactor )
+void Scene::addSpecularComponent( Ray& ray, int objectID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut, double shadowFactor )
 {
     // check if specular is ON
     if (!_specular) return;
+    
+    int materialID = _objects[objectID]->getMaterialId();
     
     Vector4D lightDir = _lights[lightID]->getPosition() - point;
     lightDir.normalize();
