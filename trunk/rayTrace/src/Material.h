@@ -10,6 +10,8 @@
 
 #include "Image.h"
 #include "Color.h"
+#include "Object.h"
+
 class Material
 {
     public:
@@ -27,7 +29,7 @@ class Material
         /**
          * Returns material's diffuse color
          */
-        Color getDiffuse();
+        Color getDiffuse( Object* object );
 
         /**
          * Returns material's specular color and exponent

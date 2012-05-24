@@ -6,6 +6,7 @@
  */
 
 #include "Material.h"
+#include "Object.h"
 
 Material::Material( Color diffuse, Color specular, float specularExponent )
 {
@@ -34,9 +35,37 @@ Material::~Material()
 
 
 
-Color Material::getDiffuse()
+Color Material::getDiffuse( Object* object )
 {
-    return _diffuse;
+    if( !_texture )
+    {
+        return _diffuse;
+    }
+    
+    Object::ObjectType objectType = object->getType();
+    
+    switch( objectType )
+    {
+        case Object::BOX:
+            // do box
+            return _diffuse;
+            break;
+            
+        case Object::SPHERE:
+            //do sphere
+            return _diffuse;
+            break;
+            
+        case Object::TRIANGLE:
+            //do triangle
+            return _diffuse;
+            break;
+            
+        default:
+            // WHAT SORCERY IS THAT?
+            return _diffuse;
+            break;
+    }
 }
 
 
