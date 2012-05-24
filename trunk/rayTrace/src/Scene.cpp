@@ -305,7 +305,7 @@ bool Scene::computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& n
 void Scene::shade( Ray& ray, int objectID, Vector4D& normal, Vector4D& point, Color& colorOut )
 {
     colorOut.set( 0.0f, 0.0f, 0.0f );   
-    addAmbienteComponent( objectID, colorOut );
+    addAmbienteComponent( objectID, colorOut, point );
         
     int numLights = _lights.size();
     
@@ -345,7 +345,7 @@ void Scene::addReflectionComponent( int objectID, Ray& ray, Vector4D& normal, Ve
 
 
 
-void Scene::addAmbienteComponent( int objectID, Color& colorOut )
+void Scene::addAmbienteComponent( int objectID, Color& colorOut, Vector4D& point )
 {
     // check if the ambient component should be added
     if( !_ambient ) return;
@@ -355,7 +355,7 @@ void Scene::addAmbienteComponent( int objectID, Color& colorOut )
     int materialID = object->getMaterialId();
     
     // recupera cor difusa do material
-    Color diffuse = _materials[materialID]->getDiffuse( object );
+    Color diffuse = _materials[materialID]->getDiffuse( object, point );
         
     // iluminação ambiente
     colorOut = _ambientLight * diffuse;
@@ -442,7 +442,7 @@ void Scene::addLambertianComponent( int objectID, int lightID, Vector4D& normal,
         cosTheta = 0.0;
 
     Color lightColor = _lights[lightID]->getDiffuse();
-    Color diffuse = _materials[materialID]->getDiffuse( object );
+    Color diffuse = _materials[materialID]->getDiffuse( object, point );
     
     // iluminação lambertiana
     colorOut   += diffuse * lightColor * cosTheta * shadowFactor;

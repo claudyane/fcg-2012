@@ -29,7 +29,7 @@ class Material
         /**
          * Returns material's diffuse color
          */
-        Color getDiffuse( Object* object );
+        Color getDiffuse( Object* object, Vector4D& point );
 
         /**
          * Returns material's specular color and exponent
