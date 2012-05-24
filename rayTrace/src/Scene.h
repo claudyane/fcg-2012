@@ -70,7 +70,7 @@ class Scene
 
         void addSpecularComponent( Ray& ray, int objectID, int lightID, Vector4D& normal, Vector4D& point, Color& colorOut, double shadowFactor );
         
-        void addAmbienteComponent( int objectID, Color& colorOut );
+        void addAmbienteComponent( int objectID, Color& colorOut, Vector4D& point );
         
         void addReflectionComponent( int objectID, Ray& ray, Vector4D& normal, Vector4D& point, Color& colorOut, int depth );
         

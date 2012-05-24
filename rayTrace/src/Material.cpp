@@ -35,7 +35,7 @@ Material::~Material()
 
 
 
-Color Material::getDiffuse( Object* object )
+Color Material::getDiffuse( Object* object, Vector4D& point )
 {
     if( !_texture )
     {
