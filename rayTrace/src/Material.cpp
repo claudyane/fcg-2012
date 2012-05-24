@@ -7,6 +7,9 @@
 
 #include "Material.h"
 #include "Object.h"
+#include "Sphere.h"
+#include "Box.h"
+#include "Triangle.h"
 
 Material::Material( Color diffuse, Color specular, float specularExponent )
 {
@@ -47,7 +50,7 @@ Color Material::getDiffuse( Object* object, Vector4D& point )
     switch( objectType )
     {
         case Object::BOX:
-            // do box
+            //do box
             return _diffuse;
             break;
             
@@ -134,3 +137,22 @@ void Material::setTextureImage( std::string filename )
 }
 
 
+
+Color Material::getSphericalTextureColor(Vector4D point, Sphere* sphere)
+{
+    
+}
+
+
+
+Color Material::getBoxTextureColor(Vector4D point, Box* box)
+{
+    
+}
+
+
+
+Color Material::getTriangleTextureColor(Vector4D point, Triangle* triangle)
+{
+    
+}
