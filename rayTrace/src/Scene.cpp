@@ -350,10 +350,12 @@ void Scene::addAmbienteComponent( int objectID, Color& colorOut )
     // check if the ambient component should be added
     if( !_ambient ) return;
     
-    int materialID = _objects[objectID]->getMaterialId();
+    Object* object = _objects[objectID];
+    
+    int materialID = object->getMaterialId();
     
     // recupera cor difusa do material
-    Color diffuse = _materials[materialID]->getDiffuse();
+    Color diffuse = _materials[materialID]->getDiffuse( object );
         
     // iluminação ambiente
     colorOut = _ambientLight * diffuse;
@@ -428,7 +430,9 @@ void Scene::addLambertianComponent( int objectID, int lightID, Vector4D& normal,
     // check if lambertian is ON
     if (!_diffuse) return;
     
-    int materialID = _objects[objectID]->getMaterialId();
+    Object* object = _objects[objectID];
+    
+    int materialID = object->getMaterialId();
     
     Vector4D lightDir = _lights[lightID]->getPosition() - point;
     lightDir.normalize();
@@ -438,7 +442,7 @@ void Scene::addLambertianComponent( int objectID, int lightID, Vector4D& normal,
         cosTheta = 0.0;
 
     Color lightColor = _lights[lightID]->getDiffuse();
-    Color diffuse = _materials[materialID]->getDiffuse();
+    Color diffuse = _materials[materialID]->getDiffuse( object );
     
     // iluminação lambertiana
     colorOut   += diffuse * lightColor * cosTheta * shadowFactor;
