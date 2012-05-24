@@ -69,3 +69,8 @@ int Sphere::getMaterialId()
 {
     return _materialId;
 }
+
+Object::ObjectType Sphere::getType()
+{
+    return Object::SPHERE;
+}

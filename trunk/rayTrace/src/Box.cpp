@@ -170,3 +170,8 @@ int Box::getMaterialId()
     return _materialId;
 }
 
+
+Object::ObjectType Box::getType()
+{
+    return Object::BOX;
+}

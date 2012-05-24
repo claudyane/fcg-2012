@@ -29,6 +29,8 @@ public:
     
     int getMaterialId();
     
+    virtual ObjectType getType();
+    
 private:
     
     int _materialId;

@@ -21,6 +21,7 @@ public:
     Vector4D getNormal( Vector4D& point );
     void setMaterial( int materialId );
     int getMaterialId();
+    virtual ObjectType getType();
 
 private:
     Vector4D _center;
