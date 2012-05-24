@@ -22,7 +22,7 @@ public:
     void setMaterial( int materialId );
     int getMaterialId();
     virtual ObjectType getType();
-    Vector4D getRadius();
+    double getRadius();
     Vector4D getCenter();
 
 private:

@@ -80,7 +80,7 @@ Vector4D Sphere::getCenter()
     return _center;
 }
 
-Vector4D Sphere::getRadius()
+double Sphere::getRadius()
 {
     return _radius;
 }
