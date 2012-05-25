@@ -10,6 +10,7 @@
 #include "Sphere.h"
 #include "Box.h"
 #include "Triangle.h"
+#include <iostream>
 
 #include <cmath>
 
@@ -52,8 +53,8 @@ Color Material::getDiffuse( Object* object, Vector4D& point )
     switch( objectType )
     {
         case Object::BOX:
-            //do box
-            return _diffuse;
+            return getBoxTextureColor( point, (Box*) object );
+            //return _diffuse;
             break;
             
         case Object::SPHERE:
@@ -172,7 +173,72 @@ Color Material::getSphericalTextureColor(Vector4D point, Sphere* sphere)
 
 Color Material::getBoxTextureColor(Vector4D point, Box* box)
 {
+    Vector4D min = box->getMin();
+    Vector4D max = box->getMax();
     
+    float u = 0.0f, v = 0.0f;
+    int aux = -1;
+    
+    // Testa se está no plano x = xmin
+    if (fabs(point.x - min.x) < 0.0001)
+    {
+        aux = 0;
+        u = (point.y - min.y)/(max.y - min.y);
+        v = (point.z - max.z)/(min.z - max.z);        
+    }
+    
+    // Testa se está no plano x = xmax
+    if (fabs(point.x - max.x) < 0.0001)
+    {
+        aux = 1;
+        u = (point.y - min.y)/(max.y - min.y);
+        v = (point.z - min.z)/(max.z - min.z);
+    }
+    
+    // Testa se está no plano y = ymin
+    if (fabs(point.y - min.y) < 0.0001)
+    {
+        aux = 2;
+        u = (point.x - min.x)/(max.x - min.x);
+        v = (point.z - min.z)/(max.z - min.z);    
+    }
+    
+    // Testa se está no plano y = ymax
+    if (fabs(point.y - max.y) < 0.0001)
+    {
+        aux =3;
+        u = (point.z - min.z)/(max.z - min.z);
+        v = (point.x - min.x)/(max.x - min.x);        
+    }       
+        
+    // Testa se está no plano z = zmin
+    if (fabs(point.z - min.z) < 0.0001)
+    {
+        aux = 4;
+        u = (point.y - min.y)/(max.y - min.y);
+        v = (point.x - min.x)/(max.x - min.x);        
+    }
+    
+    // Testa se está no plano z = xmax
+    if (fabs(point.z - max.z) < 0.0001)
+    {
+        aux = 5;
+        u = (point.x - min.x)/(max.x - min.x);
+        v = (point.y - min.y)/(max.y - min.y);        
+    }
+    
+    // Calcula x,y da imagem correspondentes a essa coordenadas de textura
+    int width = imgGetWidth( _texture );
+    int height = imgGetHeight( _texture );
+    
+    int x = (int)(u * (width - 1)) % width;
+    int y = (int)(v * (height - 1))% height;
+     
+    // Recupera a cor da imagem neste ponto
+    float r, g, b;
+    imgGetPixel3f( _texture, x, y, &r, &g, &b );
+    
+    return Color( r, g, b );
 }
 
 
