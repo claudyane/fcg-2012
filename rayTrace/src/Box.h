@@ -29,7 +29,11 @@ public:
     
     int getMaterialId();
     
-    virtual ObjectType getType();
+    ObjectType getType();
+    
+    Vector4D getMin();
+    
+    Vector4D getMax();
     
 private:
 

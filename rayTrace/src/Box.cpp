@@ -175,3 +175,18 @@ Object::ObjectType Box::getType()
 {
     return Object::BOX;
 }
+
+
+
+Vector4D Box::getMin()
+{
+    return _min;
+}
+
+
+
+Vector4D Box::getMax()
+{
+    return _max;
+}
+
