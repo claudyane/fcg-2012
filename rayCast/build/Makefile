@@ -1,7 +1,7 @@
 CC=g++
 
 SOURCES=../src/*.cpp
-EXECUTABLE=rayTrace
+EXECUTABLE=rayCast
 
 OUTPUT_DIR = ../bin
 
