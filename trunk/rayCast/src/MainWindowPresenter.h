@@ -19,22 +19,13 @@ class MainWindowPresenter
 public:
     MainWindowPresenter();
     virtual ~MainWindowPresenter();
-    bool buildScene( std::string filename );
-    void renderScene();
+    bool loadFile( std::string filename );
+    void render();
     Image* getImage();
-    
-    void toggleAmbient( bool isActive );
-    void toggleDiffuse( bool isActive );
-    void toggleSpecular( bool isActive );
-    void toggleShadow( bool isActive );
-    void toggleSoftShadow( bool isActive );
-    void toggleReflection( bool isActive );
-    void toggleAntiAlias( bool isActive );
-    
     
 private:
     Image* _image;
-    Scene* _scene;
+    // TODO: objeto volume
 };
 
 #endif /* MAINWINDOWPRESENTER_H_ */
