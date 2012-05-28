@@ -10,9 +10,6 @@
 Volume::Volume() {
 }
 
-Volume::Volume(const Volume& orig) {
-}
-
 Volume::~Volume() {
 }
 
