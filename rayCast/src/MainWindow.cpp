@@ -216,9 +216,9 @@ void MainWindow::cb_loadFile( GtkWidget* button, gpointer user_data )
                                                NULL);
 
     GtkFileFilter* filter = gtk_file_filter_new();
-    gtk_file_filter_set_name( GTK_FILE_FILTER (filter), "(*.rt4, *.RT4)");
-    gtk_file_filter_add_pattern( GTK_FILE_FILTER (filter), "*.rt4" );
-    gtk_file_filter_add_pattern( GTK_FILE_FILTER (filter), "*.RT4" );
+    gtk_file_filter_set_name( GTK_FILE_FILTER (filter), "(*.def, *.DEF)");
+    gtk_file_filter_add_pattern( GTK_FILE_FILTER (filter), "*.def" );
+    gtk_file_filter_add_pattern( GTK_FILE_FILTER (filter), "*.DEF" );
     gtk_file_chooser_add_filter( GTK_FILE_CHOOSER (fileChooser), GTK_FILE_FILTER (filter) );
 
     if (gtk_dialog_run( GTK_DIALOG (fileChooser) ) == GTK_RESPONSE_OK)
