@@ -7,14 +7,11 @@
 
 #include "MainWindowPresenter.h"
 #include "MainWindow.h"
-#include "Scene.h"
-#include "Rt4FileReader.h"
 
 
 MainWindowPresenter::MainWindowPresenter()
 {
     _image = NULL;
-    _scene  = NULL;
 }
 
 
@@ -33,15 +30,8 @@ Image* MainWindowPresenter::getImage()
 
 
 
-bool MainWindowPresenter::buildScene( std::string filename )
+bool MainWindowPresenter::loadFile( std::string filename )
 {
-    if( _scene ) delete _scene;
-    
-    _scene = new Scene();
-    
-    Rt4FileReader reader;
-    reader.loadScene( filename, _scene );
-
     if (_image)
         imgClear( _image, 0.0f, 0.0f, 0.0f );
     
@@ -50,85 +40,8 @@ bool MainWindowPresenter::buildScene( std::string filename )
 
 
 
-void MainWindowPresenter::renderScene()
+void MainWindowPresenter::render()
 {
-    if (!_scene)
-        return;
-    
     if (_image)
         imgDestroy( _image );
-        
-    _image = _scene->render();
 }
-
-
-
-void MainWindowPresenter::toggleAmbient( bool isActive )
-{
-    if (!_scene)
-        return;
-    
-    _scene->toggleAmbient( isActive );
-}
-    
-
-
-void MainWindowPresenter::toggleDiffuse( bool isActive )
-{
-    if (!_scene)
-        return;
-    
-    _scene->toggleDiffuse( isActive );
-}
-
-
-
-void MainWindowPresenter::toggleSpecular( bool isActive )
-{
-    if (!_scene)
-        return;
-    
-    _scene->toggleSpecular( isActive );
-}
-    
-
-
-void MainWindowPresenter::toggleShadow( bool isActive )
-{
-    if (!_scene)
-        return;
-    
-     _scene->toggleShadow( isActive );
-}
-
-
-
-void MainWindowPresenter::toggleSoftShadow( bool isActive )
-{
-    if (!_scene)
-        return;
-    
-     _scene->toggleSoftShadow( isActive );
-}
-
-
-
-void MainWindowPresenter::toggleReflection( bool isActive )
-{
-    if (!_scene)
-        return;
-    
-    _scene->toggleReflection( isActive );
-}
-
-
-
-void MainWindowPresenter::toggleAntiAlias( bool isActive )
-{
-    if (!_scene)
-        return;
-    
-    _scene->toggleAntiAlias( isActive );
-}
-
-

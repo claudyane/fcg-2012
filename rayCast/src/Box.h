@@ -9,6 +9,7 @@
 #define	BOX_H
 
 #include "Vector4D.h"
+#include "Ray.h"
 
 class Box
 {

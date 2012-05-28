@@ -84,7 +84,7 @@ GtkWidget* MainWindow::buildButtonsBox()
     GtkWidget* loadButton = gtk_button_new_with_label( "Load Scene" );
     gtk_widget_set_size_request( loadButton, 100, 30 );
     gtk_box_pack_start( GTK_BOX(buttonsBox), loadButton, FALSE, FALSE, 2 );
-    g_signal_connect( loadButton, "clicked", G_CALLBACK( cb_openScene ), this );    
+    g_signal_connect( loadButton, "clicked", G_CALLBACK( cb_loadFile ), this );    
     
     _fileLabel = gtk_label_new( "" );
     gtk_box_pack_start( GTK_BOX(buttonsBox), _fileLabel, FALSE, FALSE, 2 );
@@ -100,9 +100,6 @@ GtkWidget* MainWindow::buildCanvasBox()
     
     _rayTraceCanvas = buildRayTraceCanvas();
     gtk_box_pack_start( GTK_BOX(canvasBox), _rayTraceCanvas, FALSE, FALSE, 2 );
-    
-    GtkWidget* toggles = buildToggleBox();
-    gtk_box_pack_start( GTK_BOX(canvasBox), toggles, FALSE, FALSE, 2 );
     
     return canvasBox;
 }
@@ -126,60 +123,6 @@ GtkWidget* MainWindow::buildRayTraceCanvas()
     g_signal_connect( rayTraceCanvas, "expose-event"   , G_CALLBACK( cb_exposeGLCanvas )    , this );
 
     return rayTraceCanvas;
-}
-
-
-
-GtkWidget* MainWindow::buildToggleBox()
-{
-    GtkWidget* vbox = gtk_vbox_new( FALSE, 2 );
-     
-    GtkWidget* ambientToggle    = gtk_check_button_new_with_label( "Ambient"      );
-    GtkWidget* diffuseToggle    = gtk_check_button_new_with_label( "Diffuse"      );
-    GtkWidget* specularToggle   = gtk_check_button_new_with_label( "Specular"     );
-    GtkWidget* shadowToggle     = gtk_check_button_new_with_label( "Shadow"       );
-    GtkWidget* softShadowToggle = gtk_check_button_new_with_label( "Soft Shadow"  );
-    GtkWidget* reflectionToggle = gtk_check_button_new_with_label( "Reflection"   );
-    GtkWidget* antiAliasToggle  = gtk_check_button_new_with_label( "Antialiasing" );
-    
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (ambientToggle)   , TRUE );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (diffuseToggle)   , TRUE );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (specularToggle)  , TRUE );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (shadowToggle)    , TRUE );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (softShadowToggle), TRUE );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (reflectionToggle), TRUE );
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (antiAliasToggle) , TRUE );
-    
-    g_signal_connect( ambientToggle   , "toggled", G_CALLBACK (cb_toggleButton), this );
-    g_signal_connect( diffuseToggle   , "toggled", G_CALLBACK (cb_toggleButton), this );
-    g_signal_connect( specularToggle  , "toggled", G_CALLBACK (cb_toggleButton), this );
-    g_signal_connect( shadowToggle    , "toggled", G_CALLBACK (cb_toggleButton), this );
-    g_signal_connect( softShadowToggle, "toggled", G_CALLBACK (cb_toggleButton), this );
-    g_signal_connect( reflectionToggle, "toggled", G_CALLBACK (cb_toggleButton), this );
-    g_signal_connect( antiAliasToggle , "toggled", G_CALLBACK (cb_toggleButton), this );
-    
-    gtk_widget_set_name( ambientToggle   , "ambientToggle"    );
-    gtk_widget_set_name( diffuseToggle   , "diffuseToggle"    );
-    gtk_widget_set_name( specularToggle  , "specularToggle"   );
-    gtk_widget_set_name( shadowToggle    , "shadowToggle"     );
-    gtk_widget_set_name( softShadowToggle, "softShadowToggle" );
-    gtk_widget_set_name( reflectionToggle, "reflectionToggle" );    
-    gtk_widget_set_name( antiAliasToggle , "antiAliasToggle"  );    
-    
-    gtk_box_pack_start( GTK_BOX (vbox), ambientToggle   , FALSE, FALSE, 2 );
-    gtk_box_pack_start( GTK_BOX (vbox), diffuseToggle   , FALSE, FALSE, 2 );
-    gtk_box_pack_start( GTK_BOX (vbox), specularToggle  , FALSE, FALSE, 2 );
-    gtk_box_pack_start( GTK_BOX (vbox), shadowToggle    , FALSE, FALSE, 2 );
-    gtk_box_pack_start( GTK_BOX (vbox), softShadowToggle, FALSE, FALSE, 2 );
-    gtk_box_pack_start( GTK_BOX (vbox), reflectionToggle, FALSE, FALSE, 2 );
-    gtk_box_pack_start( GTK_BOX (vbox), antiAliasToggle , FALSE, FALSE, 2 );
-        
-    GtkWidget* applyButton = gtk_button_new_with_label( "Apply" );
-    gtk_widget_set_size_request( applyButton, 100, 30 );
-    gtk_box_pack_start( GTK_BOX(vbox), applyButton, FALSE, FALSE, 2 );
-    g_signal_connect( applyButton, "clicked", G_CALLBACK( cb_render ), this );
-    
-    return vbox;
 }
 
 
@@ -259,7 +202,7 @@ gboolean MainWindow::cb_configGLCanvas( GtkWidget* canvas, GdkEventConfigure* ev
 
 
 
-void MainWindow::cb_openScene( GtkWidget* button, gpointer user_data )
+void MainWindow::cb_loadFile( GtkWidget* button, gpointer user_data )
 {
     GtkWidget* fileChooser;
     gchar* filepath = 0;
@@ -282,7 +225,7 @@ void MainWindow::cb_openScene( GtkWidget* button, gpointer user_data )
     {
         filepath = gtk_file_chooser_get_filename( GTK_FILE_CHOOSER (fileChooser) );
 
-        if (!window->_presenter->buildScene( filepath ))
+        if (!window->_presenter->loadFile( filepath ))
         {
             std::string message = "Error loading file";
             gtk_label_set_text( GTK_LABEL (window->_fileLabel), message.c_str()  ); 
@@ -317,27 +260,27 @@ void MainWindow::cb_openScene( GtkWidget* button, gpointer user_data )
 
 void MainWindow::cb_render( GtkWidget* button, gpointer user_data )
 {
-    MainWindow* window = (MainWindow*)user_data;
-       
-    //gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON );
-    time_t begin = time(NULL);
-    window->_presenter->renderScene();
-    time_t end = time(NULL);
-       
-    if (!window->_presenter->getImage())
-        return;
-    
-    int width  = imgGetWidth( window->_presenter->getImage() );
-    int heigth = imgGetHeight( window->_presenter->getImage()  );
-
-    gtk_drawing_area_size( GTK_DRAWING_AREA (window->_rayTraceCanvas) , width, heigth );
-    gtk_window_resize( GTK_WINDOW (window->_window), width, heigth );            
-    
-    long long elapsed = end - begin;
-    std::stringstream message;
-    message << "Time elapsed: " << elapsed << " seconds.";
-    
-    gtk_label_set_label( GTK_LABEL(window->_messageBar), message.str().c_str() );
+//    MainWindow* window = (MainWindow*)user_data;
+//       
+//    //gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON );
+//    time_t begin = time(NULL);
+//    window->_presenter->render();
+//    time_t end = time(NULL);
+//       
+//    if (!window->_presenter->getImage())
+//        return;
+//    
+//    int width  = imgGetWidth( window->_presenter->getImage() );
+//    int heigth = imgGetHeight( window->_presenter->getImage()  );
+//
+//    gtk_drawing_area_size( GTK_DRAWING_AREA (window->_rayTraceCanvas) , width, heigth );
+//    gtk_window_resize( GTK_WINDOW (window->_window), width, heigth );            
+//    
+//    long long elapsed = end - begin;
+//    std::stringstream message;
+//    message << "Time elapsed: " << elapsed << " seconds.";
+//    
+//    gtk_label_set_label( GTK_LABEL(window->_messageBar), message.str().c_str() );
 }
 
 
@@ -348,62 +291,3 @@ gboolean MainWindow::cb_deleteWindow( GtkWidget* widget, GdkEvent* event, gpoint
 
     return TRUE;
 }
-
-
-
-void MainWindow::cb_toggleButton( GtkToggleButton* togglebutton, gpointer user_data )
-{
-    MainWindow* window = (MainWindow*) user_data;    
-    const gchar* name = gtk_widget_get_name( GTK_WIDGET (togglebutton) );
-    
-    if (strcmp( name, "ambientToggle") == 0)
-    {
-        if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)))
-            window->_presenter->toggleAmbient( true );
-        else
-            window->_presenter->toggleAmbient( false );
-    }
-    else if (strcmp( name, "diffuseToggle") == 0)
-    {
-        if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)))
-            window->_presenter->toggleDiffuse( true );
-        else
-            window->_presenter->toggleDiffuse( false );
-    }
-    else if (strcmp( name, "specularToggle") == 0)
-    {
-        if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)))
-            window->_presenter->toggleSpecular( true );
-        else
-            window->_presenter->toggleSpecular( false );
-    }
-    else if (strcmp( name, "shadowToggle") == 0)
-    {
-        if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)))
-            window->_presenter->toggleShadow( true );
-        else
-            window->_presenter->toggleShadow( false );
-    }
-    else if (strcmp( name, "softShadowToggle") == 0)
-    {
-        if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)))
-            window->_presenter->toggleSoftShadow( true );
-        else
-            window->_presenter->toggleSoftShadow( false );
-    }
-    else if (strcmp( name, "reflectionToggle") == 0)
-    {
-        if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)))
-            window->_presenter->toggleReflection( true );
-        else
-            window->_presenter->toggleReflection( false );
-    }
-    else if (strcmp( name, "antiAliasToggle") == 0)
-    {
-        if (gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON (togglebutton)))
-            window->_presenter->toggleAntiAlias( true );
-        else
-            window->_presenter->toggleAntiAlias( false );
-    }
-}
-
