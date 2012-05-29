@@ -14,7 +14,7 @@ public:
     
     /**
      * Default constructor
-     * Initializes the (0, 0, 0) color
+     * Initializes the (0, 0, 0, 1) color
      */
     Color();
     
@@ -23,8 +23,9 @@ public:
      * @param r Red component
      * @param g Green component
      * @param b Blue component
+     * @param a Alpha component, defaults to 1.0f
      */
-    Color( float r, float g, float b );
+    Color( float r, float g, float b, float a = 1.0f );
 
     /**
      * Copy constructor
@@ -41,8 +42,9 @@ public:
      * @param r Red component
      * @param g Green component
      * @param b Blue component
+     * @param a Alpha component defaults to 1.0f
      */
-    void set( float r, float g, float b );
+    void set( float r, float g, float b, float a = 1.0f );
     
     /**
      * Operators
@@ -57,6 +59,7 @@ public:
     float r;
     float g;
     float b;
+    float a;
 };
 
 /**
