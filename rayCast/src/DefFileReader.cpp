@@ -6,7 +6,8 @@
  */
 
 #include "DefFileReader.h"
-#include "Volume.h"
+
+#include <cstdio>
 
 typedef unsigned char byte;
 
@@ -36,7 +37,7 @@ Volume* DefFileReader::loadVolume( std::string filePath )
 
     fclose(fp);
     
-    Volume* volume = new Volume( nx, ny, nz, dx, dy, dz );
+    Volume* volume = new Volume( nx, ny, nz, dx, dy, dz, offset );
 
     loadVolumeData( data_file, volume, offset );
 
@@ -50,7 +51,7 @@ void DefFileReader::loadVolumeData( std::string dataFilePath, Volume* volume, in
     FILE *fp;
 
     fp = fopen(dataFilePath.c_str(), "rb");
-    if (!fp) return 0;
+    if (!fp) return;
     
     /* Alocando o buffer de dados volumetricos */
     //byte* data = new byte[volume->getTotalNumberOfSamples()];
@@ -78,74 +79,30 @@ void DefFileReader::loadVolumeData( std::string dataFilePath, Volume* volume, in
 
 void DefFileReader::loadVolumeTransfer( std::string transferFilePath, Volume* volume )
 {
-    int num;              /* Numero de amostras na curva de transferencia */
-    float r1, g1, b1, a1; /* Valores de cor e opacidade da amostra */
-    float r2, g2, b2, a2; /* Valores de cor e opacidade da amostra */
-    float r, g, b, a;     /* Valores de cor e opacidade INTERPOLADOS */
-    float mr, mg, mb, ma; /* Coeficientes de interpolacao */
-    float t1, t2, dt;     /* Parametro amostrado */
-    FILE* fp;
-    int i, j, j1, j2;
-
-    fp = fopen( filename, "r" );
-    if (!fp) return 0;
+    // open the file
+    FILE* fp = fopen( transferFilePath.c_str(), "r" );
+    if (!fp) return;
     
-    /* Lendo o n�mero de amostras */
-    fscanf( fp, "%d\n", &num );
-    if (num < 2) return 0;
+    // read number of samples from file
+    int numberOfSamples = 0;
+    fscanf( fp, "%d\n", &numberOfSamples );
+    if (numberOfSamples < 2) return;
     
-    /* Lendo a primeira amostra */
-    fscanf( fp, "%f %f %f %f %f\n", &t1, &r1, &g1, &b1, &a1 );
-    j1 = (int)t1;
-    
-    /* Armazenando a cor da amostra */
-    volume->color[j1].x[0] = r1;
-    volume->color[j1].x[1] = g1;
-    volume->color[j1].x[2] = b1;
-    
-    /* Armazenando a opacidade da amostra */
-    volume->opac[j1] = a1;  
-    
-    /* Lendo as amostras restantes */
-    for(i=1; i < num; i++)
+    for (int sample = 0; sample < numberOfSamples; ++sample)
     {
-        fscanf(fp, "%f %f %f %f %f\n", &t2, &r2, &g2, &b2, &a2);
-        j2 = (int)t2;
+        // read sample line from file
+        float r1, g1, b1, a1;
+        int t1;
+        fscanf( fp, "%d %f %f %f %f\n", &t1, &r1, &g1, &b1, &a1 );
         
-        /* Armazenando a cor da amostra */
-        volume->color[j2].x[0] = r2;
-        volume->color[j2].x[1] = g2;
-        volume->color[j2].x[2] = b2;
-        
-        /* Armazenando a opacidade da amostra */
-        volume->opac[j2] = a2;  
-        
-        /* Interpolando entre t1 e t2 */
-        dt = t2 - t1;
-        mr = (r2 - r1) / dt;
-        mg = (g2 - g1) / dt;
-        mb = (b2 - b1) / dt;
-        ma = (a2 - a1) / dt;
-        r = r1; g = g1; b = b1; a = a1;
-        for(j=j1+1; j < j2; j++)
-        {
-            /* Armazenando a cor da amostra */
-            volume->color[j].x[0] = r; r += mr;
-            volume->color[j].x[1] = (g += mg);
-            volume->color[j].x[2] = (b += mb);
-            
-            /* Armazenando a opacidade da amostra */
-            volume->opac[j] = (a += ma);
-        }
-        
-        j1 = j2;
-        t1 = t2;
-        r1 = r2;
-        g1 = g2;
-        b1 = b2;
-        a1 = a2;
+        // set the sample value on the volume
+        Color value( r1, g1, b1, a1 );
+        volume->setTransferFunctionPoint( t1, value );
     }
     
+    // close file
     fclose(fp);
-    return 1;
+    
+    // interpolate the intermediate values on the transfer function
+    volume->interpolateTransferFunction();
 }

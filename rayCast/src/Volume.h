@@ -11,6 +11,8 @@
 #include <vector>
 #include "Color.h"
 
+typedef unsigned char byte;
+
 class Volume
 {
 public:
@@ -25,6 +27,10 @@ public:
     
     void setVoxel( int i, int j, int k, byte value );
     
+    void setTransferFunctionPoint( int point, Color value );
+    
+    void interpolateTransferFunction();
+    
 private:
     
     void setNumberOfSamples( int nx, int ny, int nz );
@@ -37,6 +43,7 @@ private:
     unsigned char* _data;
     
     Color _transferFunction[256];
+    std::vector<int> _fixedTransferPositions;
 };
 
 #endif	/* VOLUME_H */

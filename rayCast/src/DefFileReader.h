@@ -8,6 +8,9 @@
 #ifndef DEFFILEREADER_H
 #define	DEFFILEREADER_H
 
+#include "Volume.h"
+#include <string>
+
 class DefFileReader
 {
 public:
