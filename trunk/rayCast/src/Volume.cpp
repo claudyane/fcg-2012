@@ -9,8 +9,10 @@
 #include <algorithm>
 
 #include "Volume.h"
+#include "Vector4D.h"
 
-Volume::Volume(int nx, int ny, int nz, float dx, float dy, float dz, int offset)
+Volume::Volume(int nx, int ny, int nz, float dx, float dy, float dz, int offset) : 
+        Box( Vector4D(0.0, 0.0, 0.0, 1.0), Vector4D(nx, ny, nz, 1.0) )
 {
     _nx = nx;
     _ny = ny;
