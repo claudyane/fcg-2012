@@ -27,15 +27,13 @@ public:
     
     void setVoxel( int i, int j, int k, byte value );
     
+    byte getVoxel( int i, int j, int k );
+    
     void setTransferFunctionPoint( int point, Color value );
     
     void interpolateTransferFunction();
     
 private:
-    
-    void setNumberOfSamples( int nx, int ny, int nz );
-    
-    void setSpacing( float dx, float dy, float dz );
     
     int _nx, _ny, _nz;
     float _dx, _dy, _dz;
