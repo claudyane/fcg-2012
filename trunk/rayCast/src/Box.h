@@ -19,7 +19,7 @@ public:
     
     virtual ~Box();
     
-    bool computeRayIntersection( Ray ray, double& t );
+    bool computeRayIntersection( Ray ray, double& tIn, double& tOut );
     
     Vector4D getNormal( Vector4D& point );
     

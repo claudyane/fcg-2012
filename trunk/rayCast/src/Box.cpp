@@ -56,9 +56,11 @@ Box::~Box( )
 
 
 
-bool Box::computeRayIntersection( Ray ray, double& t )
+bool Box::computeRayIntersection( Ray ray, double& tIn, double& tOut )
 {
-    float tMin = DBL_MAX, tAux = DBL_MAX;
+    float tMin = DBL_MAX;
+    float tMax = DBL_MIN;
+    float tAux = DBL_MAX;
     
     //Procura interseção nos planos x = xmin e x = xmax
     if (ray.direction.x != 0.0)
@@ -68,16 +70,22 @@ bool Box::computeRayIntersection( Ray ray, double& t )
                 
         float y = ray.origin.y + tAux * ray.direction.y;
         float z = ray.origin.z + tAux * ray.direction.z;        
-        if ( y >= _min.y && y <= _max.y && z >= _min.z && z <= _max.z && tAux > 0.0 && tAux < tMin) // Testa se está dentro da caixa
-            tMin = tAux;            
+        if ( y >= _min.y && y <= _max.y && z >= _min.z && z <= _max.z && tAux > 0.0 )
+        {
+            if (tAux < tMin) tMin = tAux;
+            if (tAux > tMax) tMax = tAux;
+        }
         
         // x = xmax
         tAux = (_max.x - ray.origin.x)/ray.direction.x;
        
         y = ray.origin.y + tAux * ray.direction.y;
         z = ray.origin.z + tAux * ray.direction.z;        
-        if ( y >= _min.y && y <= _max.y && z >= _min.z && z <= _max.z && tAux > 0.0 && tAux < tMin) // Testa se está dentro da caixa
-            tMin = tAux; 
+        if ( y >= _min.y && y <= _max.y && z >= _min.z && z <= _max.z && tAux > 0.0 ) // Testa se está dentro da caixa
+        {
+            if (tAux < tMin) tMin = tAux;
+            if (tAux > tMax) tMax = tAux;
+        }
     }
     
     //Procura interseção nos planos y = ymin e y = ymax
@@ -88,16 +96,22 @@ bool Box::computeRayIntersection( Ray ray, double& t )
                 
         float x = ray.origin.x + tAux * ray.direction.x;
         float z = ray.origin.z + tAux * ray.direction.z;        
-        if ( x >= _min.x && x <= _max.x && z >= _min.z && z <= _max.z && tAux > 0.0 && tAux < tMin) // Testa se está dentro da caixa
-            tMin = tAux;            
+        if ( x >= _min.x && x <= _max.x && z >= _min.z && z <= _max.z && tAux > 0.0 ) // Testa se está dentro da caixa
+        {
+            if (tAux < tMin) tMin = tAux;
+            if (tAux > tMax) tMax = tAux;
+        }           
         
         // y = ymax
         tAux = (_max.y - ray.origin.y)/ray.direction.y;
        
         x = ray.origin.x + tAux * ray.direction.x;
         z = ray.origin.z + tAux * ray.direction.z;        
-        if ( x >= _min.x && x <= _max.x && z >= _min.z && z <= _max.z && tAux > 0.0 && tAux < tMin) // Testa se está dentro da caixa
-            tMin = tAux; 
+        if ( x >= _min.x && x <= _max.x && z >= _min.z && z <= _max.z && tAux > 0.0 ) // Testa se está dentro da caixa
+        {
+            if (tAux < tMin) tMin = tAux;
+            if (tAux > tMax) tMax = tAux;
+        } 
     }
     
     //Procura interseção nos planos z = zmin e z = zmax
@@ -108,21 +122,28 @@ bool Box::computeRayIntersection( Ray ray, double& t )
                 
         float y = ray.origin.y + tAux * ray.direction.y;
         float x = ray.origin.x + tAux * ray.direction.x;        
-        if ( y >= _min.y && y <= _max.y && x >= _min.x && x <= _max.x && tAux > 0.0 && tAux < tMin) // Testa se está dentro da caixa
-            tMin = tAux;            
+        if ( y >= _min.y && y <= _max.y && x >= _min.x && x <= _max.x && tAux > 0.0 ) // Testa se está dentro da caixa
+        {
+            if (tAux < tMin) tMin = tAux;
+            if (tAux > tMax) tMax = tAux;
+        }          
         
         // z = zmax
         tAux = (_max.z - ray.origin.z)/ray.direction.z;
        
         y = ray.origin.y + tAux * ray.direction.y;
         x = ray.origin.x + tAux * ray.direction.x;        
-        if ( y >= _min.y && y <= _max.y && x >= _min.x && x <= _max.x && tAux > 0.0 && tAux < tMin) // Testa se está dentro da caixa
-            tMin = tAux; 
+        if ( y >= _min.y && y <= _max.y && x >= _min.x && x <= _max.x && tAux > 0.0 ) // Testa se está dentro da caixa
+        {
+            if (tAux < tMin) tMin = tAux;
+            if (tAux > tMax) tMax = tAux;
+        } 
     }
     
-    t = tMin;
+    tIn  = tMin;
+    tOut = tMax;
     
-    return (tMin < DBL_MAX);
+    return ( ( tMin < DBL_MAX ) && ( tMax > DBL_MIN ) );
 }
 
 
