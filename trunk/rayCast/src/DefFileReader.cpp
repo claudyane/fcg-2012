@@ -53,9 +53,6 @@ void DefFileReader::loadVolumeData( std::string dataFilePath, Volume* volume, in
     fp = fopen(dataFilePath.c_str(), "rb");
     if (!fp) return;
     
-    /* Alocando o buffer de dados volumetricos */
-    //byte* data = new byte[volume->getTotalNumberOfSamples()];
-    
     /* Passando o header */
     fseek(fp, offset, 0);
     
