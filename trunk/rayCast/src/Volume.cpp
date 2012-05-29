@@ -87,3 +87,11 @@ byte Volume::getVoxel( int i, int j, int k )
 {
     return _data[i + j * _nx + k * _nx * _ny];
 }
+
+float Volume::getSmallestDimension()
+{
+    int minxy = ( _nx < _ny ? _nx : _ny );
+    return ( minxy < _nz ? minxy : _nz );
+}
+
+

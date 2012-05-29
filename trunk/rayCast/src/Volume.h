@@ -34,6 +34,8 @@ public:
     
     void interpolateTransferFunction();
     
+    float getSmallestDimension();
+    
 private:
     
     int _nx, _ny, _nz;
