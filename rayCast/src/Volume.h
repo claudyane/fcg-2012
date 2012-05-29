@@ -10,10 +10,11 @@
 
 #include <vector>
 #include "Color.h"
+#include "Box.h"
 
 typedef unsigned char byte;
 
-class Volume
+class Volume : public Box
 {
 public:
     
