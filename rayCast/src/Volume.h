@@ -36,6 +36,8 @@ public:
     
     float getSmallestDimension();
     
+    Color interpolate( Vector4D point );
+    
 private:
     
     int _nx, _ny, _nz;
