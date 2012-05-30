@@ -94,4 +94,32 @@ float Volume::getSmallestDimension()
     return ( minxy < _nz ? minxy : _nz );
 }
 
-
+Color Volume::interpolate( Vector4D point )
+{
+    int i = (int)( point.x / _dx );
+    int j = (int)( point.y / _dy );
+    int k = (int)( point.z / _dz );
+    
+    Color outValue;
+    
+    for (int auxi = 0; i <= i+1; ++i, ++auxi)
+    {
+        for (int auxj = 0; j <= j+1; ++j, ++auxj)
+        {
+            for (int auxk = 0; k <= k+1; ++k, ++auxk)
+            {
+                if (i < 0 || i >= _nx || j < 0 || j >= _ny || k < 0 || k >= _nz)
+                    continue;
+                
+                byte voxel = getVoxel( i, j, k );
+                
+                outValue += ( 1 - point.x + auxi ) *
+                            ( 1 - point.y + auxj ) * 
+                            ( 1 - point.z + auxk ) * 
+                            _transferFunction[voxel];
+            }
+        }
+    }
+    
+    return outValue;
+}
