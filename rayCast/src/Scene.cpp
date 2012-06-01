@@ -7,28 +7,68 @@
 
 #include "Scene.h"
 #include "Image.h"
+#include "DefFileReader.h"
+#include <cstdio>
 
 Scene::Scene()
 {
     _volume = NULL;
-    _camera = NULL;
+    _camera = NULL;    
 }
+
+
 
 Scene::~Scene()
 {
-    delete _volume;
-    delete _camera;
+    if (_volume)
+        delete _volume;
+    
+    if (_camera)
+        delete _camera;
 }
+
+
 
 void Scene::setCamera( Camera* camera )
 {
     _camera = camera;
 }
 
+
+
+bool Scene::loadScene( std::string filePath )
+{
+    char cameraFile[256];
+    char volumeFile[256];
+
+    FILE* fp = fopen( filePath.c_str(), "r");
+    if (!fp) 
+        return 0;
+    
+    fscanf( fp, "%s\n", cameraFile );
+    fscanf( fp, "%s\n", volumeFile );
+    fclose( fp );
+        
+    DefFileReader reader;
+    
+    if (_camera)
+        delete _camera;
+    _camera = reader.loadCamera( cameraFile );
+    
+    if (_volume)
+        delete _volume;
+    _volume = reader.loadVolume( volumeFile );
+    
+    return true;
+}
+
+
 void Scene::setVolume( Volume* volume )
 {
     _volume = volume;
 }
+
+
 
 Image* Scene::render()
 {
@@ -50,6 +90,7 @@ Image* Scene::render()
     
     return image;
 }
+
 
 
 void Scene::computeRayColor( Ray ray, Color& colorOut )

@@ -10,9 +10,7 @@
 
 #include <string>
 #include "Image.h"
-
-//stub forward declaration
-class Scene;
+#include "Scene.h"
 
 class MainWindowPresenter
 {
@@ -25,7 +23,7 @@ public:
     
 private:
     Image* _image;
-    // TODO: objeto volume
+    Scene _scene;
 };
 
 #endif /* MAINWINDOWPRESENTER_H_ */
