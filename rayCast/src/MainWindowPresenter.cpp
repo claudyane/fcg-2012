@@ -8,6 +8,7 @@
 #include "MainWindowPresenter.h"
 #include "MainWindow.h"
 #include "Scene.h"
+#include <gdk/gdkkeysyms.h>
 
 
 MainWindowPresenter::MainWindowPresenter()
@@ -28,6 +29,45 @@ MainWindowPresenter::~MainWindowPresenter()
 Image* MainWindowPresenter::getImage()
 {
     return _image;
+}
+
+
+
+void MainWindowPresenter::keyPress( gint key )
+{
+    if (!_scene.getCamera())
+        return;
+    
+    Camera* camera = _scene.getCamera();
+    
+    switch (key)
+    {
+        case GDK_KEY_X:
+            camera->incX( 1.0 );
+            break;
+            
+        case GDK_KEY_x:
+            camera->incX( -1.0 );
+            break;
+            
+        case GDK_KEY_Y:
+            camera->incY( 1.0 );
+            break;
+            
+        case GDK_KEY_y:
+            camera->incY( -1.0 );
+            break;
+            
+        case GDK_KEY_Z:
+            camera->incZ( 1.0 );
+            break;
+            
+        case GDK_KEY_z:
+            camera->incZ( -1.0 );
+            break;
+    }
+    
+    render();
 }
 
 

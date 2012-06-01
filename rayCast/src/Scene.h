@@ -25,6 +25,8 @@ public:
     void setVolume( Volume* volume );
     
     void setCamera( Camera* camera );
+    
+    Camera* getCamera();
 
     void setBackgroundColor( Color backgroungColor );
 
