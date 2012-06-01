@@ -103,3 +103,8 @@ void DefFileReader::loadVolumeTransfer( std::string transferFilePath, Volume* vo
     // interpolate the intermediate values on the transfer function
     volume->interpolateTransferFunction();
 }
+
+Camera* DefFileReader::loadCamera( std::string filePath )
+{
+    return 0;
+}
