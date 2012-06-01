@@ -49,7 +49,7 @@ GtkWidget* MainWindow::build()
 {
     GtkWidget* window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
     gtk_container_set_border_width( GTK_CONTAINER (window), 5 );
-    gtk_window_set_title( GTK_WINDOW (window), "Raytracing");
+    gtk_window_set_title( GTK_WINDOW (window), "Raycasting");
     gtk_window_set_resizable( GTK_WINDOW (window), FALSE ); 
     g_signal_connect( window, "delete-event", G_CALLBACK (cb_deleteWindow), window );
 
