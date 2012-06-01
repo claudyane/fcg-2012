@@ -1,6 +1,6 @@
-eye= 5 4 3
+eye= -10 700 -10
 at= 0 0 0
-up= 0 0 1
+up= 0 1 0
 fovy= 60
 nearp= 3
 farp= 100

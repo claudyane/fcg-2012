@@ -51,13 +51,19 @@ bool Scene::loadScene( std::string filePath )
         
     DefFileReader reader;
     
+    size_t pos = filePath.find_last_of( "/\\" );          
+    std::string cameraPath = filePath.substr( 0, pos + 1 );
+    cameraPath += cameraFile;
+    
     if (_camera)
         delete _camera;
-    _camera = reader.loadCamera( cameraFile );
+    _camera = reader.loadCamera( cameraPath );
     
+    std::string volumePath = filePath.substr( 0, pos + 1 );
+    volumePath += volumeFile;
     if (_volume)
         delete _volume;
-    _volume = reader.loadVolume( volumeFile );
+    _volume = reader.loadVolume( volumePath );
     
     return true;
 }
