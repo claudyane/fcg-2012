@@ -7,6 +7,7 @@
 
 #include "MainWindowPresenter.h"
 #include "MainWindow.h"
+#include "Scene.h"
 
 
 MainWindowPresenter::MainWindowPresenter()
@@ -18,7 +19,8 @@ MainWindowPresenter::MainWindowPresenter()
 
 MainWindowPresenter::~MainWindowPresenter()
 {
-    // TODO Auto-generated destructor stub
+    if (_image)
+        imgDestroy( _image );
 }
 
 
@@ -34,8 +36,8 @@ bool MainWindowPresenter::loadFile( std::string filename )
 {
     if (_image)
         imgClear( _image, 0.0f, 0.0f, 0.0f );
-    
-    return true;
+       
+    return _scene.loadScene( filename );        
 }
 
 
@@ -44,4 +46,6 @@ void MainWindowPresenter::render()
 {
     if (_image)
         imgDestroy( _image );
+    
+    _image = _scene.render();
 }

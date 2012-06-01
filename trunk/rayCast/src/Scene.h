@@ -20,6 +20,8 @@ public:
         
     virtual ~Scene();
 
+    bool loadScene( std::string filePath );
+    
     void setVolume( Volume* volume );
     
     void setCamera( Camera* camera );
