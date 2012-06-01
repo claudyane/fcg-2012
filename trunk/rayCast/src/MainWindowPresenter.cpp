@@ -37,7 +37,11 @@ bool MainWindowPresenter::loadFile( std::string filename )
     if (_image)
         imgClear( _image, 0.0f, 0.0f, 0.0f );
        
-    return _scene.loadScene( filename );        
+    _scene.loadScene( filename );        
+    
+    render();
+    
+    return true;
 }
 
 
