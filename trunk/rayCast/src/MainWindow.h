@@ -33,7 +33,7 @@ private:
     static gint cb_keyPress( GtkWidget* widget, GdkEvent* event, gpointer callback_data );
     
     GtkWidget* _window;
-    GtkWidget* _rayTraceCanvas;
+    GtkWidget* _canvas;
     GtkWidget* _messageBar;
     GtkWidget* _fileLabel;
     

@@ -51,7 +51,7 @@ GtkWidget* MainWindow::build()
     gtk_window_set_title( GTK_WINDOW (window), "Raycasting");
     gtk_window_set_resizable( GTK_WINDOW (window), FALSE ); 
     g_signal_connect( window, "delete-event", G_CALLBACK (cb_deleteWindow), window );
-    g_signal_connect( window, "key-press-event", G_CALLBACK (cb_keyPress), window );
+    g_signal_connect( window, "key-press-event", G_CALLBACK (cb_keyPress), this );
 
     GtkWidget* mainBox = gtk_vbox_new( FALSE, 2 );
     gtk_container_add( GTK_CONTAINER(window), mainBox );
@@ -98,8 +98,8 @@ GtkWidget* MainWindow::buildCanvasBox()
 {
     GtkWidget* canvasBox = gtk_hbox_new( FALSE, 2 );
     
-    _rayTraceCanvas = buildRayTraceCanvas();
-    gtk_box_pack_start( GTK_BOX(canvasBox), _rayTraceCanvas, FALSE, FALSE, 2 );
+    _canvas = buildRayTraceCanvas();
+    gtk_box_pack_start( GTK_BOX(canvasBox), _canvas, FALSE, FALSE, 2 );
     
     return canvasBox;
 }
@@ -248,7 +248,7 @@ void MainWindow::cb_loadFile( GtkWidget* button, gpointer user_data )
         }
 
         gtk_label_set_label( GTK_LABEL(window->_messageBar), "Created by Eliana Goldner and Walther Maciel" );
-        gtk_widget_queue_draw( window->_rayTraceCanvas );
+        gtk_widget_queue_draw( window->_canvas );
         
         g_free( filepath );
     }
@@ -298,6 +298,8 @@ gint MainWindow::cb_keyPress( GtkWidget* widget, GdkEvent* event, gpointer callb
 {
     MainWindow* window = ( MainWindow* )callback_data;
     window->_presenter->keyPress( event->key.keyval );
+    
+    gtk_widget_queue_draw( window->_canvas );
     
     return 0;
 }
