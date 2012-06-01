@@ -52,6 +52,10 @@ public:
      * Returns the camera's position in world coordinates
      */
     Vector4D getPosition();
+    
+    void incX( float increment );
+    void incY( float increment );
+    void incZ( float increment );
 
 private:
     /** Position of the camera on world space */

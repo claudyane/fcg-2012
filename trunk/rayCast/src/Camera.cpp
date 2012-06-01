@@ -90,3 +90,20 @@ Vector4D Camera::getPosition()
 {
     return _eye;
 }
+
+
+
+void Camera::incX(float increment)
+{
+    _eye.x += increment;
+}
+
+void Camera::incY(float increment)
+{
+    _eye.y += increment;
+}
+
+void Camera::incZ(float increment)
+{
+    _eye.z += increment;
+}
