@@ -6,7 +6,7 @@
  */
 
 #include "DefFileReader.h"
-
+#include <cstring>
 #include <cstdio>
 
 typedef unsigned char byte;
