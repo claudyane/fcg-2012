@@ -60,6 +60,8 @@ void Scene::computeRayColor( Ray ray, Color& colorOut )
     {
         Vector4D pIn  = ray.origin + tIn  * ray.direction;
         Vector4D pOut = ray.origin + tOut * ray.direction;
+
+        colorOut.set( 1.0f, 0.0f, 0.0f, 1.0f );
     }
     else
     {

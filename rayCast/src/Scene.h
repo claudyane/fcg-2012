@@ -28,10 +28,8 @@ public:
 
     Image* render();
     
-private:
-    
-    bool computeNearestRayIntersection( Ray ray, Vector4D& point, Vector4D& normal, int& objectID );        
-        
+private:    
+
     void computeRayColor( Ray ray, Color& colorOut );
     
     Volume* _volume;
