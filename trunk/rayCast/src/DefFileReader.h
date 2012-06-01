@@ -9,6 +9,7 @@
 #define	DEFFILEREADER_H
 
 #include "Volume.h"
+#include "Camera.h"
 #include <string>
 
 class DefFileReader
@@ -20,6 +21,8 @@ public:
     virtual ~DefFileReader();
     
     Volume* loadVolume( std::string filePath );
+    
+    Camera* loadCamera( std::string filePath );
     
 private:
     
