@@ -20,7 +20,6 @@
 #include <glib-2.0/glib/gtypes.h>
 #include <gtk-2.0/gtk/gtkwidget.h>
 
-
 MainWindow::MainWindow()
 {
     _window = build();
@@ -52,6 +51,7 @@ GtkWidget* MainWindow::build()
     gtk_window_set_title( GTK_WINDOW (window), "Raycasting");
     gtk_window_set_resizable( GTK_WINDOW (window), FALSE ); 
     g_signal_connect( window, "delete-event", G_CALLBACK (cb_deleteWindow), window );
+    g_signal_connect( window, "key-press-event", G_CALLBACK (cb_keyPress), window );
 
     GtkWidget* mainBox = gtk_vbox_new( FALSE, 2 );
     gtk_container_add( GTK_CONTAINER(window), mainBox );
@@ -291,3 +291,14 @@ gboolean MainWindow::cb_deleteWindow( GtkWidget* widget, GdkEvent* event, gpoint
 
     return TRUE;
 }
+
+
+
+gint MainWindow::cb_keyPress( GtkWidget* widget, GdkEvent* event, gpointer callback_data )
+{
+    MainWindow* window = ( MainWindow* )callback_data;
+    window->_presenter->keyPress( event->key.keyval );
+    
+    return 0;
+}
+

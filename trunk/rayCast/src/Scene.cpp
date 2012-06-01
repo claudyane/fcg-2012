@@ -36,6 +36,13 @@ void Scene::setCamera( Camera* camera )
 
 
 
+Camera* Scene::getCamera()
+{
+    return _camera;
+}
+
+
+
 bool Scene::loadScene( std::string filePath )
 {
     char cameraFile[256];

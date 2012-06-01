@@ -11,6 +11,7 @@
 #include <string>
 #include "Image.h"
 #include "Scene.h"
+#include <gtk/gtk.h>
 
 class MainWindowPresenter
 {
@@ -21,6 +22,7 @@ public:
     void render();
     Image* getImage();
     
+    void keyPress( gint key );
 private:
     Image* _image;
     Scene _scene;
