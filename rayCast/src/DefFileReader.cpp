@@ -8,6 +8,7 @@
 #include "DefFileReader.h"
 #include <cstring>
 #include <cstdio>
+#include <cstdlib>
 
 typedef unsigned char byte;
 
@@ -205,7 +206,11 @@ Camera* DefFileReader::loadCamera( std::string filePath )
     
     fclose(fp);
     
-    if( errors ) return 0;
+    if( errors )
+    {
+        printf("Ocorreram erros ao ler o arquivo .cam\n");
+        exit(1);
+    }
     
     return new Camera( eye, at, up, fovy, near, width, height );
 }
