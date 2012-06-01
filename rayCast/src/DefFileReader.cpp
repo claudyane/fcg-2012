@@ -40,9 +40,14 @@ Volume* DefFileReader::loadVolume( std::string filePath )
     
     Volume* volume = new Volume( nx, ny, nz, dx, dy, dz, offset );
 
-    loadVolumeData( data_file, volume, offset );
+    size_t pos = filePath.find_last_of( "/\\" );          
+    std::string dataPath = filePath.substr( 0, pos + 1 );
+    dataPath += data_file;    
+    loadVolumeData( dataPath, volume, offset );
 
-    loadVolumeTransfer( transf_file, volume );
+    std::string transferPath = filePath.substr( 0, pos + 1 );
+    transferPath += transf_file;
+    loadVolumeTransfer( transferPath, volume );
     
     return volume;
 }
