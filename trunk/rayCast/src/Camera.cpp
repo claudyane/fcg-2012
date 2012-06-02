@@ -98,12 +98,43 @@ void Camera::incX(float increment)
     _eye.x += increment;
 }
 
+
+
 void Camera::incY(float increment)
 {
     _eye.y += increment;
 }
 
+
+
 void Camera::incZ(float increment)
 {
     _eye.z += increment;
 }
+
+
+
+void Camera::rotateY( double angle )
+{
+    double matrix[3][3];
+    
+    matrix[0][0] = cos( angle );  matrix[0][1] = 0.0; matrix[0][2] = sin( angle );
+    matrix[1][0] = 0.0;           matrix[1][1] = 1.0; matrix[1][2] = 0.0;
+    matrix[2][0] = -sin( angle ); matrix[2][1] = 0.0; matrix[2][2] = cos( angle );
+    
+    _eye = matrixMult( matrix, _eye );
+}
+
+
+
+Vector4D Camera::matrixMult( double matrix[][3], Vector4D point )
+{
+    Vector4D result;
+    
+    result.x = matrix[0][0] * point.x + matrix[0][1] * point.y + matrix[0][2] * point.z;
+    result.y = matrix[1][0] * point.x + matrix[1][1] * point.y + matrix[1][2] * point.z;
+    result.z = matrix[2][0] * point.x + matrix[2][1] * point.y + matrix[2][2] * point.z;
+    
+    return result;
+}
+
