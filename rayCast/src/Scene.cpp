@@ -111,18 +111,32 @@ Image* Scene::render()
 void Scene::computeRayColor( Ray ray, Color& colorOut )
 {
     double tIn, tOut;
-    
-    if (_volume->computeRayIntersection( ray, tIn, tOut ))
-    {
-        Vector4D pIn  = ray.origin + tIn  * ray.direction;
-        Vector4D pOut = ray.origin + tOut * ray.direction;
-        
-        Vector4D normal = _volume->getNormal( pIn );
-        
-        colorOut = _volume->interpolate(pIn);
-    }
-    else
+    if (!_volume->computeRayIntersection( ray, tIn, tOut ))
     {
         colorOut = _backgroundColor;
+        return;
     }
+
+    // if there were an intersection, traverse the volume adding colors
+    double dt = _volume->getSmallestDimension();
+    Color colorNow( 0.0f, 0.0f, 0.0f, 0.0f );
+    for( double tCurr = tIn; tCurr <= tOut; tCurr += dt )
+    {
+        Vector4D point  = ray.origin + tIn  * ray.direction;
+        
+        Color colorVoxel = _volume->interpolate( point );
+        
+        colorNow.r += (1-colorNow.a) * colorVoxel.a * colorVoxel.r;
+        colorNow.g += (1-colorNow.a) * colorVoxel.a * colorVoxel.g;
+        colorNow.b += (1-colorNow.a) * colorVoxel.a * colorVoxel.b;
+        colorNow.a += (1-colorNow.a) * colorVoxel.a;
+        
+        if( colorNow.a >= 1.0f )
+        {
+            colorNow.a = 1.0f;
+            break;
+        }
+    }
+    
+    colorOut = colorNow;
 }
