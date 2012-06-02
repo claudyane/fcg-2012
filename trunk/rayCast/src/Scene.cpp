@@ -99,7 +99,7 @@ Image* Scene::render()
             Ray ray = _camera->computeRay( x + 0.25, y + 0.25 );
             Color pixelColor;
             computeRayColor( ray, pixelColor );
-            imgSetPixel3f( image, x, y, pixelColor.r, pixelColor.g, pixelColor.b );
+            imgSetPixel3f( image, x, y, pixelColor.r*pixelColor.a, pixelColor.g*pixelColor.a, pixelColor.b*pixelColor.a );
         }
     }
     
