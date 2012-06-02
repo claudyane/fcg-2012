@@ -149,9 +149,13 @@ gboolean MainWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event
     //If Image loaded OK, start drawing
     if( image )
     {
+        int width  = imgGetWidth( window->_presenter->getImage() );
+        int height = imgGetHeight( window->_presenter->getImage()  );
+
+        gtk_drawing_area_size( GTK_DRAWING_AREA (window->_canvas) , width, height );
+        gtk_window_resize( GTK_WINDOW (window->_window), width, height ); 
+
         glBegin( GL_POINTS );
-            int width = imgGetWidth( image );
-            int height = imgGetHeight( image );
 
             for (int w = 0; w < width; ++w)
             {

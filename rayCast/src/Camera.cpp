@@ -96,6 +96,7 @@ Vector4D Camera::getPosition()
 void Camera::incX(float increment)
 {
     _eye.x += increment;
+    computeDerivedParameters();
 }
 
 
@@ -103,6 +104,7 @@ void Camera::incX(float increment)
 void Camera::incY(float increment)
 {
     _eye.y += increment;
+    computeDerivedParameters();
 }
 
 
@@ -110,6 +112,7 @@ void Camera::incY(float increment)
 void Camera::incZ(float increment)
 {
     _eye.z += increment;
+    computeDerivedParameters();
 }
 
 
@@ -123,6 +126,7 @@ void Camera::rotateY( double angle )
     matrix[2][0] = -sin( angle ); matrix[2][1] = 0.0; matrix[2][2] = cos( angle );
     
     _eye = matrixMult( matrix, _eye );
+    computeDerivedParameters();
 }
 
 
