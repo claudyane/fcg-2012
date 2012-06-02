@@ -57,6 +57,8 @@ public:
     void incY( float increment );
     void incZ( float increment );
     void rotateY( double angle );
+    
+    void setCenter( Vector4D center );
 
 private:
     /** Position of the camera on world space */

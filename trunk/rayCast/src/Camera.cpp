@@ -131,6 +131,14 @@ void Camera::rotateY( double angle )
 
 
 
+void Camera::setCenter( Vector4D center )
+{
+    _center = center;
+    computeDerivedParameters();
+}
+
+
+
 Vector4D Camera::matrixMult( double matrix[][3], Vector4D point )
 {
     Vector4D result;
@@ -141,4 +149,5 @@ Vector4D Camera::matrixMult( double matrix[][3], Vector4D point )
     
     return result;
 }
+
 

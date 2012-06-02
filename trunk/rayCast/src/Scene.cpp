@@ -72,6 +72,8 @@ bool Scene::loadScene( std::string filePath )
         delete _volume;
     _volume = reader.loadVolume( volumePath );
     
+    _camera->setCenter( _volume->getCenter() );
+    
     return true;
 }
 

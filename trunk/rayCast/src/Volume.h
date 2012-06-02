@@ -38,6 +38,8 @@ public:
     
     Color interpolate( Vector4D point );
     
+    Vector4D getCenter();
+    
 private:
     
     int _nx, _ny, _nz;
