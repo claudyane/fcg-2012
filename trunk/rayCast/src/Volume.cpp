@@ -100,7 +100,8 @@ Color Volume::interpolate( Vector4D point )
     int j = (int)( point.y / _dy );
     int k = (int)( point.z / _dz );
     
-    Color outColor;
+    Color outColor(0.0, 0.0, 0.0, 0.0);
+    
     int nexti = i+1;
     int nextj = j+1;
     int nextk = k+1;
