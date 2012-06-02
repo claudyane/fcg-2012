@@ -40,6 +40,8 @@ public:
     
     Vector4D getCenter();
     
+    Vector4D getNormal( Vector4D& point );
+    
 private:
     
     int _nx, _ny, _nz;

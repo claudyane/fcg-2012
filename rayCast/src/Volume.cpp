@@ -27,10 +27,15 @@ Volume::Volume(int nx, int ny, int nz, float dx, float dy, float dz, int offset)
     _data = new byte[nx * ny * nz];
 }
 
+
+
 Volume::~Volume()
 {
     delete[] _data;
 }
+
+
+
 
 int Volume::getNumberOfSamples(int& nx, int& ny, int& nz)
 {
@@ -39,10 +44,14 @@ int Volume::getNumberOfSamples(int& nx, int& ny, int& nz)
     nz = _nz;
 }
 
+
+
 int Volume::getTotalNumberOfSamples()
 {
     return _nx * _ny * _nz;
 }
+
+
 
 void Volume::interpolateTransferFunction()
 {
@@ -71,11 +80,15 @@ void Volume::interpolateTransferFunction()
     }
 }
 
+
+
 void Volume::setTransferFunctionPoint(int point, Color value)
 {
     _transferFunction[point] = value;
     _fixedTransferPositions.push_back( point );
 }
+
+
 
 void Volume::setVoxel(int i, int j, int k, byte value)
 {
@@ -83,16 +96,21 @@ void Volume::setVoxel(int i, int j, int k, byte value)
 }
 
 
+
 byte Volume::getVoxel( int i, int j, int k )
 {
     return _data[i + j * _nx + k * _nx * _ny];
 }
+
+
 
 float Volume::getSmallestDimension()
 {
     int minxy = ( _nx < _ny ? _nx : _ny );
     return ( minxy < _nz ? minxy : _nz );
 }
+
+
 
 Color Volume::interpolate( Vector4D point )
 {
@@ -133,5 +151,33 @@ Color Volume::interpolate( Vector4D point )
 Vector4D Volume::getCenter()
 {
     return Vector4D( (_nx*_dx)/2.0, (_ny*_dy)/2.0, (_nz*_dz)/2.0, 1.0 );
+}
+
+
+
+Vector4D Volume::getNormal( Vector4D& point )
+{
+    int i = (int)( point.x / _dx );
+    int j = (int)( point.y / _dy );
+    int k = (int)( point.z / _dz );
+    
+    int prevI = (i > 0? i-1 : 0);
+    int prevJ = (j > 0? j-1 : 0);
+    int prevK = (k > 0? k-1 : 0);
+    
+    int nextI = (i < _nx-1? i+1 : _nx-1);
+    int nextJ = (j < _ny-1? i+1 : _ny-1);
+    int nextK = (k < _nz-1? i+1 : _nz-1);
+    
+    Vector4D normal;
+    
+    normal.x = (getVoxel( nextI, j, k ) - getVoxel( prevI, j, k ))/(2*_dx);
+    normal.y = (getVoxel( i, nextJ, k ) - getVoxel( i, prevJ, k ))/(2*_dy);
+    normal.z = (getVoxel( i, j, nextK ) - getVoxel( i, j, prevK ))/(2*_dz);
+    normal.w = 1.0;
+    
+    normal.normalize();
+    
+    return normal;
 }
 

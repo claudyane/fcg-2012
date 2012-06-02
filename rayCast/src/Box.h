@@ -21,7 +21,7 @@ public:
     
     bool computeRayIntersection( Ray ray, double& tIn, double& tOut );
     
-    Vector4D getNormal( Vector4D& point );
+    virtual Vector4D getNormal( Vector4D& point );
     
     Vector4D getMin();
     
