@@ -127,24 +127,26 @@ Color Volume::interpolate( Vector4D point )
     int nextj = j+1;
     int nextk = k+1;
     
-    for (int auxi = 0; i <= nexti; ++i, ++auxi)
-    {
-        for (int auxj = 0; j <= nextj; ++j, ++auxj)
-        {
-            for (int auxk = 0; k <= nextk; ++k, ++auxk)
-            {
-                if (i < 0 || i >= _nx || j < 0 || j >= _ny || k < 0 || k >= _nz)
-                    continue;
-                
-                byte voxel = getVoxel( i, j, k );
-                                
-                outColor += ( 1 - point.x + auxi ) *
-                            ( 1 - point.y + auxj ) * 
-                            ( 1 - point.z + auxk ) * 
-                            _transferFunction[voxel];
-            }
-        }
-    }
+//    for (int auxi = 0; i <= nexti; ++i, ++auxi)
+//    {
+//        for (int auxj = 0; j <= nextj; ++j, ++auxj)
+//        {
+//            for (int auxk = 0; k <= nextk; ++k, ++auxk)
+//            {
+//                if (i < 0 || i >= _nx || j < 0 || j >= _ny || k < 0 || k >= _nz)
+//                    continue;
+//                
+//                byte voxel = getVoxel( i, j, k );
+//                                
+//                outColor += ( 1 - point.x + auxi ) *
+//                            ( 1 - point.y + auxj ) * 
+//                            ( 1 - point.z + auxk ) * 
+//                            _transferFunction[voxel];
+//            }
+//        }
+//    }
+    
+    outColor += _transferFunction[ getVoxel(i,j,k) ];
     
     return outColor;
 }
