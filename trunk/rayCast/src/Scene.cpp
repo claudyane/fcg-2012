@@ -9,6 +9,7 @@
 #include "Image.h"
 #include "DefFileReader.h"
 #include <cstdio>
+#include <iostream>
 
 Scene::Scene()
 {
@@ -98,6 +99,7 @@ Image* Scene::render()
         {
             Ray ray = _camera->computeRay( x + 0.25, y + 0.25 );
             Color pixelColor;
+            
             computeRayColor( ray, pixelColor );
             imgSetPixel3f( image, x, y, pixelColor.r*pixelColor.a, pixelColor.g*pixelColor.a, pixelColor.b*pixelColor.a );
         }
@@ -122,18 +124,18 @@ void Scene::computeRayColor( Ray ray, Color& colorOut )
     Color colorNow( 0.0f, 0.0f, 0.0f, 0.0f );
     for( double tCurr = tIn; tCurr <= tOut; tCurr += dt )
     {
-        Vector4D point  = ray.origin + tIn  * ray.direction;
+        Vector4D point  = ray.origin + tCurr  * ray.direction;
         
         Color colorVoxel = _volume->interpolate( point );
-        
+               
         colorNow.r += (1-colorNow.a) * colorVoxel.a * colorVoxel.r;
         colorNow.g += (1-colorNow.a) * colorVoxel.a * colorVoxel.g;
         colorNow.b += (1-colorNow.a) * colorVoxel.a * colorVoxel.b;
         colorNow.a += (1-colorNow.a) * colorVoxel.a;
         
-        if( colorNow.a >= 1.0f )
+        if( colorNow.a >= 0.95f )
         {
-            colorNow.a = 1.0f;
+            //colorNow.a = 1.0f;
             break;
         }
     }

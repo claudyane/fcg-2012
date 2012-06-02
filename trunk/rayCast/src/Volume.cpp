@@ -10,6 +10,8 @@
 
 #include "Volume.h"
 #include "Vector4D.h"
+#include <cstdio>
+#include <iostream>
 
 Volume::Volume(int nx, int ny, int nz, float dx, float dy, float dz, int offset) : 
         Box( Vector4D(0.0, 0.0, 0.0, 1.0), Vector4D(nx*dx, ny*dy, nz*dz, 1.0) )
@@ -62,18 +64,19 @@ void Volume::interpolateTransferFunction()
     unsigned int tBegin = _fixedTransferPositions[0];
     unsigned int nFixedPositions = _fixedTransferPositions.size();
     
-    for( unsigned int tEnd = _fixedTransferPositions[1]; tEnd < nFixedPositions; ++tEnd )
+    for(unsigned int i = 0; i < nFixedPositions; ++i )
     {
+        int tEnd = _fixedTransferPositions[i];
         int dt = tEnd - tBegin;
         Color increment = (_transferFunction[tEnd] - _transferFunction[tBegin]);
         increment /= dt;
         
-        Color sampleValue = increment;
+        Color sampleValue =_transferFunction[tBegin] + increment;
         
         for( int tSample = tBegin+1; tSample < tEnd; ++tSample )
         {
             _transferFunction[tSample] = sampleValue;
-            sampleValue += increment;
+            sampleValue += increment;            
         }
         
         tBegin = tEnd;
@@ -134,7 +137,7 @@ Color Volume::interpolate( Vector4D point )
                     continue;
                 
                 byte voxel = getVoxel( i, j, k );
-                
+                                
                 outColor += ( 1 - point.x + auxi ) *
                             ( 1 - point.y + auxj ) * 
                             ( 1 - point.z + auxk ) * 
