@@ -119,38 +119,7 @@ void Scene::computeRayColor( Ray ray, Color& colorOut )
         
         Vector4D normal = _volume->getNormal( pIn );
         
-        colorOut.set( 0.5, 0.5, 0.5, 1.0f );
-        
-        //RED
-        if( normal.x == 1.0 && normal.y == 0.0 && normal.z == 0.0 )
-        {
-            colorOut.set( 1.0,0.0,0.0,1.0 );
-        }
-        //green
-        if( normal.x == 0.0 && normal.y == 1.0 && normal.z == 0.0 )
-        {
-            colorOut.set( 0.0,1.0,0.0,1.0 );
-        }
-        //blue
-        if( normal.x == 0.0 && normal.y == 0.0 && normal.z == 1.0 )
-        {
-            colorOut.set( 0.0,0.0,1.0,1.0 );
-        }
-        //cyan
-        if( normal.x == -1.0 && normal.y == 0.0 && normal.z == 0.0 )
-        {
-            colorOut.set( 0.0,1.0,1.0,1.0 );
-        }
-        //magenta
-        if( normal.x == 0.0 && normal.y == -1.0 && normal.z == 0.0 )
-        {
-            colorOut.set( 1.0,0.0,1.0,1.0 );
-        }
-        //yellow
-        if( normal.x == 0.0 && normal.y == 0.0 && normal.z == -1.0 )
-        {
-            colorOut.set( 1.0,1.0,0.0,1.0 );
-        }
+        colorOut = _volume->interpolate(pIn);
     }
     else
     {
