@@ -43,27 +43,27 @@ void MainWindowPresenter::keyPress( gint key )
     switch (key)
     {
         case GDK_KEY_X:
-            camera->incX( 10.0 );
+            camera->incX( 1.0 );
             break;
             
         case GDK_KEY_x:
-            camera->incX( -10.0 );
+            camera->incX( -1.0 );
             break;
             
         case GDK_KEY_Y:
-            camera->incY( 10.0 );
+            camera->incY( 1.0 );
             break;
             
         case GDK_KEY_y:
-            camera->incY( -10.0 );
+            camera->incY( -1.0 );
             break;
             
         case GDK_KEY_Z:
-            camera->incZ( 10.0 );
+            camera->incZ( 1.0 );
             break;
             
         case GDK_KEY_z:
-            camera->incZ( -10.0 );
+            camera->incZ( -1.0 );
             break;
         
         case GDK_KEY_R:
