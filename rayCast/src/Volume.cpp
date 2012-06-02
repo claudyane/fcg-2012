@@ -126,3 +126,11 @@ Color Volume::interpolate( Vector4D point )
     
     return outColor;
 }
+
+
+
+Vector4D Volume::getCenter()
+{
+    return Vector4D( (_nx*_dx)/2.0, (_ny*_dy)/2.0, (_nz*_dz)/2.0, 1.0 );
+}
+
