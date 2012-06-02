@@ -58,9 +58,9 @@ Box::~Box( )
 
 bool Box::computeRayIntersection( Ray ray, double& tIn, double& tOut )
 {
-    float tMin = DBL_MAX;
-    float tMax = DBL_MIN;
-    float tAux = DBL_MAX;
+    double tMin = DBL_MAX;
+    double tMax = -1.0;
+    double tAux = DBL_MAX;
     
     //Procura interseção nos planos x = xmin e x = xmax
     if (ray.direction.x != 0.0)
@@ -68,8 +68,8 @@ bool Box::computeRayIntersection( Ray ray, double& tIn, double& tOut )
         // x = xmin
         tAux = (_min.x - ray.origin.x)/ray.direction.x;
                 
-        float y = ray.origin.y + tAux * ray.direction.y;
-        float z = ray.origin.z + tAux * ray.direction.z;        
+        double y = ray.origin.y + tAux * ray.direction.y;
+        double z = ray.origin.z + tAux * ray.direction.z;        
         if ( y >= _min.y && y <= _max.y && z >= _min.z && z <= _max.z && tAux > 0.0 )
         {
             if (tAux < tMin) tMin = tAux;
@@ -94,8 +94,8 @@ bool Box::computeRayIntersection( Ray ray, double& tIn, double& tOut )
         // y = ymin
         tAux = (_min.y - ray.origin.y)/ray.direction.y;
                 
-        float x = ray.origin.x + tAux * ray.direction.x;
-        float z = ray.origin.z + tAux * ray.direction.z;        
+        double x = ray.origin.x + tAux * ray.direction.x;
+        double z = ray.origin.z + tAux * ray.direction.z;        
         if ( x >= _min.x && x <= _max.x && z >= _min.z && z <= _max.z && tAux > 0.0 ) // Testa se está dentro da caixa
         {
             if (tAux < tMin) tMin = tAux;
@@ -120,8 +120,8 @@ bool Box::computeRayIntersection( Ray ray, double& tIn, double& tOut )
         // z = zmin
         tAux = (_min.z - ray.origin.z)/ray.direction.z;
                 
-        float y = ray.origin.y + tAux * ray.direction.y;
-        float x = ray.origin.x + tAux * ray.direction.x;        
+        double y = ray.origin.y + tAux * ray.direction.y;
+        double x = ray.origin.x + tAux * ray.direction.x;        
         if ( y >= _min.y && y <= _max.y && x >= _min.x && x <= _max.x && tAux > 0.0 ) // Testa se está dentro da caixa
         {
             if (tAux < tMin) tMin = tAux;
@@ -143,7 +143,7 @@ bool Box::computeRayIntersection( Ray ray, double& tIn, double& tOut )
     tIn  = tMin;
     tOut = tMax;
     
-    return ( ( tMin < DBL_MAX ) && ( tMax > DBL_MIN ) );
+    return ( ( tMin < DBL_MAX ) && ( tMax > -1.0 ) );
 }
 
 
