@@ -56,6 +56,7 @@ public:
     void incX( float increment );
     void incY( float increment );
     void incZ( float increment );
+    void rotateY( double angle );
 
 private:
     /** Position of the camera on world space */
@@ -67,6 +68,8 @@ private:
     /** Point in the world the camera is looking at */
     Vector4D _center;
 
+    Vector4D matrixMult( double matrix[][3], Vector4D point );
+    
     /** Field of vision */
     double _fovy;
 

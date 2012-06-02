@@ -65,6 +65,14 @@ void MainWindowPresenter::keyPress( gint key )
         case GDK_KEY_z:
             camera->incZ( -1.0 );
             break;
+        
+        case GDK_KEY_R:
+            camera->rotateY( 0.5 );
+            break;
+            
+        case GDK_KEY_r:
+            camera->rotateY( -0.5 );
+            break;
     }
     
     render();
