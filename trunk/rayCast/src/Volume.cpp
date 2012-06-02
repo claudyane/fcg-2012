@@ -12,7 +12,7 @@
 #include "Vector4D.h"
 
 Volume::Volume(int nx, int ny, int nz, float dx, float dy, float dz, int offset) : 
-        Box( Vector4D(0.0, 0.0, 0.0, 1.0), Vector4D(nx, ny, nz, 1.0) )
+        Box( Vector4D(0.0, 0.0, 0.0, 1.0), Vector4D(nx*dx, ny*dy, nz*dz, 1.0) )
 {
     _nx = nx;
     _ny = ny;
@@ -100,20 +100,23 @@ Color Volume::interpolate( Vector4D point )
     int j = (int)( point.y / _dy );
     int k = (int)( point.z / _dz );
     
-    Color outValue;
+    Color outColor;
+    int nexti = i+1;
+    int nextj = j+1;
+    int nextk = k+1;
     
-    for (int auxi = 0; i <= i+1; ++i, ++auxi)
+    for (int auxi = 0; i <= nexti; ++i, ++auxi)
     {
-        for (int auxj = 0; j <= j+1; ++j, ++auxj)
+        for (int auxj = 0; j <= nextj; ++j, ++auxj)
         {
-            for (int auxk = 0; k <= k+1; ++k, ++auxk)
+            for (int auxk = 0; k <= nextk; ++k, ++auxk)
             {
                 if (i < 0 || i >= _nx || j < 0 || j >= _ny || k < 0 || k >= _nz)
                     continue;
                 
                 byte voxel = getVoxel( i, j, k );
                 
-                outValue += ( 1 - point.x + auxi ) *
+                outColor += ( 1 - point.x + auxi ) *
                             ( 1 - point.y + auxj ) * 
                             ( 1 - point.z + auxk ) * 
                             _transferFunction[voxel];
@@ -121,5 +124,5 @@ Color Volume::interpolate( Vector4D point )
         }
     }
     
-    return outValue;
+    return outColor;
 }
