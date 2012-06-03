@@ -95,14 +95,14 @@ void Volume::setTransferFunctionPoint(int point, Color value)
 
 void Volume::setVoxel(int i, int j, int k, byte value)
 {
-    _data[i + j * _nx + k * _nx * _ny] = value;
+    _data[i*_ny*_nz + j*_nz + k] = value;
 }
 
 
 
 byte Volume::getVoxel( int i, int j, int k )
 {
-    return _data[i + j * _nx + k * _nx * _ny];
+    return _data[i*_ny*_nz + j*_nz + k];
 }
 
 
@@ -117,38 +117,55 @@ float Volume::getSmallestDimension()
 
 Color Volume::interpolate( Vector4D point )
 {
-    int i = (int)( point.x / _dx );
-    int j = (int)( point.y / _dy );
-    int k = (int)( point.z / _dz );
+    double x = ( point.x / _dx );
+    double y = ( point.y / _dy );
+    double z = ( point.z / _dz );
     
-    Color outColor(0.0, 0.0, 0.0, 0.0);
+    int i1 = (int) x;
+    int j1 = (int) y;
+    int k1 = (int) z;
+    int i2 = i1+1;
+    int j2 = j1+1;
+    int k2 = k1+1;
     
-    int nexti = i+1;
-    int nextj = j+1;
-    int nextk = k+1;
+    if( i1 <= 0 || i2 >= _nx || j1 <= 0 || j2 >= _ny || k1 <= 0 || k2 >= _nz )
+    {
+        return Color( 0.0f, 0.0f, 0.0f, 0.0f );
+    }
     
-//    for (int auxi = 0; i <= nexti; ++i, ++auxi)
+    // i1,j1,k1 -- i2,j1,k1
+    double V1 = ( i2-x )*getVoxel( i1, j1, k1 ) + ( x-i1 )*getVoxel( i2, j1, k1 );
+    
+    // i1,j2,k1 -- i2,j2,k1
+    double V2 = ( i2-x )*getVoxel( i1, j2, k1 ) + ( x-i1 )*getVoxel( i2, j2, k1 );
+    
+    // i1,j1,k2 -- i2,j1,k2
+    double V3 = ( i2-x )*getVoxel( i1, j1, k2 ) + ( x-i1 )*getVoxel( i2, j1, k2 );
+    
+    // i1,j2,k2 -- i2,j2,k2
+    double V4 = ( i2-x )*getVoxel( i1, j2, k2 ) + ( x-i1 )*getVoxel( i2, j2, k2 );
+    
+    // V1 -- V2
+    double V5 = ( j2-y )*V1 + ( y-j1 )*V2;
+    
+    // V3 -- V4
+    double V6 = ( j2-y )*V3 + ( y-j1 )*V4;
+    
+    // V5 -- V6
+    double V7 = ( k2-z )*V5 + ( z-k1 )*V6;
+    
+    int value = (int)(V7+0.5);
+    
+    Color colorOut = _transferFunction[ value ];
+    
+//    if( value - (int)getVoxel( i1, j1, k1 ) != 0 )
 //    {
-//        for (int auxj = 0; j <= nextj; ++j, ++auxj)
-//        {
-//            for (int auxk = 0; k <= nextk; ++k, ++auxk)
-//            {
-//                if (i < 0 || i >= _nx || j < 0 || j >= _ny || k < 0 || k >= _nz)
-//                    continue;
-//                
-//                byte voxel = getVoxel( i, j, k );
-//                                
-//                outColor += ( 1 - point.x + auxi ) *
-//                            ( 1 - point.y + auxj ) * 
-//                            ( 1 - point.z + auxk ) * 
-//                            _transferFunction[voxel];
-//            }
-//        }
+//        std::cout << "interpolated: " << value << "\n";
+//        std::cout << "sharp: " << (int)getVoxel( i1, j1, k1 ) << "\n\n";
 //    }
     
-    outColor += _transferFunction[ getVoxel(i,j,k) ];
     
-    return outColor;
+    return colorOut;
 }
 
 
