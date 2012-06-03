@@ -15,6 +15,8 @@ Scene::Scene()
 {
     _volume = NULL;
     _camera = NULL;    
+    
+    _light = new Light( Vector4D( -5.0, 5.0, -5.0, 1.0), 0.7f, 0.7f, 0.7f );
 }
 
 
@@ -26,6 +28,8 @@ Scene::~Scene()
     
     if (_camera)
         delete _camera;
+    
+    delete _light;
 }
 
 
@@ -95,6 +99,7 @@ Image* Scene::render()
     
     for (int x = 0; x < width; ++x)
     {
+        #pragma omp parallel for
         for (int y = 0; y < height; ++y)
         {
             Ray ray = _camera->computeRay( x + 0.25, y + 0.25 );
@@ -126,8 +131,29 @@ void Scene::computeRayColor( Ray ray, Color& colorOut )
     {
         Vector4D point  = ray.origin + tCurr  * ray.direction;
         
+        #ifdef LIGHTING
+        Color colorVoxel( 0.0f, 0.0f, 0.0f, 0.0f );        
+        
+        // Direção de iluminação
+        Vector4D lightDir = _camera->getPosition() - point;
+        lightDir.normalize();
+        
+        // Normal do voxel
+        Vector4D normal = _volume->getNormal( point );        
+        if (normal.norm() != 0)
+        {
+            normal.normalize();
+            double cos = dot( normal, lightDir );
+            if (cos < 0.0)
+                cos = -cos;
+            
+            colorVoxel = _volume->interpolate( point );
+            colorVoxel = colorVoxel*cos;
+        }
+        #else
         Color colorVoxel = _volume->interpolate( point );
-               
+        #endif
+
         colorNow.r += (1-colorNow.a) * colorVoxel.a * colorVoxel.r;
         colorNow.g += (1-colorNow.a) * colorVoxel.a * colorVoxel.g;
         colorNow.b += (1-colorNow.a) * colorVoxel.a * colorVoxel.b;

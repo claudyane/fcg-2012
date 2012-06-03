@@ -205,7 +205,7 @@ Vector4D Volume::getNormal( Vector4D& point )
     normal.z = (getVoxel( i, j, nextK ) - getVoxel( i, j, prevK ))/(2*_dz);
     normal.w = 1.0;
     
-    normal.normalize();
+    //normal.normalize();
     
     return normal;
 }
