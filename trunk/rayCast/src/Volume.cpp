@@ -135,28 +135,35 @@ Color Volume::interpolate( Vector4D point )
     
     // i1,j1,k1 -- i2,j1,k1
     double V1 = ( i2-x )*getVoxel( i1, j1, k1 ) + ( x-i1 )*getVoxel( i2, j1, k1 );
+    Color CV1 = _transferFunction[(int)V1];
     
     // i1,j2,k1 -- i2,j2,k1
     double V2 = ( i2-x )*getVoxel( i1, j2, k1 ) + ( x-i1 )*getVoxel( i2, j2, k1 );
+    Color CV2 = _transferFunction[(int)V2];
     
     // i1,j1,k2 -- i2,j1,k2
     double V3 = ( i2-x )*getVoxel( i1, j1, k2 ) + ( x-i1 )*getVoxel( i2, j1, k2 );
+    Color CV3 = _transferFunction[(int)V3];
     
     // i1,j2,k2 -- i2,j2,k2
     double V4 = ( i2-x )*getVoxel( i1, j2, k2 ) + ( x-i1 )*getVoxel( i2, j2, k2 );
+    Color CV4 = _transferFunction[(int)V4];
     
     // V1 -- V2
     double V5 = ( j2-y )*V1 + ( y-j1 )*V2;
+    Color CV5 = ( j2-y )*CV1 + ( y-j1 )*CV2;
     
     // V3 -- V4
     double V6 = ( j2-y )*V3 + ( y-j1 )*V4;
+    Color CV6 = ( j2-y )*CV3 + ( y-j1 )*CV4;
     
     // V5 -- V6
     double V7 = ( k2-z )*V5 + ( z-k1 )*V6;
+    Color CV7 = ( k2-z )*CV5 + ( z-k1 )*CV6;
     
     int value = (int)(V7+0.5);
     
-    Color colorOut = _transferFunction[ value ];
+    Color colorOut = CV7;
     
 //    if( value - (int)getVoxel( i1, j1, k1 ) != 0 )
 //    {
