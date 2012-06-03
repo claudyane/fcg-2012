@@ -11,6 +11,7 @@
 #include "Volume.h"
 #include "Camera.h"
 #include "Image.h"
+#include "Light.h"
 
 class Scene
 {
@@ -39,6 +40,7 @@ private:
     Volume* _volume;
     Color _backgroundColor;
     Camera* _camera;
+    Light* _light;
 };
 
 #endif	/* SCENE_H */
