@@ -14,9 +14,7 @@
 Scene::Scene()
 {
     _volume = NULL;
-    _camera = NULL;    
-    
-    _light = new Light( Vector4D( -5.0, 5.0, -5.0, 1.0), 0.7f, 0.7f, 0.7f );
+    _camera = NULL;        
 }
 
 
@@ -27,9 +25,7 @@ Scene::~Scene()
         delete _volume;
     
     if (_camera)
-        delete _camera;
-    
-    delete _light;
+        delete _camera;    
 }
 
 

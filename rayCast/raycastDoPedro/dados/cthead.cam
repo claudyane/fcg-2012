@@ -1,0 +1,8 @@
+eye= -265 265 265
+at= 128 128 54
+up= 0 1 0
+fovy= 60
+nearp= 3
+farp= 100
+screenW= 500
+screenH= 500
