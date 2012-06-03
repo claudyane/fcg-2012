@@ -26,6 +26,8 @@ public:
 private:
     Image* _image;
     Scene _scene;
+    
+    float _increment;
 };
 
 #endif /* MAINWINDOWPRESENTER_H_ */

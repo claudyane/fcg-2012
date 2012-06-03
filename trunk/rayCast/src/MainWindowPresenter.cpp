@@ -14,6 +14,7 @@
 MainWindowPresenter::MainWindowPresenter()
 {
     _image = NULL;
+    _increment = 1.0;
 }
 
 
@@ -43,39 +44,57 @@ void MainWindowPresenter::keyPress( gint key )
     switch (key)
     {
         case GDK_KEY_X:
-            camera->incX( 1.0 );
+            camera->incX( _increment );
+            render();
             break;
             
         case GDK_KEY_x:
-            camera->incX( -1.0 );
+            camera->incX( -_increment );
+            render();
             break;
             
         case GDK_KEY_Y:
-            camera->incY( 1.0 );
+            camera->incY( _increment );
+            render();
             break;
             
         case GDK_KEY_y:
-            camera->incY( -1.0 );
+            camera->incY( -_increment );
+            render();
             break;
             
         case GDK_KEY_Z:
-            camera->incZ( 1.0 );
+            camera->incZ( _increment );
+            render();
             break;
             
         case GDK_KEY_z:
-            camera->incZ( -1.0 );
+            camera->incZ( -_increment );
+            render();
             break;
         
         case GDK_KEY_R:
             camera->rotateY( 0.5 );
+            render();
             break;
             
         case GDK_KEY_r:
             camera->rotateY( -0.5 );
+            render();
+            break;
+            
+        case GDK_KEY_Up:
+            _increment += 1.0;
+            printf("increment %f\n", _increment );
+            break;
+            
+        case GDK_KEY_Down:
+            _increment -= 1.0;
+            printf("increment %f\n", _increment );
             break;
     }
     
-    render();
+    //render();
 }
 
 

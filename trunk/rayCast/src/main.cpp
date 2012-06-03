@@ -3,7 +3,7 @@
 
 #include "MainWindow.h"
 
-#define LIGHTING 0
+#define LIGHTING 1
 
 int main( int argc, char** argv )
 {
