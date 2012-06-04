@@ -138,3 +138,9 @@ Color operator*( const Color& c, const Color& b )
     return Color( c.r * b.r, c.g * b.g, c.b * b.b, c.a * b.a );
 }
 
+
+
+Color weightOpacity( const Color& a )
+{
+    return Color( a.r * a.a, a.g * a.a, a.b * a.a, a.a );
+}

@@ -71,6 +71,8 @@ Color operator*( const double a, const Color& b );
 Color operator*( const Color& a, const double b );
 Color operator*( const Color& a, const Color& b );
 
+Color weightOpacity( const Color& a );
+
 
 #endif	/* COLOR_H */
 
