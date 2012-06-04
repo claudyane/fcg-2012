@@ -11,6 +11,8 @@
 #include <cstdio>
 #include <iostream>
 
+//#define LIGHTING
+
 Scene::Scene()
 {
     _volume = NULL;
@@ -121,7 +123,7 @@ void Scene::computeRayColor( Ray ray, Color& colorOut )
     }
 
     // if there were an intersection, traverse the volume adding colors
-    double dt = _volume->getSmallestDimension();// / 4.0;
+    double dt = _volume->getSmallestDimension() / 4.0;
     Color colorNow( 0.0f, 0.0f, 0.0f, 0.0f );
     for( double tCurr = tIn; tCurr <= tOut; tCurr += dt )
     {
@@ -150,9 +152,9 @@ void Scene::computeRayColor( Ray ray, Color& colorOut )
         Color colorVoxel = _volume->interpolate( point );
         #endif
 
-        colorNow.r += (1-colorNow.a) * colorVoxel.a * colorVoxel.r;
-        colorNow.g += (1-colorNow.a) * colorVoxel.a * colorVoxel.g;
-        colorNow.b += (1-colorNow.a) * colorVoxel.a * colorVoxel.b;
+        colorNow.r += (1-colorNow.a) *  colorVoxel.r;
+        colorNow.g += (1-colorNow.a) *  colorVoxel.g;
+        colorNow.b += (1-colorNow.a) *  colorVoxel.b;
         colorNow.a += (1-colorNow.a) * colorVoxel.a;
         
         if( colorNow.a >= 0.95f )
