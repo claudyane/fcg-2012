@@ -133,46 +133,39 @@ Color Volume::interpolate( Vector4D point )
         return Color( 0.0f, 0.0f, 0.0f, 0.0f );
     }
     
+    //The variables voxelColor*** will be used to identifiy the voxels. For
+    //instance, the color of the voxel in i1, j2, k1 will be named voxelColor121
+    Color voxelColor111 = weightOpacity( _transferFunction[ getVoxel( i1, j1, k1 ) ] );
+    Color voxelColor112 = weightOpacity( _transferFunction[ getVoxel( i1, j1, k2 ) ] );
+    Color voxelColor121 = weightOpacity( _transferFunction[ getVoxel( i1, j2, k1 ) ] );
+    Color voxelColor122 = weightOpacity( _transferFunction[ getVoxel( i1, j2, k2 ) ] );
+    Color voxelColor211 = weightOpacity( _transferFunction[ getVoxel( i2, j1, k1 ) ] );
+    Color voxelColor212 = weightOpacity( _transferFunction[ getVoxel( i2, j1, k2 ) ] );
+    Color voxelColor221 = weightOpacity( _transferFunction[ getVoxel( i2, j2, k1 ) ] );
+    Color voxelColor222 = weightOpacity( _transferFunction[ getVoxel( i2, j2, k2 ) ] );
+    
     // i1,j1,k1 -- i2,j1,k1
-    double V1 = ( i2-x )*getVoxel( i1, j1, k1 ) + ( x-i1 )*getVoxel( i2, j1, k1 );
-    Color CV1 = _transferFunction[(int)V1];
+    Color cv1 = ( i2-x )*voxelColor111 + ( x-i1 )*voxelColor211;
     
     // i1,j2,k1 -- i2,j2,k1
-    double V2 = ( i2-x )*getVoxel( i1, j2, k1 ) + ( x-i1 )*getVoxel( i2, j2, k1 );
-    Color CV2 = _transferFunction[(int)V2];
+    Color cv2 = ( i2-x )*voxelColor121 + ( x-i1 )*voxelColor221;
     
     // i1,j1,k2 -- i2,j1,k2
-    double V3 = ( i2-x )*getVoxel( i1, j1, k2 ) + ( x-i1 )*getVoxel( i2, j1, k2 );
-    Color CV3 = _transferFunction[(int)V3];
+    Color cv3 = ( i2-x )*voxelColor112 + ( x-i1 )*voxelColor212;
     
     // i1,j2,k2 -- i2,j2,k2
-    double V4 = ( i2-x )*getVoxel( i1, j2, k2 ) + ( x-i1 )*getVoxel( i2, j2, k2 );
-    Color CV4 = _transferFunction[(int)V4];
+    Color cv4 = ( i2-x )*voxelColor122 + ( x-i1 )*voxelColor222;
     
     // V1 -- V2
-    double V5 = ( j2-y )*V1 + ( y-j1 )*V2;
-    Color CV5 = ( j2-y )*CV1 + ( y-j1 )*CV2;
+    Color cv5 = ( j2-y )*cv1 + ( y-j1 )*cv2;
     
     // V3 -- V4
-    double V6 = ( j2-y )*V3 + ( y-j1 )*V4;
-    Color CV6 = ( j2-y )*CV3 + ( y-j1 )*CV4;
+    Color cv6 = ( j2-y )*cv3 + ( y-j1 )*cv4;
     
     // V5 -- V6
-    double V7 = ( k2-z )*V5 + ( z-k1 )*V6;
-    Color CV7 = ( k2-z )*CV5 + ( z-k1 )*CV6;
+    Color cv7 = ( k2-z )*cv5 + ( z-k1 )*cv6;
     
-    int value = (int)(V7+0.5);
-    
-    Color colorOut = CV7;
-    
-//    if( value - (int)getVoxel( i1, j1, k1 ) != 0 )
-//    {
-//        std::cout << "interpolated: " << value << "\n";
-//        std::cout << "sharp: " << (int)getVoxel( i1, j1, k1 ) << "\n\n";
-//    }
-    
-    
-    return colorOut;
+    return cv7;
 }
 
 
