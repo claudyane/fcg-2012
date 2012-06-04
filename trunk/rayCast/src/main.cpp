@@ -3,8 +3,6 @@
 
 #include "MainWindow.h"
 
-#define LIGHTING 1
-
 int main( int argc, char** argv )
 {
     gtk_init( &argc, &argv );
