@@ -208,13 +208,16 @@ Vector4D Volume::getNormal( Vector4D& point )
     int j = (int)( point.y / _dy );
     int k = (int)( point.z / _dz );
     
+    if( i > 255 || i < 0 || j > 255 || j < 0 || k > 255 || k < 0 )
+        return Vector4D(0,0,0,1);
+        
     int prevI = (i > 0? i-1 : 0);
     int prevJ = (j > 0? j-1 : 0);
     int prevK = (k > 0? k-1 : 0);
     
     int nextI = (i < _nx-1? i+1 : _nx-1);
-    int nextJ = (j < _ny-1? i+1 : _ny-1);
-    int nextK = (k < _nz-1? i+1 : _nz-1);
+    int nextJ = (j < _ny-1? j+1 : _ny-1);
+    int nextK = (k < _nz-1? k+1 : _nz-1);
     
     Vector4D normal;
     
@@ -223,6 +226,25 @@ Vector4D Volume::getNormal( Vector4D& point )
     normal.z = (getVoxel( i, j, nextK ) - getVoxel( i, j, prevK ))/(2*_dz);
     normal.w = 1.0;
     
+    Color nowColor  = _transferFunction[getVoxel( i, j, k )];
+    
+    Color nextColor = _transferFunction[getVoxel( nextI, j, k )];
+    if( nowColor.r == nextColor.r && nowColor.g == nextColor.g && nowColor.b == nowColor.b )
+    {
+        normal.x = 0;
+    }
+    
+    nextColor = _transferFunction[getVoxel( i, nextJ, k )];
+    if( nowColor.r == nextColor.r && nowColor.g == nextColor.g && nowColor.b == nowColor.b )
+    {
+        normal.y = 0;
+    }
+    
+    nextColor = _transferFunction[getVoxel( i, j, nextK )];
+    if( nowColor.r == nextColor.r && nowColor.g == nextColor.g && nowColor.b == nowColor.b )
+    {
+        normal.z = 0;
+    }
     //normal.normalize();
     
     return normal;

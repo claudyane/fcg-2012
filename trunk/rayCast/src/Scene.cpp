@@ -123,7 +123,7 @@ void Scene::computeRayColor( Ray ray, Color& colorOut )
     }
 
     // if there were an intersection, traverse the volume adding colors
-    double dt = _volume->getSmallestDimension() / 4.0;
+    double dt = _volume->getSmallestDimension() / 8.0;
     Color colorNow( 0.0f, 0.0f, 0.0f, 0.0f );
     for( double tCurr = tIn; tCurr <= tOut; tCurr += dt )
     {
