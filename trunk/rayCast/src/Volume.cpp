@@ -229,19 +229,19 @@ Vector4D Volume::getNormal( Vector4D& point )
     Color nowColor  = _transferFunction[getVoxel( i, j, k )];
     
     Color nextColor = _transferFunction[getVoxel( nextI, j, k )];
-    if( nowColor.r == nextColor.r && nowColor.g == nextColor.g && nowColor.b == nowColor.b )
+    if( nowColor.r == nextColor.r && nowColor.g == nextColor.g && nowColor.b == nextColor.b && nowColor.a == nextColor.a )
     {
         normal.x = 0;
     }
     
     nextColor = _transferFunction[getVoxel( i, nextJ, k )];
-    if( nowColor.r == nextColor.r && nowColor.g == nextColor.g && nowColor.b == nowColor.b )
+    if( nowColor.r == nextColor.r && nowColor.g == nextColor.g && nowColor.b == nextColor.b && nowColor.a == nextColor.a )
     {
         normal.y = 0;
     }
     
     nextColor = _transferFunction[getVoxel( i, j, nextK )];
-    if( nowColor.r == nextColor.r && nowColor.g == nextColor.g && nowColor.b == nowColor.b )
+    if( nowColor.r == nextColor.r && nowColor.g == nextColor.g && nowColor.b == nextColor.b && nowColor.a == nextColor.a )
     {
         normal.z = 0;
     }
