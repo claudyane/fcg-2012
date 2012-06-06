@@ -128,44 +128,69 @@ Color Volume::interpolate( Vector4D point )
     int j2 = j1+1;
     int k2 = k1+1;
     
+    x -= i1;
+    y -= j1;
+    z -= k1;
+    
+//    x = fabs(point.x - i1*_dx);
+//    y = fabs(point.y - j1*_dy);
+//    z = fabs(point.z - k1*_dz);
     if( i1 <= 0 || i2 >= _nx || j1 <= 0 || j2 >= _ny || k1 <= 0 || k2 >= _nz )
     {
         return Color( 0.0f, 0.0f, 0.0f, 0.0f );
     }
     
-    //The variables voxelColor*** will be used to identifiy the voxels. For
-    //instance, the color of the voxel in i1, j2, k1 will be named voxelColor121
-    Color voxelColor111 = weightOpacity( _transferFunction[ getVoxel( i1, j1, k1 ) ] );
-    Color voxelColor112 = weightOpacity( _transferFunction[ getVoxel( i1, j1, k2 ) ] );
-    Color voxelColor121 = weightOpacity( _transferFunction[ getVoxel( i1, j2, k1 ) ] );
-    Color voxelColor122 = weightOpacity( _transferFunction[ getVoxel( i1, j2, k2 ) ] );
-    Color voxelColor211 = weightOpacity( _transferFunction[ getVoxel( i2, j1, k1 ) ] );
-    Color voxelColor212 = weightOpacity( _transferFunction[ getVoxel( i2, j1, k2 ) ] );
-    Color voxelColor221 = weightOpacity( _transferFunction[ getVoxel( i2, j2, k1 ) ] );
-    Color voxelColor222 = weightOpacity( _transferFunction[ getVoxel( i2, j2, k2 ) ] );
+    Color colorOut( 0.0f, 0.0f, 0.0f, 0.0f );
     
-    // i1,j1,k1 -- i2,j1,k1
-    Color cv1 = ( i2-x )*voxelColor111 + ( x-i1 )*voxelColor211;
+    // (i, j, k)
+    byte v1 = getVoxel( i1, j1, k1 );
+    //Color colorV1 = _transferFunction[v1];    
+    Color colorV1 = weightOpacity( _transferFunction[v1] );
+    colorOut += (1-x)*(1-y)*(1-z)*colorV1;
     
-    // i1,j2,k1 -- i2,j2,k1
-    Color cv2 = ( i2-x )*voxelColor121 + ( x-i1 )*voxelColor221;
+    // (i+1, j, k)
+    byte v2 = getVoxel( i2, j1, k1 );
+    //Color colorV2 = _transferFunction[v2];
+    Color colorV2 = weightOpacity( _transferFunction[v2] );
+    colorOut += x*(1-y)*(1-z)*colorV2;
     
-    // i1,j1,k2 -- i2,j1,k2
-    Color cv3 = ( i2-x )*voxelColor112 + ( x-i1 )*voxelColor212;
+    // (i, j+1, k)
+    byte v3 = getVoxel( i1, j2, k1 );
+    //Color colorV3 = _transferFunction[v3];
+    Color colorV3 = weightOpacity( _transferFunction[v3] );
+    colorOut += (1-x)*y*(1-z)*colorV3;
     
-    // i1,j2,k2 -- i2,j2,k2
-    Color cv4 = ( i2-x )*voxelColor122 + ( x-i1 )*voxelColor222;
+    // (i+1, j+1, k)
+    byte v4 = getVoxel( i2, j2, k1 );
+    //Color colorV4 = _transferFunction[v4];
+    Color colorV4 = weightOpacity( _transferFunction[v4] );
+    colorOut += x*y*(1-z)*colorV4;
     
-    // V1 -- V2
-    Color cv5 = ( j2-y )*cv1 + ( y-j1 )*cv2;
+    // (i, j, k+1)
+    byte v5 = getVoxel( i1, j1, k2 );
+    //Color colorV5 = _transferFunction[v5];
+    Color colorV5 = weightOpacity( _transferFunction[v5] );
+    colorOut += (1-x)*(1-y)*z*colorV5;
     
-    // V3 -- V4
-    Color cv6 = ( j2-y )*cv3 + ( y-j1 )*cv4;
+    // (i+1, j, k+1)
+    byte v6 = getVoxel( i2, j1, k2 );
+    //Color colorV6 = _transferFunction[v6];
+    Color colorV6 = weightOpacity( _transferFunction[v6] );
+    colorOut += x*(1-y)*z*colorV6;
     
-    // V5 -- V6
-    Color cv7 = ( k2-z )*cv5 + ( z-k1 )*cv6;
+    // (i, j+1, k+1)
+    byte v7 = getVoxel( i1, j2, k2 );
+    //Color colorV7 = _transferFunction[v7];
+    Color colorV7 = weightOpacity( _transferFunction[v7] );
+    colorOut += (1-x)*y*z*colorV7;
     
-    return cv7;
+    // (i, j+1, k+1)
+    byte v8 = getVoxel( i2, j2, k2 );
+    //Color colorV8 = _transferFunction[v8];
+    Color colorV8 = weightOpacity( _transferFunction[v8] );
+    colorOut += x*y*z*colorV8;
+    
+    return colorOut;
 }
 
 

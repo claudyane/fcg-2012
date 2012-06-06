@@ -11,7 +11,7 @@
 #include <cstdio>
 #include <iostream>
 
-//#define LIGHTING
+#define LIGHTING
 
 Scene::Scene()
 {
@@ -100,11 +100,11 @@ Image* Scene::render()
         #pragma omp parallel for
         for (int y = 0; y < height; ++y)
         {
-            Ray ray = _camera->computeRay( x + 0.25, y + 0.25 );
+            Ray ray = _camera->computeRay( x, y );
             Color pixelColor;
             
             computeRayColor( ray, pixelColor );
-            imgSetPixel3f( image, x, y, pixelColor.r*pixelColor.a, pixelColor.g*pixelColor.a, pixelColor.b*pixelColor.a );
+            imgSetPixel3f( image, x, y, pixelColor.r, pixelColor.g, pixelColor.b );
         }
     }
     
@@ -138,23 +138,35 @@ void Scene::computeRayColor( Ray ray, Color& colorOut )
         
         // Normal do voxel
         Vector4D normal = _volume->getNormal( point );        
-        if (normal.norm() != 0)
+        if (normal.norm() > 0.0)
         {
             normal.normalize();
             double cos = dot( normal, lightDir );
+            
             if (cos < 0.0)
                 cos = -cos;
             
-            colorVoxel = _volume->interpolate( point );
-            colorVoxel = colorVoxel*cos;
+            if (cos > 0.0)
+            {
+                Color ambient( 0.3f, 0.3f, 0.3f, 1.0f );
+                Color diffuse( 0.7f, 0.7f, 0.7f, 1.0f );
+                colorVoxel = _volume->interpolate( point );
+                float alpha = colorVoxel.a;
+                
+                colorVoxel = colorVoxel*ambient + diffuse*colorVoxel*cos;
+                colorVoxel.a = alpha;
+            }
         }
         #else
         Color colorVoxel = _volume->interpolate( point );
         #endif
 
-        colorNow.r += (1-colorNow.a) *  colorVoxel.r;
-        colorNow.g += (1-colorNow.a) *  colorVoxel.g;
-        colorNow.b += (1-colorNow.a) *  colorVoxel.b;
+//        colorNow.r += (1-colorNow.a) * colorVoxel.r * colorVoxel.a;
+//        colorNow.g += (1-colorNow.a) * colorVoxel.g * colorVoxel.a;
+//        colorNow.b += (1-colorNow.a) * colorVoxel.b * colorVoxel.a;
+        colorNow.r += (1-colorNow.a) * colorVoxel.r;
+        colorNow.g += (1-colorNow.a) * colorVoxel.g;
+        colorNow.b += (1-colorNow.a) * colorVoxel.b;        
         colorNow.a += (1-colorNow.a) * colorVoxel.a;
         
         if( colorNow.a >= 0.95f )
@@ -164,5 +176,8 @@ void Scene::computeRayColor( Ray ray, Color& colorOut )
         }
     }
     
+
+    
     colorOut = colorNow;
 }
+
