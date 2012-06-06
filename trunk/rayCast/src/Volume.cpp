@@ -132,9 +132,10 @@ Color Volume::interpolate( Vector4D point )
     y -= j1;
     z -= k1;
     
-//    x = fabs(point.x - i1*_dx);
-//    y = fabs(point.y - j1*_dy);
-//    z = fabs(point.z - k1*_dz);
+//    x = fabs(point.x - i1*_dx)/_dx;
+//    y = fabs(point.y - j1*_dy)/_dy;
+//    z = fabs(point.z - k1*_dz)/_dz;
+    
     if( i1 <= 0 || i2 >= _nx || j1 <= 0 || j2 >= _ny || k1 <= 0 || k2 >= _nz )
     {
         return Color( 0.0f, 0.0f, 0.0f, 0.0f );
