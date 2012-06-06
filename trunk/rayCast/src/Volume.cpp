@@ -208,8 +208,8 @@ Vector4D Volume::getNormal( Vector4D& point )
     int j = (int)( point.y / _dy );
     int k = (int)( point.z / _dz );
     
-    if( i > 255 || i < 0 || j > 255 || j < 0 || k > 255 || k < 0 )
-        return Vector4D(0,0,0,1);
+    if( i >= _nx || i < 0 || j >= _ny || j < 0 || k >= _nz || k < 0 )
+        return Vector4D( 0.0, 0.0, 0.0, 1.0 );
         
     int prevI = (i > 0? i-1 : 0);
     int prevJ = (j > 0? j-1 : 0);

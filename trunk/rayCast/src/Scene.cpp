@@ -146,16 +146,17 @@ void Scene::computeRayColor( Ray ray, Color& colorOut )
             if (cos < 0.0)
                 cos = -cos;
             
+            Color ambient( 0.3f, 0.3f, 0.3f, 1.0f );
+            Color diffuse( 0.7f, 0.7f, 0.7f, 1.0f );
+            colorVoxel = _volume->interpolate( point );
+            float alpha = colorVoxel.a;
+
+            colorVoxel = colorVoxel*ambient;
+
             if (cos > 0.0)
-            {
-                Color ambient( 0.3f, 0.3f, 0.3f, 1.0f );
-                Color diffuse( 0.7f, 0.7f, 0.7f, 1.0f );
-                colorVoxel = _volume->interpolate( point );
-                float alpha = colorVoxel.a;
-                
-                colorVoxel = colorVoxel*ambient + diffuse*colorVoxel*cos;
-                colorVoxel.a = alpha;
-            }
+                colorVoxel += diffuse*colorVoxel*cos;
+
+            colorVoxel.a = alpha;
         }
         #else
         Color colorVoxel = _volume->interpolate( point );
