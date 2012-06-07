@@ -1,5 +1,5 @@
 RT 4.0
-SOFTSHADOW 5. 5.
+SOFTSHADOW 5 5.
 CAMERA 120. 50. 40.   0. 30. 0.    0. 1. 0. 90. 1. 100. 400 400
 SCENE 0. 0. 35. 30. 30. 30. null
 MATERIAL 20.   50.   20.    255.  255.  255.   35.  1.  0.8  1.5 null

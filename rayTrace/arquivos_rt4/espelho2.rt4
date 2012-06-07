@@ -1,5 +1,5 @@
 RT 4.0
-SOFTSHADOW 0. 0.
+SOFTSHADOW 10 50.
 CAMERA 50. 70. 400. 0. 0. 150. 0. 1. 0. 90. 1. 100. 400 400
 SCENE 0. 100. 100. 100.  60.   40. null
 MATERIAL 0.   50.  255. 50.   70.   255.  5.  0.  0. 1. ../../images/estrela.bmp
