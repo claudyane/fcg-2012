@@ -133,6 +133,7 @@ Image* Scene::render()
     
     if( _antiAlias )
     {
+        #pragma omp parallel for
         for (int x = 0; x < width; ++x)
         {
             for (int y = 0; y < height; ++y)
@@ -160,6 +161,7 @@ Image* Scene::render()
     }
     else
     {
+        #pragma omp parallel for
         for (int x = 0; x < width; ++x)
         {
             for (int y = 0; y < height; ++y)
