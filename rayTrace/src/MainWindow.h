@@ -38,6 +38,14 @@ private:
     GtkWidget* _messageBar;
     GtkWidget* _fileLabel;
     
+    GtkWidget* _ambientToggle;
+    GtkWidget* _diffuseToggle;
+    GtkWidget* _specularToggle;
+    GtkWidget* _shadowToggle;
+    GtkWidget* _softShadowToggle;
+    GtkWidget* _reflectionToggle;
+    GtkWidget* _antiAliasToggle;
+    
     MainWindowPresenter* _presenter;
 };
 

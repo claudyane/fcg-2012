@@ -1,10 +1,10 @@
 RT 4.0
-SOFTSHADOW 3 20.
+SOFTSHADOW 8 5.
 CAMERA 280. -60. 245.    0. -100. 245.      0. 1. 0. 90. 1. 100. 400 400
 SCENE 0. 120. 255. 80. 100. 120. null
 MATERIAL 70.  50.   0.      0.   0.   0.     30.   0.  0.  1.  null  !madeira
 MATERIAL 0.   0.   0.      0.   0.   0.     30.   0.  0.  1.  null  !lustre
-MATERIAL 200. 200. 200.      0.   0.   0.     30.   0.  0.  1.  ../../images/parede.bmp  !paredes
+MATERIAL 200. 200. 200.      0.   0.   0.     30.   0.  0.  1.  null  !paredes
 MATERIAL 150. 200. 200.      0.   0.   0.     30.   0.  0.  1.  null  !teto
 MATERIAL 70.  70.   0.      0.   0.   0.     30.   0.  0.  1.  ../../images/wood.bmp  !piso
 MATERIAL 100.   0.  90.      0.   0.   0.     30.   0.  0.  1.  null  !mesa
