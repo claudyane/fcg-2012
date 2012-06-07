@@ -4,7 +4,7 @@ RT 4.0
 ! dx - deslocamento x										!
 ! dy - deslocamento y										!
 !-----------------------------------------------------------!
-SOFTSHADOW 2.5 2.5
+SOFTSHADOW 20 5.
 !-----------------------------------------------------------!
 !Parametros da camera :                                     !
 ! x. y. z. - posicao do eye                                 !
