@@ -147,23 +147,29 @@ Color Material::getSphericalTextureColor(Vector4D point, Sphere* sphere)
 //    double s = acos( point.z / radius ) * M_1_PI;
 //    double t = acos( point.x / ( radius * sin( M_PI * s ) ) ) * 0.5 * M_1_PI;
     
-    Vector4D vn( 0.0, 1.0, 0.0, 1.0 );
-    Vector4D ve( 1.0, 0.0, 0.0, 1.0 );
-    Vector4D vp = point - sphere->getCenter();
-    vp.normalize();
+    Vector4D sp ( 1.0, 0.0, 0.0, 1.0 );
+    sp.normalize();
+    Vector4D se ( 0.0, 1.0, 0.0, 1.0 );
+    se.normalize();
+    Vector4D spe( 0.0, 0.0, 1.0, 1.0 );
+    Vector4D sn = point - sphere->getCenter();
+    sn.normalize();
     
-    double s = acos( -dot( vn, vp )) / M_PI;
-    double t = ( acos( dot( vp, ve ) / sin( M_PI * s )) ) / ( 2 * M_PI);
+    double phi = acos( -dot( sn, sp ) );
+    double v = phi / M_PI;
+    double theta = (acos( dot( se, sn ) ) / sin( phi )) / ( 2* M_PI);
     
-    if ( dot( cross( vn, ve ), vp ) < 0 )
+    double u = theta;
+    
+    if( dot( cross(sp, se), sn ) <= 0 )
     {
-        t = -t;
+        u = 1-theta;
     }
     
     float r, g, b;
     int width = imgGetWidth( _texture ) - 1;
     int height = imgGetHeight( _texture ) - 1;
-    imgGetPixel3f( _texture, (int)( s * width ), (int)(t * height), &r, &g, &b );
+    imgGetPixel3f( _texture, (int)( u * width ), (int)( v * height ), &r, &g, &b );
     Color textureColor( r, g, b );
     
     return textureColor;
