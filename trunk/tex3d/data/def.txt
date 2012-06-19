@@ -1,0 +1,16 @@
+# Formato do arquivo .def
+#
+# Os arquivo .def contem as definicoes do dado volumetrico. Sao elas:
+ 
+# dim_x dim_y dim_z header voxel_scale_x voxel_scale_y voxel_scale_z voxel_size_x voxel_size_y voxel_size_z
+
+# onde:
+#
+# dim_x, dim_y, dim_z: dimensão do volume em X, Y, Z respectivamente
+#
+# header: tamanho de header do arquivo do dado em bytes
+#
+# voxel_scale_x, _y, _z:  fator de escala a ser aplicado em cada dimensao do volume
+#
+# voxel_size_x, _y, _z:  tamanho em milimetros do voxel em cada dimensao do volume
+

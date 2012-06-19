@@ -1,0 +1,9 @@
+ptype= p
+eye= 3 0 2
+at= 1 1 1
+up= 0 0 1
+fovy= 90
+nearp= 1
+farp= 100
+screenW= 256
+screenH= 256

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="80">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df name="tex3d" root=".">
+      <df name="bin">
+        <df name="debug">
+        </df>
+        <df name="release">
+        </df>
+      </df>
+      <df name="build">
+      </df>
+      <df name="data">
+      </df>
+      <df name="src">
+        <in>Camera.cpp</in>
+        <in>Camera.h</in>
+        <in>Color.cpp</in>
+        <in>Color.h</in>
+        <in>DefFileReader.cpp</in>
+        <in>DefFileReader.h</in>
+        <in>Image.cpp</in>
+        <in>Image.h</in>
+        <in>MainWindow.cpp</in>
+        <in>MainWindow.h</in>
+        <in>MainWindowPresenter.cpp</in>
+        <in>MainWindowPresenter.h</in>
+        <in>Scene.cpp</in>
+        <in>Scene.h</in>
+        <in>Vector4D.cpp</in>
+        <in>Vector4D.h</in>
+        <in>Volume.cpp</in>
+        <in>Volume.h</in>
+        <in>main.cpp</in>
+      </df>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>build/Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
+  <projectmakefile>build/Makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+      </toolsSet>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>build</buildCommandWorkingDir>
+          <buildCommand>make DBG=Yes</buildCommand>
+          <cleanCommand>make  clean DBG=Yes</cleanCommand>
+          <executablePath>bin/debug/tex3d</executablePath>
+          <ccTool>
+            <incDir>
+              <pElem>/usr/include/gtk-2.0</pElem>
+              <pElem>/usr/include/gtkglext-1.0</pElem>
+              <pElem>/usr/include/gio-unix-2.0/</pElem>
+              <pElem>/usr/include/glib-2.0</pElem>
+              <pElem>/usr/lib/x86_64-linux-gnu/glib-2.0/include</pElem>
+              <pElem>/usr/include/cairo</pElem>
+              <pElem>/usr/lib/gtk-2.0/include</pElem>
+              <pElem>/usr/include/pixman-1</pElem>
+              <pElem>build</pElem>
+              <pElem>/usr/include/gdk-pixbuf-2.0</pElem>
+              <pElem>/usr/include/pango-1.0</pElem>
+              <pElem>/usr/include/freetype2</pElem>
+              <pElem>/usr/lib/gtkglext-1.0/include</pElem>
+              <pElem>/usr/include/atk-1.0</pElem>
+              <pElem>/usr/include/libpng12</pElem>
+            </incDir>
+            <preprocessorList>
+              <Elem>_OPENMP=200505</Elem>
+            </preprocessorList>
+          </ccTool>
+        </makeTool>
+      </makefileType>
+    </conf>
+  </confs>
+</configurationDescriptor>
