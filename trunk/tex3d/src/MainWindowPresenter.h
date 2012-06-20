@@ -16,7 +16,7 @@
 class MainWindowPresenter
 {
 public:
-    MainWindowPresenter();
+    MainWindowPresenter( GtkWidget* canvas );
     virtual ~MainWindowPresenter();
     bool loadFile( std::string filename );
     void render();
@@ -28,6 +28,9 @@ private:
     Scene _scene;
     
     float _increment;
+    
+    
+    GtkWidget* _canvas;
 };
 
 #endif /* MAINWINDOWPRESENTER_H_ */
