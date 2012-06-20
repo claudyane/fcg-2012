@@ -42,7 +42,11 @@ public:
     
     Vector4D getNormal( Vector4D& point );
     
+    float* getTexture3D();
+    
 private:
+    
+    int index( int i, int j, int k );
     
     int _nx, _ny, _nz;
     float _dx, _dy, _dz;
