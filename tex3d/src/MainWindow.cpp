@@ -138,39 +138,44 @@ gboolean MainWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event
         g_assert_not_reached();
     }
     
-    //Clear the canvas with black
-    glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+//    //Clear the canvas with black
+//    glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+//    
+//    //Recover access to the image
+//    MainWindow* window = ( MainWindow* )user_data;
+//    Image* image = window->_presenter->getImage();
+//    
+//    //If Image loaded OK, start drawing
+//    if( image )
+//    {
+//        int width  = imgGetWidth( window->_presenter->getImage() );
+//        int height = imgGetHeight( window->_presenter->getImage()  );
+//
+//        gtk_drawing_area_size( GTK_DRAWING_AREA (window->_canvas) , width, height );
+//        gtk_window_resize( GTK_WINDOW (window->_window), width, height ); 
+//
+//        glBegin( GL_POINTS );
+//
+//            for (int w = 0; w < width; ++w)
+//            {
+//                for (int h = 0; h < height; ++h)
+//                {
+//                    float r,g,b;
+//                    imgGetPixel3f( image, w, h, &r, &g, &b );
+//                    glColor3f( r,g,b );
+//                    glVertex2i( w, h );
+//                }
+//            }
+//        glEnd();
+//    }
+//    
+//    //Update image
+//    gdk_gl_drawable_swap_buffers (glDrawable);
     
-    //Recover access to the image
     MainWindow* window = ( MainWindow* )user_data;
-    Image* image = window->_presenter->getImage();
+    window->_presenter->render();
     
-    //If Image loaded OK, start drawing
-    if( image )
-    {
-        int width  = imgGetWidth( window->_presenter->getImage() );
-        int height = imgGetHeight( window->_presenter->getImage()  );
-
-        gtk_drawing_area_size( GTK_DRAWING_AREA (window->_canvas) , width, height );
-        gtk_window_resize( GTK_WINDOW (window->_window), width, height ); 
-
-        glBegin( GL_POINTS );
-
-            for (int w = 0; w < width; ++w)
-            {
-                for (int h = 0; h < height; ++h)
-                {
-                    float r,g,b;
-                    imgGetPixel3f( image, w, h, &r, &g, &b );
-                    glColor3f( r,g,b );
-                    glVertex2i( w, h );
-                }
-            }
-        glEnd();
-    }
-    
-    //Update image
     gdk_gl_drawable_swap_buffers (glDrawable);
     
     //Tell GTK we stopped messing with OpenGL

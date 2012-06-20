@@ -10,6 +10,8 @@
 #include "DefFileReader.h"
 #include <cstdio>
 #include <iostream>
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 #define LIGHTING
 
@@ -88,7 +90,22 @@ void Scene::setVolume( Volume* volume )
 
 
 
-Image* Scene::render()
+void Scene::render()
 {
-    return NULL;
+//    _camera->load();
+    
+    gluLookAt( 0.0f, 0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f );
+    gluPerspective( 60.0, 1.0, 1.0f, 5.0f );
+    
+    glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    
+    glBegin( GL_TRIANGLES );
+    glColor4f( 1.0f, 0.0f, 0.0f, 1.0f );
+    glVertex4f( 0.0f, 0.0f, 0.0f, 1.0f );
+    glColor4f( 0.0f, 1.0f, 0.0f, 1.0f );
+    glVertex4f( 1.0f, 0.0f, 0.0f, 1.0f );
+    glColor4f( 0.0f, 0.0f, 1.0f, 1.0f );
+    glVertex4f( 0.0f, 1.0f, 0.0f, 1.0f );
+    glEnd();
 }

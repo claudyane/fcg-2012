@@ -6,6 +6,7 @@
  */
 
 #include <cmath>
+#include <GL/glu.h>
 
 #include "Vector4D.h"
 #include "Camera.h"
@@ -62,6 +63,14 @@ void Camera::computeDerivedParameters()
     _xe = cross( _up, _ze );
     _xe.normalize();
     _ye = cross( _ze, _xe );
+}
+
+
+
+void Camera::load()
+{
+    gluLookAt( _eye.x, _eye.y, _eye.z, _center.x, _center.y, _center.z, _up.x, _up.y, _up.z );
+    gluPerspective( _fovy, (double)_width/(double)_height, _near, _far );
 }
 
 
