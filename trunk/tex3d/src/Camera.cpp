@@ -66,18 +66,6 @@ void Camera::computeDerivedParameters()
 
 
 
-Ray Camera::computeRay( double x, double y )
-{
-    Ray ray;
-
-    ray.origin = _eye;
-    ray.direction = -_near * _ze + _a * _ye * ((y/(double)_height) - 0.5) + _b * _xe * ((x/(double)_width)-0.5);
-
-    return ray;
-}
-
-
-
 void Camera::getScreenSize( int& width, int& height )
 {
     width = _width;
