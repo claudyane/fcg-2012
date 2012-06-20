@@ -94,14 +94,14 @@ void Volume::setTransferFunctionPoint(int point, Color value)
 
 void Volume::setVoxel(int i, int j, int k, byte value)
 {
-    _data[i*_ny*_nz + j*_nz + k] = value;
+    _data[index(i, j, k)] = value;
 }
 
 
 
 byte Volume::getVoxel( int i, int j, int k )
 {
-    return _data[i*_ny*_nz + j*_nz + k];
+    return _data[index(i, j, k)];
 }
 
 
@@ -248,5 +248,38 @@ Vector4D Volume::getNormal( Vector4D& point )
     //normal.normalize();
     
     return normal;
+}
+
+
+
+float* Volume::getTexture3D()
+{
+    float* texture = new float[_nx*_ny*_nz];
+    
+    for (int i = 0; i < _nx; i++)
+    {
+        for (int j = 0; j < _ny; j++)
+        {
+            for (int k = 0; k < _nz; k++)
+            {
+                int sampleIndex = index( i, j, k );
+                Color voxelColor = _transferFunction[getVoxel( i, j, k )];
+                
+                texture[4*sampleIndex  ] = voxelColor.r;
+                texture[4*sampleIndex+1] = voxelColor.g;
+                texture[4*sampleIndex+2] = voxelColor.b;
+                texture[4*sampleIndex+3] = voxelColor.a;
+            }
+        }
+    }
+    
+    return texture;
+}
+
+
+
+int Volume::index( int i, int j, int k )
+{
+    return i*_ny*_nz + j*_nz + k;
 }
 
