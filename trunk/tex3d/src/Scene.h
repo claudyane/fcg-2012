@@ -32,9 +32,7 @@ public:
 
     Image* render();
     
-private:    
-
-    void computeRayColor( Ray ray, Color& colorOut );
+private:
     
     Volume* _volume;
     Color _backgroundColor;
