@@ -9,7 +9,6 @@
 #define CAMERA_H_
 
 #include "Vector4D.h"
-#include "Ray.h"
 
 class Camera
 {
@@ -34,14 +33,6 @@ public:
      * This method may also prove useful if the camera suffer any changes during the program.
      */
     void computeDerivedParameters();
-
-    /**
-     * Given a pixel coordinates, computeRay will return a ray that starts in camera and passes through the pixel.
-     * @param x Horizontal position of the pixel in the screen.
-     * @param y Vertical position of the pixel in the screen.
-     * @return Ray that starts in the eye position and goes through the pixel.
-     */
-    Ray computeRay( double x, double y );
     
     /**
      * Returns the screen size
