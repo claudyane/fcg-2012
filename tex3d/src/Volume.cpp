@@ -13,8 +13,7 @@
 #include <cstdio>
 #include <iostream>
 
-Volume::Volume(int nx, int ny, int nz, float dx, float dy, float dz, int offset) : 
-        Box( Vector4D(0.0, 0.0, 0.0, 1.0), Vector4D(nx*dx, ny*dy, nz*dz, 1.0) )
+Volume::Volume(int nx, int ny, int nz, float dx, float dy, float dz, int offset)
 {
     _nx = nx;
     _ny = ny;
