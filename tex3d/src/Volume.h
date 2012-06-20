@@ -10,6 +10,7 @@
 
 #include <vector>
 #include "Color.h"
+#include "Vector4D.h"
 
 typedef unsigned char byte;
 
