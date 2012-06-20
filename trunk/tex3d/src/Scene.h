@@ -32,6 +32,8 @@ public:
 
     void render();
     
+    void loadTexture3D();
+    
 private:
     
     Volume* _volume;

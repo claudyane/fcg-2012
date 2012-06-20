@@ -113,3 +113,10 @@ void Scene::render()
     glVertex4f( 0.0f, 1.0f, 0.0f, 1.0f );
     glEnd();
 }
+
+
+
+void Scene::loadTexture3D()
+{
+    
+}
