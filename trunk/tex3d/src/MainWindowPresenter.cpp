@@ -115,8 +115,5 @@ bool MainWindowPresenter::loadFile( std::string filename )
 
 void MainWindowPresenter::render()
 {
-    if (_image)
-        imgDestroy( _image );
-    
-    _image = _scene.render();
+    _scene.render();
 }

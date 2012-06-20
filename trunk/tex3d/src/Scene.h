@@ -30,7 +30,7 @@ public:
 
     void setBackgroundColor( Color backgroungColor );
 
-    Image* render();
+    void render();
     
 private:
     

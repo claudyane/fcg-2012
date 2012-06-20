@@ -34,6 +34,8 @@ public:
      */
     void computeDerivedParameters();
     
+    void load();
+    
     /**
      * Returns the screen size
      */
