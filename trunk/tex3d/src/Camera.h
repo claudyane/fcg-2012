@@ -34,6 +34,9 @@ public:
      */
     void computeDerivedParameters();
     
+    /**
+     * Sets up modelview and projection matrices 
+     */
     void load();
     
     /**
