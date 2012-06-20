@@ -18,6 +18,8 @@ public:
     MainWindow();
     virtual ~MainWindow();
     void show();
+    
+    GtkWidget* getCanvas();
 
 private:
     GtkWidget* build();

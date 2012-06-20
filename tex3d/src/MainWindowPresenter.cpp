@@ -11,10 +11,12 @@
 #include <gdk/gdkkeysyms.h>
 
 
-MainWindowPresenter::MainWindowPresenter()
+MainWindowPresenter::MainWindowPresenter( GtkWidget* canvas )
 {
     _image = NULL;
     _increment = 1.0;
+    
+    _canvas = canvas;
 }
 
 
@@ -104,7 +106,8 @@ bool MainWindowPresenter::loadFile( std::string filename )
     if (_image)
         imgClear( _image, 0.0f, 0.0f, 0.0f );
        
-    _scene.loadScene( filename );        
+    _scene.loadScene( filename );
+    _scene.getCamera()->setManipulator( new VManipulator( _canvas ));
     
     render();
     

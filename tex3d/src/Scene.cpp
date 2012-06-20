@@ -92,14 +92,14 @@ void Scene::setVolume( Volume* volume )
 
 void Scene::render()
 {
-//    _camera->load();
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
-    gluLookAt( 0.0f, 0.0f, 3.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f );
+    if (!_camera)
+    {
+        glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );    
+        return;
+    }
     
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-    gluPerspective( 90.0f, 1.0f, 1.0f, 5.0f );
+    _camera->load();
     
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );

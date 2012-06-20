@@ -9,6 +9,7 @@
 #define CAMERA_H_
 
 #include "Vector4D.h"
+#include "manipulator.h"
 
 class Camera
 {
@@ -55,6 +56,8 @@ public:
     void rotateY( double angle );
     
     void setCenter( Vector4D center );
+    
+    void setManipulator( VManipulator* manipulator );
 
 private:
     /** Position of the camera on world space */
@@ -93,6 +96,10 @@ private:
     Vector4D _xe;
     Vector4D _ye;
     Vector4D _ze;
+    
+    /** scene manipulator */
+    VManipulator* _manipulator;
+    
 };
 
 #endif /* CAMERA_H_ */

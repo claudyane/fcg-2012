@@ -23,7 +23,7 @@
 MainWindow::MainWindow()
 {
     _window = build();
-    _presenter = new MainWindowPresenter();
+    _presenter = new MainWindowPresenter( _canvas );
 }
 
 
@@ -40,6 +40,13 @@ MainWindow::~MainWindow()
 void MainWindow::show()
 {
     gtk_main();
+}
+
+
+
+GtkWidget* MainWindow::getCanvas()
+{
+    return _canvas;
 }
 
 
