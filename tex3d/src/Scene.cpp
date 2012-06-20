@@ -16,7 +16,7 @@
 Scene::Scene()
 {
     _volume = NULL;
-    _camera = NULL;        
+    _camera = NULL;    
 }
 
 
