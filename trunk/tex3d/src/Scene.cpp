@@ -206,6 +206,13 @@ void Scene::setVolume( Volume* volume )
 
 
 
+Volume* Scene::getVolume()
+{
+    return _volume;
+}
+
+
+
 void Scene::render()
 {
     if (!_camera)

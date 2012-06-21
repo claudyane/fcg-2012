@@ -25,6 +25,8 @@ MainWindowPresenter::~MainWindowPresenter()
 {
     if (_image)
         imgDestroy( _image );
+    
+    _histogramWindow.hide();
 }
 
 
@@ -109,9 +111,19 @@ bool MainWindowPresenter::loadFile( std::string filename )
     _scene.loadScene( filename );
     _scene.getCamera()->setManipulator( new VManipulator( _canvas ));
     
+    _histogramWindow.hide();
+    
     render();
     
     return true;
+}
+
+
+
+void MainWindowPresenter::showHistogram()
+{
+    _histogramWindow.setVolume( _scene.getVolume() );
+    _histogramWindow.show();
 }
 
 

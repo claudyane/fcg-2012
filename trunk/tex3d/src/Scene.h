@@ -25,6 +25,8 @@ public:
     
     void setVolume( Volume* volume );
     
+    Volume* getVolume();
+    
     void setCamera( Camera* camera );
     
     Camera* getCamera();

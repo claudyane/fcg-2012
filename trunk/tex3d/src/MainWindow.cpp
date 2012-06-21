@@ -96,6 +96,11 @@ GtkWidget* MainWindow::buildButtonsBox()
     _fileLabel = gtk_label_new( "" );
     gtk_box_pack_start( GTK_BOX(buttonsBox), _fileLabel, FALSE, FALSE, 2 );
     
+    GtkWidget* histogramButton = gtk_button_new_with_label( "Histogram" );
+    gtk_widget_set_size_request( histogramButton, 100, 30 );
+    gtk_box_pack_start( GTK_BOX(buttonsBox), histogramButton, FALSE, FALSE, 2 );
+    g_signal_connect( histogramButton, "clicked", G_CALLBACK( cb_loadFile ), this );  
+    
     return buttonsBox;
 }
 
@@ -234,29 +239,10 @@ void MainWindow::cb_loadFile( GtkWidget* button, gpointer user_data )
 
 
 
-void MainWindow::cb_render( GtkWidget* button, gpointer user_data )
+void MainWindow::cb_histogram( GtkWidget* button, gpointer user_data )
 {
-//    MainWindow* window = (MainWindow*)user_data;
-//       
-//    //gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON );
-//    time_t begin = time(NULL);
-//    window->_presenter->render();
-//    time_t end = time(NULL);
-//       
-//    if (!window->_presenter->getImage())
-//        return;
-//    
-//    int width  = imgGetWidth( window->_presenter->getImage() );
-//    int heigth = imgGetHeight( window->_presenter->getImage()  );
-//
-//    gtk_drawing_area_size( GTK_DRAWING_AREA (window->_rayTraceCanvas) , width, heigth );
-//    gtk_window_resize( GTK_WINDOW (window->_window), width, heigth );            
-//    
-//    long long elapsed = end - begin;
-//    std::stringstream message;
-//    message << "Time elapsed: " << elapsed << " seconds.";
-//    
-//    gtk_label_set_label( GTK_LABEL(window->_messageBar), message.str().c_str() );
+    MainWindow* window = (MainWindow*) user_data;
+    window->_presenter->showHistogram();
 }
 
 
