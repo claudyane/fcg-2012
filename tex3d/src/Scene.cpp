@@ -240,7 +240,9 @@ void Scene::render()
     Vector4D camPos = _camera->getPosition();
     Vector4D center = _camera->getCenter();
     float eye[4] = {camPos.x, camPos.y, camPos.z, camPos.w};
+    float at[4] = {center.x, center.y, center.z, center.w};
     mult( invModelview, eye );
+    mult( invModelview, at );
     
     Vector4D viewDir = Vector4D( center.x - eye[0], center.y - eye[1], center.z - eye[2], 1.0 );
     viewDir.normalize();
@@ -252,18 +254,18 @@ void Scene::render()
     
     if (maxIndex == 0)
     {
-        int direction = (modelview[8] > 0 ? 1 : -1 );
-        drawXSlices( 2, direction );
+        int direction = (viewDir.x > 0 ? 1 : -1 );
+        drawXSlices( nx, direction );
     }
     else if (maxIndex == 1)
     {
-        int direction = (modelview[9] > 0 ? 1 : -1 );
-        drawYSlices( 2, direction );
+        int direction = (viewDir.y > 0 ? 1 : -1 );
+        drawYSlices( ny, direction );
     }
     else
     {
-        int direction = (modelview[10] > 0 ? 1 : -1 );
-        drawZSlices( 2, direction );
+        int direction = (viewDir.z > 0 ? 1 : -1 );
+        drawZSlices( nz, direction );
     }
     
     glPopAttrib();
@@ -273,7 +275,6 @@ void Scene::render()
 
 void Scene::loadTexture3D()
 {
-    //glClearColor(1.0f,1.0f,1.0f,1.0f);
     if (_textureData)
     {
         glDeleteTextures( 1, &_textureID );
@@ -300,7 +301,7 @@ void Scene::loadTexture3D()
 
 
 void Scene::drawXSlices( int num, int direction  )
-{
+{    
     int nx, ny, nz;
     _volume->getNumberOfSamples( nx, ny, nz );
     
@@ -323,20 +324,20 @@ void Scene::drawXSlices( int num, int direction  )
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     
-    //glEnable( GL_TEXTURE_3D );
+    glEnable( GL_TEXTURE_3D );
     glBindTexture( GL_TEXTURE_3D, _textureID );
     
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
     
     glBegin( GL_QUADS );
     
-    if (direction < 0)
+    if (direction > 0)
     {
         for( int slice = num; slice >= 0; --slice )
         {
             float xPos = positionStep * slice;
             float texPos = textureStep * slice;
-            glColor3f( texPos, 0.0f, 0.0f );
+
             glTexCoord3f( texPos, 0.0f, 0.0f ); glVertex3f( xPos, 0.0f, 0.0f );
             glTexCoord3f( texPos, 0.0f, 1.0f ); glVertex3f( xPos, 0.0f, zMax );
             glTexCoord3f( texPos, 1.0f, 1.0f ); glVertex3f( xPos, yMax, zMax );
@@ -349,7 +350,7 @@ void Scene::drawXSlices( int num, int direction  )
         {
             float xPos = positionStep * slice;
             float texPos = textureStep * slice;
-            glColor3f( texPos, 0.0f, 0.0f );
+
             glTexCoord3f( texPos, 0.0f, 0.0f ); glVertex3f( xPos, 0.0f, 0.0f );
             glTexCoord3f( texPos, 0.0f, 1.0f ); glVertex3f( xPos, 0.0f, zMax );
             glTexCoord3f( texPos, 1.0f, 1.0f ); glVertex3f( xPos, yMax, zMax );
@@ -388,20 +389,20 @@ void Scene::drawYSlices( int num, int direction  )
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     
-    //glEnable( GL_TEXTURE_3D );    
+    glEnable( GL_TEXTURE_3D );    
     glBindTexture( GL_TEXTURE_3D, _textureID );
     
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
     
     glBegin( GL_QUADS );
     
-    if (direction < 0)
+    if (direction > 0)
     {
         for( int slice = num; slice >= 0; --slice )
         {
             float yPos = positionStep * slice;
             float texPos = textureStep * slice;
-            glColor3f( 0.0f, texPos, 0.0f );
+
             glTexCoord3f( 0.0f, texPos, 0.0f ); glVertex3f( 0.0f, yPos, 0.0f );
             glTexCoord3f( 0.0f, texPos, 1.0f ); glVertex3f( 0.0f, yPos, zMax );
             glTexCoord3f( 1.0f, texPos, 1.0f ); glVertex3f( xMax, yPos, zMax );
@@ -414,7 +415,7 @@ void Scene::drawYSlices( int num, int direction  )
         {
             float yPos = positionStep * slice;
             float texPos = textureStep * slice;
-            glColor3f( 0.0f, texPos, 0.0f );
+
             glTexCoord3f( 0.0f, texPos, 0.0f ); glVertex3f( 0.0f, yPos, 0.0f );
             glTexCoord3f( 0.0f, texPos, 1.0f ); glVertex3f( 0.0f, yPos, zMax );
             glTexCoord3f( 1.0f, texPos, 1.0f ); glVertex3f( xMax, yPos, zMax );
@@ -431,7 +432,7 @@ void Scene::drawYSlices( int num, int direction  )
 
 
 void Scene::drawZSlices( int num, int direction  )
-{
+{    
     int nx, ny, nz;
     _volume->getNumberOfSamples( nx, ny, nz );
     
@@ -454,20 +455,20 @@ void Scene::drawZSlices( int num, int direction  )
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     
-    //glEnable( GL_TEXTURE_3D );  
+    glEnable( GL_TEXTURE_3D );  
     glBindTexture( GL_TEXTURE_3D, _textureID );
     
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
     
     glBegin( GL_QUADS );
     
-    if (direction < 0)
+    if (direction > 0)
     {
         for( int slice = num; slice >= 0; --slice )
         {
             float zPos = positionStep * slice;
             float texPos = textureStep * slice;
-            glColor3f( 0.0f, 0.0f, texPos );
+
             glTexCoord3f( 0.0f, 0.0f, texPos ); glVertex3f( 0.0f, 0.0f, zPos );
             glTexCoord3f( 0.0f, 1.0f, texPos ); glVertex3f( 0.0f, yMax, zPos );
             glTexCoord3f( 1.0f, 1.0f, texPos ); glVertex3f( xMax, yMax, zPos );
@@ -480,7 +481,7 @@ void Scene::drawZSlices( int num, int direction  )
         {
             float zPos = positionStep * slice;
             float texPos = textureStep * slice;
-            glColor3f( 0.0f, 0.0f, texPos );
+            
             glTexCoord3f( 0.0f, 0.0f, texPos ); glVertex3f( 0.0f, 0.0f, zPos );
             glTexCoord3f( 0.0f, 1.0f, texPos ); glVertex3f( 0.0f, yMax, zPos );
             glTexCoord3f( 1.0f, 1.0f, texPos ); glVertex3f( xMax, yMax, zPos );
