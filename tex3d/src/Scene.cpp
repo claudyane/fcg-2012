@@ -237,7 +237,7 @@ void Scene::render()
     glGetFloatv( GL_MODELVIEW_MATRIX , modelview );
     algInv( modelview, invModelview );
     
-    Vector4D camPos = _camera->getPosition();
+    Vector4D camPos = Vector4D( 0.0, 0.0, 0.0, 1.0 );
     Vector4D center = _camera->getCenter();
     float eye[4] = {camPos.x, camPos.y, camPos.z, camPos.w};
     mult( invModelview, eye );
@@ -245,11 +245,7 @@ void Scene::render()
     Vector4D viewDir = Vector4D( center.x - eye[0], center.y - eye[1], center.z - eye[2], 1.0 );
     viewDir.normalize();
     int maxIndex = max( fabs(viewDir.x), fabs(viewDir.y), fabs(viewDir.z) );        
-    
-    std::cout << "gl: (" << modelview[8]<< ", " << modelview[9] << ", " << modelview[10] << ")\n";
-    std::cout << "view: (" << viewDir.x << ", " << viewDir.y << ", " << viewDir.z << ")\n";
-    std::cout << "max: " << maxIndex << "\n"; 
-    
+
     if (maxIndex == 0)
     {
         int direction = (viewDir.x > 0 ? 1 : -1 );
