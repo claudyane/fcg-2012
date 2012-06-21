@@ -254,9 +254,9 @@ void Scene::drawYSlices( int num )
         float yPos = positionStep * slice;
         float texPos = textureStep * slice;
         glTexCoord3f( 0.0f, texPos, 0.0f ); glVertex3f( 0.0f, yPos, 0.0f );
+        glTexCoord3f( 0.0f, texPos, 1.0f ); glVertex3f( 0.0f, yPos, zMax );
         glTexCoord3f( 1.0f, texPos, 1.0f ); glVertex3f( xMax, yPos, zMax );
-        glTexCoord3f( 1.0f, texPos, 1.0f ); glVertex3f( xMax, yPos, zMax );
-        glTexCoord3f( 0.0f, texPos, 0.0f ); glVertex3f( 1.0f, yPos, 0.0f );
+        glTexCoord3f( 1.0f, texPos, 0.0f ); glVertex3f( xMax, yPos, 0.0f );
     }
     
     glEnd();
