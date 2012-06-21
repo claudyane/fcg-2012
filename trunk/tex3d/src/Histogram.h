@@ -43,6 +43,12 @@ private:
     
     /** Where the values of the histogram will be stored */
     int _values[256];
+    
+    /** Width of the available drawing area */
+    int _width;
+    
+    /** Height of the available drawing area */
+    int _height;
 };
 
 #endif	/* HISTOGRAM_H */
