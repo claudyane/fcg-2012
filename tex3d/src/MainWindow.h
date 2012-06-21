@@ -25,7 +25,7 @@ private:
     GtkWidget* build();
     GtkWidget* buildButtonsBox();
     GtkWidget* buildCanvasBox();
-    GtkWidget* buildRayTraceCanvas();
+    GtkWidget* buildCanvas();
 
     void beginGL();
     void endGL();
