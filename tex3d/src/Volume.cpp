@@ -220,6 +220,13 @@ Vector4D Volume::getNormal( Vector4D& point )
     if( i >= _nx || i < 0 || j >= _ny || j < 0 || k >= _nz || k < 0 )
         return Vector4D( 0.0, 0.0, 0.0, 1.0 );
         
+    return getNormal( i, j, k );
+}
+
+
+
+Vector4D Volume::getNormal( int i, int j, int k )
+{
     int prevI = (i > 0? i-1 : 0);
     int prevJ = (j > 0? j-1 : 0);
     int prevK = (k > 0? k-1 : 0);
@@ -261,7 +268,7 @@ Vector4D Volume::getNormal( Vector4D& point )
 
 
 
-float* Volume::getTexture3D()
+float* Volume::getTexture3D( Vector4D light )
 {
     float* texture = new float[4*_nx*_ny*_nz];
     
@@ -271,8 +278,40 @@ float* Volume::getTexture3D()
         {
             for (int k = 0; k < _nz; k++)
             {
-                int sampleIndex = index( i, j, k );
                 Color voxelColor = _transferFunction[getVoxel( i, j, k )];
+                int sampleIndex = index( i, j, k );
+                Vector4D point = Vector4D( i*_dx, j*_dy, k*_dz, 1.0 );
+                
+                // Direção de iluminação
+                Vector4D lightDir = light - point;
+                lightDir.normalize();
+
+                // Normal do voxel
+                Vector4D normal = getNormal( i, j, k );        
+                if (normal.norm() > 0.0)
+                {
+                    normal.normalize();
+                    double cos = dot( normal, lightDir );
+
+                    if (cos < 0.0)
+                        cos = -cos;
+
+                    if (cos > 0.0)
+                    {
+                        Color ambient( 0.3f, 0.3f, 0.3f, 1.0f );
+                        Color diffuse( 0.7f, 0.7f, 0.7f, 1.0f );                        
+                        float alpha = voxelColor.a;
+                        voxelColor = voxelColor*ambient + diffuse*voxelColor*cos;
+                        voxelColor.a = alpha;
+                    }
+                }
+                else
+                {
+                    Color ambient( 0.3f, 0.3f, 0.3f, 1.0f );
+                    float alpha = voxelColor.a;
+                    voxelColor = voxelColor*ambient;
+                    voxelColor.a = alpha;
+                }
                 
                 texture[4*sampleIndex  ] = voxelColor.r;
                 texture[4*sampleIndex+1] = voxelColor.g;
@@ -289,7 +328,6 @@ float* Volume::getTexture3D()
 
 int Volume::index( int i, int j, int k )
 {
-    //return i*_ny*_nz + j*_nz + k;
     return k*_ny*_nx + j*_nx + i;
 }
 
