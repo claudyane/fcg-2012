@@ -13,7 +13,112 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#define LIGHTING
+
+static void mult( const float source[16], float destination[4] )
+{
+	float result[4];
+    
+    result[0] = source[0] * destination[0] + source[4] * destination[1] + source[8]  * destination[2] + source[12] * destination[3];
+	result[1] = source[1] * destination[0] + source[5] * destination[1] + source[9]  * destination[2] + source[13] * destination[3];
+	result[2] = source[2] * destination[0] + source[6] * destination[1] + source[10] * destination[2] + source[14] * destination[3];
+	result[3] = source[3] * destination[0] + source[7] * destination[1] + source[11] * destination[2] + source[15] * destination[3];
+
+	for(int i = 0; i < 4; i++)
+	{
+		destination[i] = result[i];
+	}
+}
+
+
+
+static float algDet( float m[16] ) 
+{
+  return
+    m[0] *
+      ( m[5] * (m[10]*m[15] - m[14]*m[11]) - 
+        m[9] * (m[6]*m[15]  - m[14]*m[7])  + 
+        m[13] * (m[6]*m[11]  - m[10]*m[7])   ) - 
+    m[4] *
+      ( m[1] * (m[10]*m[15] - m[14]*m[11]) - 
+        m[9] * (m[2]*m[15] - m[14]*m[3])   +
+        m[13] * (m[2]*m[11] - m[10]*m[3])    ) +
+    m[8] * 
+      ( m[1] * (m[6]*m[15] - m[14]*m[7]) -
+        m[5] * (m[2]*m[15] - m[14]*m[3]) +
+        m[13] * (m[2]*m[7] - m[6]*m[3])      ) -
+    m[12] *
+      ( m[1] * (m[6]*m[11] - m[10]*m[7]) -
+        m[5] * (m[2]*m[11] - m[10]*m[3]) +
+        m[9] * (m[2]*m[7] - m[6]*m[3])       );
+}
+
+
+
+static void algInv( float m[16], float inv[16] ) 
+{
+  double  d;
+  //float temp[16];
+  d = algDet(m);
+
+  
+  inv[0] = ( m[5] * (m[10]*m[15] - m[14]*m[11]) + m[6] * (-m[9]*m[15] + m[13]*m[11]) + 
+     m[7] * (m[9]*m[14] - m[13]*m[10]) ) / d;
+
+  inv[4] = - ( m[4] * (m[10]*m[15] - m[14]*m[11]) + m[6] * (-m[8]*m[15] + m[12]*m[11]) + 
+       m[7] * (m[8]*m[14] - m[12]*m[10]) ) / d;
+
+  inv[8] = ( m[4] * (m[9]*m[15] - m[13]*m[11]) + m[5] * (-m[8]*m[15] + m[12]*m[11]) + 
+     m[7] * (m[8]*m[13] - m[12]*m[9]) ) / d;
+
+  inv[12] = - ( m[4] * (m[9]*m[14] - m[13]*m[10]) + m[5] * (-m[8]*m[14] + m[12]*m[10]) + 
+       m[6] * (m[8]*m[13] - m[12]*m[9]) ) / d;
+
+
+
+  inv[1] = - ( m[1] * (m[10]*m[15] - m[14]*m[11]) + m[2] * (-m[9]*m[15] + m[13]*m[11]) + 
+       m[3] * (m[9]*m[14] - m[13]*m[10]) ) / d;
+
+  inv[5] = ( m[0] * (m[10]*m[15] - m[14]*m[11]) + m[2] * (-m[8]*m[15] + m[12]*m[11]) + 
+     m[3] * (m[8]*m[14] - m[12]*m[10]) ) / d;
+
+  inv[9] = - ( m[0] * (m[9]*m[15] - m[13]*m[11]) + m[1] * (-m[8]*m[15] + m[12]*m[11]) + 
+       m[3] * (m[8]*m[13] - m[12]*m[9]) ) / d;
+
+  inv[13] = ( m[0] * (m[9]*m[14] - m[13]*m[10]) + m[1] * (-m[8]*m[14] + m[12]*m[10]) + 
+     m[2] * (m[8]*m[13] - m[12]*m[9]) ) / d;
+
+
+
+  inv[2] = ( m[1] * (m[6]*m[15] - m[14]*m[7]) + m[2] * (-m[5]*m[15] + m[13]*m[7]) + 
+     m[3] * (m[5]*m[14] - m[13]*m[6]) ) / d;
+
+  inv[6] = - ( m[0] * (m[6]*m[15] - m[14]*m[7]) + m[2] * (-m[4]*m[15] + m[12]*m[7]) + 
+       m[3] * (m[4]*m[14] - m[12]*m[6]) ) / d;
+
+  inv[10] = ( m[0] * (m[5]*m[15] - m[13]*m[7]) + m[1] * (-m[4]*m[15] + m[12]*m[7]) + 
+     m[3] * (m[4]*m[13] - m[12]*m[5]) ) / d;
+
+  inv[14] = - ( m[0] * (m[5]*m[14] - m[13]*m[6]) + m[1] * (-m[4]*m[14] + m[12]*m[6]) + 
+       m[2] * (m[4]*m[13] - m[12]*m[5]) ) / d;
+
+
+
+  inv[3] =  - ( m[1] * (m[6]*m[11] - m[10]*m[7]) + m[2] * (-m[5]*m[11] + m[9]*m[7]) + 
+       m[3] * (m[5]*m[10] - m[9]*m[6]) )  / d;
+
+  inv[7] = ( m[0] * (m[6]*m[11] - m[10]*m[7]) + m[2] * (-m[4]*m[11] + m[8]*m[7]) + 
+     m[3] * (m[4]*m[10] - m[8]*m[6]) ) / d;
+
+  inv[11] = - ( m[0] * (m[5]*m[11] - m[9]*m[7]) + m[1] * (-m[4]*m[11] + m[8]*m[7]) + 
+       m[3] * (m[4]*m[9] - m[8]*m[5]) ) / d;
+
+  inv[15] = ( m[0] * (m[5]*m[10] - m[9]*m[6]) + m[1] * (-m[4]*m[10] + m[8]*m[6]) + 
+     m[2] * (m[4]*m[9] - m[8]*m[5]) ) / d;
+
+	//mult( temp, _transformInv );
+}
+
+
 
 Scene::Scene()
 {
@@ -128,23 +233,37 @@ void Scene::render()
     
     // Define orientação das fatias
     float modelview[16];
+    float invModelview[16];
     glGetFloatv( GL_MODELVIEW_MATRIX , modelview );
-    int maxIndex = max( fabs(modelview[8]), fabs(modelview[9]), fabs(modelview[10]) );        
+    algInv( modelview, invModelview );
+    
+    Vector4D camPos = _camera->getPosition();
+    Vector4D center = _camera->getCenter();
+    float eye[4] = {camPos.x, camPos.y, camPos.z, camPos.w};
+    mult( invModelview, eye );
+    
+    Vector4D viewDir = Vector4D( center.x - eye[0], center.y - eye[1], center.z - eye[2], 1.0 );
+    viewDir.normalize();
+    int maxIndex = max( fabs(viewDir.x), fabs(viewDir.y), fabs(viewDir.z) );        
+    
+    std::cout << "gl: (" << modelview[8]<< ", " << modelview[9] << ", " << modelview[10] << ")\n";
+    std::cout << "view: (" << viewDir.x << ", " << viewDir.y << ", " << viewDir.z << ")\n";
+    std::cout << "max: " << maxIndex << "\n"; 
     
     if (maxIndex == 0)
     {
         int direction = (modelview[8] > 0 ? 1 : -1 );
-        drawXSlices( nx, direction );
+        drawXSlices( 2, direction );
     }
     else if (maxIndex == 1)
     {
         int direction = (modelview[9] > 0 ? 1 : -1 );
-        drawYSlices( ny, direction );
+        drawYSlices( 2, direction );
     }
     else
     {
         int direction = (modelview[10] > 0 ? 1 : -1 );
-        drawZSlices( nz, direction );
+        drawZSlices( 2, direction );
     }
     
     glPopAttrib();
@@ -204,7 +323,7 @@ void Scene::drawXSlices( int num, int direction  )
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     
-    glEnable( GL_TEXTURE_3D );
+    //glEnable( GL_TEXTURE_3D );
     glBindTexture( GL_TEXTURE_3D, _textureID );
     
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
@@ -217,6 +336,7 @@ void Scene::drawXSlices( int num, int direction  )
         {
             float xPos = positionStep * slice;
             float texPos = textureStep * slice;
+            glColor3f( texPos, 0.0f, 0.0f );
             glTexCoord3f( texPos, 0.0f, 0.0f ); glVertex3f( xPos, 0.0f, 0.0f );
             glTexCoord3f( texPos, 0.0f, 1.0f ); glVertex3f( xPos, 0.0f, zMax );
             glTexCoord3f( texPos, 1.0f, 1.0f ); glVertex3f( xPos, yMax, zMax );
@@ -229,6 +349,7 @@ void Scene::drawXSlices( int num, int direction  )
         {
             float xPos = positionStep * slice;
             float texPos = textureStep * slice;
+            glColor3f( texPos, 0.0f, 0.0f );
             glTexCoord3f( texPos, 0.0f, 0.0f ); glVertex3f( xPos, 0.0f, 0.0f );
             glTexCoord3f( texPos, 0.0f, 1.0f ); glVertex3f( xPos, 0.0f, zMax );
             glTexCoord3f( texPos, 1.0f, 1.0f ); glVertex3f( xPos, yMax, zMax );
@@ -267,19 +388,20 @@ void Scene::drawYSlices( int num, int direction  )
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     
-    glEnable( GL_TEXTURE_3D );    
+    //glEnable( GL_TEXTURE_3D );    
     glBindTexture( GL_TEXTURE_3D, _textureID );
     
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
     
     glBegin( GL_QUADS );
     
-    if (direction > 0)
+    if (direction < 0)
     {
         for( int slice = num; slice >= 0; --slice )
         {
             float yPos = positionStep * slice;
             float texPos = textureStep * slice;
+            glColor3f( 0.0f, texPos, 0.0f );
             glTexCoord3f( 0.0f, texPos, 0.0f ); glVertex3f( 0.0f, yPos, 0.0f );
             glTexCoord3f( 0.0f, texPos, 1.0f ); glVertex3f( 0.0f, yPos, zMax );
             glTexCoord3f( 1.0f, texPos, 1.0f ); glVertex3f( xMax, yPos, zMax );
@@ -292,6 +414,7 @@ void Scene::drawYSlices( int num, int direction  )
         {
             float yPos = positionStep * slice;
             float texPos = textureStep * slice;
+            glColor3f( 0.0f, texPos, 0.0f );
             glTexCoord3f( 0.0f, texPos, 0.0f ); glVertex3f( 0.0f, yPos, 0.0f );
             glTexCoord3f( 0.0f, texPos, 1.0f ); glVertex3f( 0.0f, yPos, zMax );
             glTexCoord3f( 1.0f, texPos, 1.0f ); glVertex3f( xMax, yPos, zMax );
@@ -331,7 +454,7 @@ void Scene::drawZSlices( int num, int direction  )
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     
-    glEnable( GL_TEXTURE_3D );  
+    //glEnable( GL_TEXTURE_3D );  
     glBindTexture( GL_TEXTURE_3D, _textureID );
     
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
@@ -344,6 +467,7 @@ void Scene::drawZSlices( int num, int direction  )
         {
             float zPos = positionStep * slice;
             float texPos = textureStep * slice;
+            glColor3f( 0.0f, 0.0f, texPos );
             glTexCoord3f( 0.0f, 0.0f, texPos ); glVertex3f( 0.0f, 0.0f, zPos );
             glTexCoord3f( 0.0f, 1.0f, texPos ); glVertex3f( 0.0f, yMax, zPos );
             glTexCoord3f( 1.0f, 1.0f, texPos ); glVertex3f( xMax, yMax, zPos );
@@ -356,6 +480,7 @@ void Scene::drawZSlices( int num, int direction  )
         {
             float zPos = positionStep * slice;
             float texPos = textureStep * slice;
+            glColor3f( 0.0f, 0.0f, texPos );
             glTexCoord3f( 0.0f, 0.0f, texPos ); glVertex3f( 0.0f, 0.0f, zPos );
             glTexCoord3f( 0.0f, 1.0f, texPos ); glVertex3f( 0.0f, yMax, zPos );
             glTexCoord3f( 1.0f, 1.0f, texPos ); glVertex3f( xMax, yMax, zPos );

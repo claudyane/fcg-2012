@@ -50,6 +50,11 @@ public:
      */
     Vector4D getPosition();
     
+    /**
+     * Returns the camera's center in world coordinates
+     */
+    Vector4D getCenter();
+    
     void incX( float increment );
     void incY( float increment );
     void incZ( float increment );
