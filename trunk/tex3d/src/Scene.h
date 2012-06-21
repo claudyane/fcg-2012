@@ -8,6 +8,7 @@
 #ifndef SCENE_H
 #define	SCENE_H
 
+#include <GL/gl.h>
 #include "Volume.h"
 #include "Camera.h"
 #include "Image.h"
@@ -41,6 +42,8 @@ private:
     Volume* _volume;
     Color _backgroundColor;
     Camera* _camera;
+    
+    GLuint _textureID;
 };
 
 #endif	/* SCENE_H */

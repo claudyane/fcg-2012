@@ -111,6 +111,11 @@ void Scene::render()
 
 void Scene::loadTexture3D()
 {
+    //glClearColor(1.0f,1.0f,1.0f,1.0f);
+    
+    glGenTextures( 1, &_textureID );
+	glBindTexture( GL_TEXTURE_3D, _textureID );
+    
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP);
