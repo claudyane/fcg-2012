@@ -151,6 +151,13 @@ void Scene::loadTexture3D()
 
 
 
+void Scene::drawXSlices( int num )
+{
+    
+}
+
+
+
 void Scene::drawSlice()
 {
     int nx, ny, nz;

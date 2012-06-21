@@ -41,6 +41,8 @@ private:
     
     void drawSlice();
     
+    void drawXSlices( int num );
+    
     Volume* _volume;
     Color _backgroundColor;
     Camera* _camera;
