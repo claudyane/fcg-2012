@@ -104,14 +104,7 @@ void Scene::render()
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
-    glBegin( GL_TRIANGLES );
-    glColor4f( 1.0f, 0.0f, 0.0f, 1.0f );
-    glVertex4f( 0.0f, 0.0f, 0.0f, 1.0f );
-    glColor4f( 0.0f, 1.0f, 0.0f, 1.0f );
-    glVertex4f( 1.0f, 0.0f, 0.0f, 1.0f );
-    glColor4f( 0.0f, 0.0f, 1.0f, 1.0f );
-    glVertex4f( 0.0f, 1.0f, 0.0f, 1.0f );
-    glEnd();
+    drawBox();
 }
 
 
@@ -120,3 +113,65 @@ void Scene::loadTexture3D()
 {
     
 }
+
+
+
+void Scene::drawBox()
+{
+    int nx, ny, nz;
+    _volume->getNumberOfSamples( nx, ny, nz );
+    
+    float dx, dy, dz;
+    _volume->getVoxelDimension( dx, dy, dz );
+    
+    float xMax, yMax, zMax;
+    xMax = nx*dx;
+    yMax = ny*dy;
+    zMax = nz*dz;
+    
+    glPushAttrib( GL_POLYGON_BIT );
+    
+    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+    
+    glBegin( GL_QUADS );
+    
+    // x = 0
+    glVertex3f( 0.0f, 0.0f, 0.0f );
+    glVertex3f( 0.0f, 0.0f, zMax );
+    glVertex3f( 0.0f, yMax, zMax );
+    glVertex3f( 0.0f, yMax, 0.0f );
+    
+    // x = xMax
+    glVertex3f( xMax, 0.0f, 0.0f );
+    glVertex3f( xMax, yMax, 0.0f );
+    glVertex3f( xMax, yMax, zMax );
+    glVertex3f( xMax, 0.0f, zMax );
+    
+    // y = 0
+    glVertex3f( 0.0f, 0.0f, 0.0f );
+    glVertex3f( xMax, 0.0f, 0.0f );
+    glVertex3f( xMax, 0.0f, zMax );
+    glVertex3f( 0.0f, 0.0f, zMax );
+    
+    // y = yMax
+    glVertex3f( 0.0f, yMax, 0.0f );
+    glVertex3f( 0.0f, yMax, zMax );
+    glVertex3f( xMax, yMax, zMax );
+    glVertex3f( xMax, yMax, 0.0f );
+    
+    // z = 0
+    glVertex3f( 0.0f, 0.0f, 0.0f );
+    glVertex3f( 0.0f, yMax, 0.0f );
+    glVertex3f( xMax, yMax, 0.0f );
+    glVertex3f( xMax, 0.0f, 0.0f );
+    
+    // z = zMax
+    glVertex3f( 0.0f, 0.0f, zMax );
+    glVertex3f( xMax, 0.0f, zMax );
+    glVertex3f( xMax, yMax, zMax );
+    glVertex3f( 0.0f, yMax, zMax );
+    
+    glEnd();
+}
+

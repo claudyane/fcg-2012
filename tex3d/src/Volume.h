@@ -26,6 +26,8 @@ public:
     
     int getNumberOfSamples( int& nx, int& ny, int& nz );
     
+    int getVoxelDimension( float& dx, float& dy, float& dz );
+    
     void setVoxel( int i, int j, int k, byte value );
     
     byte getVoxel( int i, int j, int k );
