@@ -240,9 +240,7 @@ void Scene::render()
     Vector4D camPos = _camera->getPosition();
     Vector4D center = _camera->getCenter();
     float eye[4] = {camPos.x, camPos.y, camPos.z, camPos.w};
-    float at[4] = {center.x, center.y, center.z, center.w};
     mult( invModelview, eye );
-    mult( invModelview, at );
     
     Vector4D viewDir = Vector4D( center.x - eye[0], center.y - eye[1], center.z - eye[2], 1.0 );
     viewDir.normalize();
