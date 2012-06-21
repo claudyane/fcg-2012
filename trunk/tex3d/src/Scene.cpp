@@ -172,7 +172,48 @@ void Scene::loadTexture3D()
 
 void Scene::drawXSlices( int num )
 {
+    int nx, ny, nz;
+    _volume->getNumberOfSamples( nx, ny, nz );
     
+    float dx, dy, dz;
+    _volume->getVoxelDimension( dx, dy, dz );
+    
+    float xMax, yMax, zMax;
+    xMax = nx*dx;
+    yMax = ny*dy;
+    zMax = nz*dz;
+    
+    float positionStep = xMax / num;
+    float textureStep = 1.0 / num;
+    
+    glPushAttrib( GL_TEXTURE_BIT | GL_ENABLE_BIT | GL_POLYGON_BIT );
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+    
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
+    
+    glEnable( GL_TEXTURE_3D );    
+    glBindTexture( GL_TEXTURE_3D, _textureID );
+    
+    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+    
+    glBegin( GL_QUADS );
+    
+    for( int slice = 0; slice <= num; ++slice )
+    {
+        float xPos = positionStep * slice;
+        float texPos = textureStep * slice;
+        glTexCoord3f( texPos, 0.0f, 0.0f ); glVertex3f( xPos, 0.0f, 0.0f );
+        glTexCoord3f( texPos, 0.0f, 1.0f ); glVertex3f( xPos, 0.0f, zMax );
+        glTexCoord3f( texPos, 1.0f, 1.0f ); glVertex3f( xPos, yMax, zMax );
+        glTexCoord3f( texPos, 1.0f, 0.0f ); glVertex3f( xPos, yMax, 0.0f );
+    }
+    
+    glEnd();
+    
+    glPopAttrib();
 }
 
 
