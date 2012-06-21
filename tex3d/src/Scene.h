@@ -40,8 +40,8 @@ private:
     void drawBox();    
     void drawSlice();    
     void drawXSlices( int num, int direction );
-    void drawYSlices( int num, int direction  );
-    void drawZSlices( int num, int direction  );
+    void drawYSlices( int num, int direction );
+    void drawZSlices( int num, int direction );
     
     int max( float a, float b, float c );
     
