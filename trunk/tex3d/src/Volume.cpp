@@ -242,22 +242,23 @@ Vector4D Volume::getNormal( int i, int j, int k )
     normal.z = (getVoxel( i, j, nextK ) - getVoxel( i, j, prevK ))/(2*_dz);
     normal.w = 1.0;
     
-    Color nowColor  = _transferFunction[getVoxel( i, j, k )];
-    
+    Color previousColor  = _transferFunction[getVoxel( prevI, j, k )];    
     Color nextColor = _transferFunction[getVoxel( nextI, j, k )];
-    if( nowColor.r == nextColor.r && nowColor.g == nextColor.g && nowColor.b == nextColor.b && nowColor.a == nextColor.a )
+    if( previousColor.r == nextColor.r && previousColor.g == nextColor.g && previousColor.b == nextColor.b && previousColor.a == nextColor.a )
     {
         normal.x = 0;
     }
     
+    previousColor = _transferFunction[getVoxel( i, prevJ, k )];
     nextColor = _transferFunction[getVoxel( i, nextJ, k )];
-    if( nowColor.r == nextColor.r && nowColor.g == nextColor.g && nowColor.b == nextColor.b && nowColor.a == nextColor.a )
+    if( previousColor.r == nextColor.r && previousColor.g == nextColor.g && previousColor.b == nextColor.b && previousColor.a == nextColor.a )
     {
         normal.y = 0;
     }
     
+    previousColor = _transferFunction[getVoxel( i, j, prevK )];
     nextColor = _transferFunction[getVoxel( i, j, nextK )];
-    if( nowColor.r == nextColor.r && nowColor.g == nextColor.g && nowColor.b == nextColor.b && nowColor.a == nextColor.a )
+    if( previousColor.r == nextColor.r && previousColor.g == nextColor.g && previousColor.b == nextColor.b && previousColor.a == nextColor.a )
     {
         normal.z = 0;
     }
@@ -290,7 +291,7 @@ float* Volume::getTexture3D( Vector4D light )
                 Vector4D normal = getNormal( i, j, k );        
                 if (normal.norm() > 0.0)
                 {
-                    normal.normalize();
+                    normal.normalize();                                        
                     double cos = dot( normal, lightDir );
 
                     if (cos < 0.0)
