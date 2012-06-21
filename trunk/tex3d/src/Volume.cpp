@@ -47,6 +47,15 @@ int Volume::getNumberOfSamples(int& nx, int& ny, int& nz)
 
 
 
+int Volume::getVoxelDimension( float& dx, float& dy, float& dz )
+{
+    dx = _dx;
+    dy = _dy;
+    dz = _dz;
+}
+
+
+
 int Volume::getTotalNumberOfSamples()
 {
     return _nx * _ny * _nz;

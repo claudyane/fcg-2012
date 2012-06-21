@@ -36,6 +36,8 @@ public:
     
 private:
     
+    void drawBox();
+    
     Volume* _volume;
     Color _backgroundColor;
     Camera* _camera;
