@@ -12,14 +12,14 @@
 #include "Camera.h"
 #include "Scene.h"
 
-Camera::Camera( Vector4D eye, Vector4D center, Vector4D up, double fovy, double near, int width, int height )
+Camera::Camera( Vector4D eye, Vector4D center, Vector4D up, double fovy, double near, double far, int width, int height )
 {
     _eye = eye;
     _center = center;
     _up = up;
     _fovy = fovy;
     _near = near;
-    _far = 2 * near;
+    _far = far;
     _width = width;
     _height = height;
 
@@ -69,32 +69,21 @@ void Camera::computeDerivedParameters()
 
 
 void Camera::load()
-{
-//    glMatrixMode( GL_MODELVIEW );
-//    glLoadIdentity();
-//    gluLookAt( _eye.x, _eye.y, _eye.z, _center.x, _center.y, _center.z, _up.x, _up.y, _up.z );
-//    
-//    glMatrixMode( GL_PROJECTION );
-//    glLoadIdentity();
-//    gluPerspective( _fovy, (double)_width/(double)_height, _near, _far );
-//    
-//    _near = 1.0f;
-//    _far = 5.0f;
-    
+{   
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
-    gluPerspective( 90.0f, 1.0f, 1.0f, 5.0f );
-    
+    gluPerspective( _fovy, (double)_width/(double)_height, _near, _far );
+     
     glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();    
+    glLoadIdentity();
     
     if(_manipulator)
 	{
-		_manipulator->SetZCenter( 3.0f );
+		_manipulator->SetZCenter( (_near+_far)/2.0f );
 		_manipulator->Load();
 	}
     
-    gluLookAt( 0.0f, 0.0f, 3.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f );
+    gluLookAt( _eye.x, _eye.y, _eye.z, _center.x, _center.y, _center.z, _up.x, _up.y, _up.z );   
 }
 
 

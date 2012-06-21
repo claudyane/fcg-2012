@@ -17,7 +17,7 @@ public:
     /**
      * Constructor
      */
-    Camera( Vector4D eye, Vector4D center, Vector4D up, double fovy, double near, int width, int height );
+    Camera( Vector4D eye, Vector4D center, Vector4D up, double fovy, double near, double far, int width, int height );
 
     /**
      * Copy constructor

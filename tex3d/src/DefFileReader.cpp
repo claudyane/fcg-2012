@@ -217,5 +217,5 @@ Camera* DefFileReader::loadCamera( std::string filePath )
         exit(1);
     }
     
-    return new Camera( eye, at, up, fovy, near, width, height );
+    return new Camera( eye, at, up, fovy, near, far, width, height );
 }
