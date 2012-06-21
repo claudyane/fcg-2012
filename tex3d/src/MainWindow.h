@@ -27,6 +27,9 @@ private:
     GtkWidget* buildCanvasBox();
     GtkWidget* buildRayTraceCanvas();
 
+    void beginGL();
+    void endGL();
+    
     static gboolean cb_configGLCanvas( GtkWidget* canvas, GdkEventConfigure* event, gpointer user_data );
     static gboolean cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event, gpointer user_data );
     static void cb_loadFile( GtkWidget* button, gpointer user_data );
