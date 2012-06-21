@@ -115,30 +115,7 @@ gboolean HistogramWindow::cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* 
     
     window->beginGL();
     
-    //TODO
-    
-     // Altera a Área de desenho no canvas para apenas uma pequena região no canto superior esquerdo.
-    glMatrixMode( GL_PROJECTION );
-    glPushMatrix();
-    glLoadIdentity();
-    glViewport( 0, 0, window->_width, window->_height );
-
-    // Altera o sistema de coordenadas do desenho que mapear de 0,0 ate largura,atura da regiÃ£o sendo desenhada
-    // isto facilita as contas feitas pelo render de cada uma dar partes do desenho.
-    glMatrixMode( GL_MODELVIEW );
-    glPushMatrix();
-    glLoadIdentity();
-    gluOrtho2D( 0, window->_width, 0, window->_height );
-    
-    glBegin( GL_TRIANGLES );
-    
-    glColor3f( 1.0f, 0.0f, 0.0f );
-    glVertex2d( 0, 0 );
-    glVertex2d( window->_width/2, window->_height);
-    glVertex2d( window->_width, 0 );
-    
-    glEnd();
-    
+    window->_histogram->draw();    
     
     gdk_gl_drawable_swap_buffers( glDrawable );
     

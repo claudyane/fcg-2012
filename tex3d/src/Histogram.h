@@ -45,6 +45,10 @@ private:
     
     void cleanupOGL();
     
+    void drawHorizontalAxis();
+    
+    void drawVerticalAxis();
+    
     /** Where the values of the histogram will be stored */
     int _values[256];
     
@@ -53,6 +57,16 @@ private:
     
     /** Height of the available drawing area */
     int _height;
+    
+    float _leftBorder;
+    
+    float _rightBorder;
+    
+    float _topBorder;
+    
+    float _bottomBorder;
+    
+    int _maxValue;
 };
 
 #endif	/* HISTOGRAM_H */

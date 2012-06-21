@@ -7,6 +7,7 @@
 
 #include <cstring>
 #include <GL/gl.h>
+#include <GL/freeglut.h>
 
 #include "Histogram.h"
 
@@ -14,6 +15,8 @@ Histogram::Histogram( int width, int height )
 {
     clear();
     
+    _rightBorder = 0.05 * width;
+    _topBorder = _rightBorder;
     _width = width;
     _height = height;
 }
@@ -44,15 +47,36 @@ void Histogram::setVolume(Volume* volume)
             }
         }
     }
+    
+    for( int i = 0; i < 255; ++i )
+    {
+        if( _maxValue < _values[i] )
+        {
+            _maxValue = _values[i];
+        }
+    }
 }
 
 void Histogram::draw()
 {
     setupOGL();
     
-    // do shit!
+    glClear( GL_COLOR_BUFFER_BIT );
+    
+    drawHorizontalAxis();
     
     cleanupOGL();
+}
+
+void Histogram::drawHorizontalAxis()
+{
+    float characterHeight = glutBitmapHeight( GLUT_BITMAP_9_BY_15 );
+    glColor3f( 0.0f, 0.0f, 0.0f );
+    glLineWidth( 1.0f );
+    glBegin( GL_LINES );
+    glVertex2f( 0.0f, characterHeight + 1.0f );
+    glVertex2f( _width, characterHeight + 1.0f );
+    glEnd();
 }
 
 void Histogram::setupOGL()
@@ -60,7 +84,7 @@ void Histogram::setupOGL()
     glMatrixMode( GL_PROJECTION );
     glPushMatrix();
     glLoadIdentity();
-    glOrtho( 0, _width, 0, _height, 0, 2 );
+    gluOrtho2D( 0, _width, 0, _height );
     
     glMatrixMode( GL_MODELVIEW );
     glPushMatrix();
@@ -69,6 +93,8 @@ void Histogram::setupOGL()
     glPushAttrib( GL_ALL_ATTRIB_BITS );
     glDisable( GL_LIGHTING );
     glDisable( GL_DEPTH_TEST );
+    
+    glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
 }
 
 void Histogram::cleanupOGL()
@@ -82,5 +108,6 @@ void Histogram::cleanupOGL()
 
 void Histogram::clear()
 {
+    _maxValue = 0;
     memset( _values, 0, sizeof( _values ) );
 }

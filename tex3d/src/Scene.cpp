@@ -339,7 +339,7 @@ void Scene::drawXSlices( int num, int direction  )
         {
             float xPos = positionStep * slice;
             float texPos = textureStep * slice;
-
+            
             glTexCoord3f( texPos, 0.0f, 0.0f ); glVertex3f( xPos, 0.0f, 0.0f );
             glTexCoord3f( texPos, 0.0f, 1.0f ); glVertex3f( xPos, 0.0f, zMax );
             glTexCoord3f( texPos, 1.0f, 1.0f ); glVertex3f( xPos, yMax, zMax );
@@ -483,7 +483,7 @@ void Scene::drawZSlices( int num, int direction  )
         {
             float zPos = positionStep * slice;
             float texPos = textureStep * slice;
-            
+
             glTexCoord3f( 0.0f, 0.0f, texPos ); glVertex3f( 0.0f, 0.0f, zPos );
             glTexCoord3f( 0.0f, 1.0f, texPos ); glVertex3f( 0.0f, yMax, zPos );
             glTexCoord3f( 1.0f, 1.0f, texPos ); glVertex3f( xMax, yMax, zPos );
