@@ -117,6 +117,7 @@ void Scene::render()
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glEnable( GL_DEPTH_TEST );
+    glDisable( GL_CULL_FACE );
     
     // Desenha a caixa envolvente
     drawBox();
@@ -131,11 +132,20 @@ void Scene::render()
     int maxIndex = max( fabs(modelview[8]), fabs(modelview[9]), fabs(modelview[10]) );        
     
     if (maxIndex == 0)
-        drawXSlices( nx );
+    {
+        int direction = (modelview[8] > 0 ? 1 : -1 );
+        drawXSlices( nx, direction );
+    }
     else if (maxIndex == 1)
-        drawYSlices( ny );
+    {
+        int direction = (modelview[9] > 0 ? 1 : -1 );
+        drawYSlices( ny, direction );
+    }
     else
-        drawZSlices( nz );
+    {
+        int direction = (modelview[10] > 0 ? 1 : -1 );
+        drawZSlices( nz, direction );
+    }
     
     glPopAttrib();
 }
@@ -170,7 +180,7 @@ void Scene::loadTexture3D()
 
 
 
-void Scene::drawXSlices( int num )
+void Scene::drawXSlices( int num, int direction  )
 {
     int nx, ny, nz;
     _volume->getNumberOfSamples( nx, ny, nz );
@@ -204,14 +214,29 @@ void Scene::drawXSlices( int num )
     
     glBegin( GL_QUADS );
     
-    for( int slice = 0; slice <= num; ++slice )
+    if (direction < 0)
     {
-        float xPos = positionStep * slice;
-        float texPos = textureStep * slice;
-        glTexCoord3f( texPos, 0.0f, 0.0f ); glVertex3f( xPos, 0.0f, 0.0f );
-        glTexCoord3f( texPos, 0.0f, 1.0f ); glVertex3f( xPos, 0.0f, zMax );
-        glTexCoord3f( texPos, 1.0f, 1.0f ); glVertex3f( xPos, yMax, zMax );
-        glTexCoord3f( texPos, 1.0f, 0.0f ); glVertex3f( xPos, yMax, 0.0f );
+        for( int slice = num; slice >= 0; --slice )
+        {
+            float xPos = positionStep * slice;
+            float texPos = textureStep * slice;
+            glTexCoord3f( texPos, 0.0f, 0.0f ); glVertex3f( xPos, 0.0f, 0.0f );
+            glTexCoord3f( texPos, 0.0f, 1.0f ); glVertex3f( xPos, 0.0f, zMax );
+            glTexCoord3f( texPos, 1.0f, 1.0f ); glVertex3f( xPos, yMax, zMax );
+            glTexCoord3f( texPos, 1.0f, 0.0f ); glVertex3f( xPos, yMax, 0.0f );
+        }
+    }
+    else
+    {
+        for( int slice = 0; slice <= num; ++slice )
+        {
+            float xPos = positionStep * slice;
+            float texPos = textureStep * slice;
+            glTexCoord3f( texPos, 0.0f, 0.0f ); glVertex3f( xPos, 0.0f, 0.0f );
+            glTexCoord3f( texPos, 0.0f, 1.0f ); glVertex3f( xPos, 0.0f, zMax );
+            glTexCoord3f( texPos, 1.0f, 1.0f ); glVertex3f( xPos, yMax, zMax );
+            glTexCoord3f( texPos, 1.0f, 0.0f ); glVertex3f( xPos, yMax, 0.0f );
+        }
     }
     
     glEnd();
@@ -221,7 +246,7 @@ void Scene::drawXSlices( int num )
 
 
 
-void Scene::drawYSlices( int num )
+void Scene::drawYSlices( int num, int direction  )
 {
     int nx, ny, nz;
     _volume->getNumberOfSamples( nx, ny, nz );
@@ -252,15 +277,31 @@ void Scene::drawYSlices( int num )
     
     glBegin( GL_QUADS );
     
-    for( int slice = 0; slice <= num; ++slice )
+    if (direction > 0)
     {
-        float yPos = positionStep * slice;
-        float texPos = textureStep * slice;
-        glTexCoord3f( 0.0f, texPos, 0.0f ); glVertex3f( 0.0f, yPos, 0.0f );
-        glTexCoord3f( 0.0f, texPos, 1.0f ); glVertex3f( 0.0f, yPos, zMax );
-        glTexCoord3f( 1.0f, texPos, 1.0f ); glVertex3f( xMax, yPos, zMax );
-        glTexCoord3f( 1.0f, texPos, 0.0f ); glVertex3f( xMax, yPos, 0.0f );
+        for( int slice = num; slice >= 0; --slice )
+        {
+            float yPos = positionStep * slice;
+            float texPos = textureStep * slice;
+            glTexCoord3f( 0.0f, texPos, 0.0f ); glVertex3f( 0.0f, yPos, 0.0f );
+            glTexCoord3f( 0.0f, texPos, 1.0f ); glVertex3f( 0.0f, yPos, zMax );
+            glTexCoord3f( 1.0f, texPos, 1.0f ); glVertex3f( xMax, yPos, zMax );
+            glTexCoord3f( 1.0f, texPos, 0.0f ); glVertex3f( xMax, yPos, 0.0f );
+        }
     }
+    else
+    {
+       for( int slice = 0; slice <= num; ++slice )
+        {
+            float yPos = positionStep * slice;
+            float texPos = textureStep * slice;
+            glTexCoord3f( 0.0f, texPos, 0.0f ); glVertex3f( 0.0f, yPos, 0.0f );
+            glTexCoord3f( 0.0f, texPos, 1.0f ); glVertex3f( 0.0f, yPos, zMax );
+            glTexCoord3f( 1.0f, texPos, 1.0f ); glVertex3f( xMax, yPos, zMax );
+            glTexCoord3f( 1.0f, texPos, 0.0f ); glVertex3f( xMax, yPos, 0.0f );
+        } 
+    }
+    
     
     glEnd();
     
@@ -269,7 +310,7 @@ void Scene::drawYSlices( int num )
 
 
 
-void Scene::drawZSlices( int num )
+void Scene::drawZSlices( int num, int direction  )
 {
     int nx, ny, nz;
     _volume->getNumberOfSamples( nx, ny, nz );
@@ -300,14 +341,29 @@ void Scene::drawZSlices( int num )
     
     glBegin( GL_QUADS );
     
-    for( int slice = 0; slice <= num; ++slice )
+    if (direction < 0)
     {
-        float zPos = positionStep * slice;
-        float texPos = textureStep * slice;
-        glTexCoord3f( 0.0f, 0.0f, texPos ); glVertex3f( 0.0f, 0.0f, zPos );
-        glTexCoord3f( 0.0f, 1.0f, texPos ); glVertex3f( 0.0f, yMax, zPos );
-        glTexCoord3f( 1.0f, 1.0f, texPos ); glVertex3f( xMax, yMax, zPos );
-        glTexCoord3f( 1.0f, 0.0f, texPos ); glVertex3f( xMax, 0.0f, zPos );
+        for( int slice = num; slice >= 0; --slice )
+        {
+            float zPos = positionStep * slice;
+            float texPos = textureStep * slice;
+            glTexCoord3f( 0.0f, 0.0f, texPos ); glVertex3f( 0.0f, 0.0f, zPos );
+            glTexCoord3f( 0.0f, 1.0f, texPos ); glVertex3f( 0.0f, yMax, zPos );
+            glTexCoord3f( 1.0f, 1.0f, texPos ); glVertex3f( xMax, yMax, zPos );
+            glTexCoord3f( 1.0f, 0.0f, texPos ); glVertex3f( xMax, 0.0f, zPos );
+        }
+    }
+    else
+    {
+        for( int slice = 0; slice <= num; ++slice )
+        {
+            float zPos = positionStep * slice;
+            float texPos = textureStep * slice;
+            glTexCoord3f( 0.0f, 0.0f, texPos ); glVertex3f( 0.0f, 0.0f, zPos );
+            glTexCoord3f( 0.0f, 1.0f, texPos ); glVertex3f( 0.0f, yMax, zPos );
+            glTexCoord3f( 1.0f, 1.0f, texPos ); glVertex3f( xMax, yMax, zPos );
+            glTexCoord3f( 1.0f, 0.0f, texPos ); glVertex3f( xMax, 0.0f, zPos );
+        }
     }
     
     glEnd();
