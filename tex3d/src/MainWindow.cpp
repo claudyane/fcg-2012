@@ -98,6 +98,10 @@ GtkWidget* MainWindow::buildButtonsBox()
     _fileLabel = gtk_label_new( "" );
     gtk_box_pack_start( GTK_BOX(buttonsBox), _fileLabel, FALSE, FALSE, 2 );
     
+    // adiciona label vazio como fill
+    GtkWidget* fillLabel = gtk_label_new( "" );
+    gtk_box_pack_start( GTK_BOX(buttonsBox), fillLabel, TRUE, TRUE, 2 );
+    
     GtkWidget* histogramButton = gtk_button_new();
     gtk_box_pack_start( GTK_BOX(buttonsBox), histogramButton, FALSE, FALSE, 2 );
     g_signal_connect( histogramButton, "clicked", G_CALLBACK( cb_histogram ), this );  
