@@ -17,7 +17,7 @@ public:
     /**
      * Default Constructor
      */
-    Histogram();
+    Histogram( int width, int height );
     
     /**
      * Default Destructor
