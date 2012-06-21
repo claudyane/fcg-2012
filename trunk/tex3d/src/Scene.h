@@ -44,6 +44,7 @@ private:
     Camera* _camera;
     
     GLuint _textureID;
+    float* _textureData;
 };
 
 #endif	/* SCENE_H */

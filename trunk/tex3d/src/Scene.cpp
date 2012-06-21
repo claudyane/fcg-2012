@@ -19,6 +19,7 @@ Scene::Scene()
 {
     _volume = NULL;
     _camera = NULL;    
+    _textureData = 0;
 }
 
 
@@ -29,7 +30,13 @@ Scene::~Scene()
         delete _volume;
     
     if (_camera)
-        delete _camera;    
+        delete _camera;           
+    
+    if (_textureData)
+    {
+        glDeleteTextures( 1, &_textureID );
+        delete[] _textureData;
+    }
 }
 
 
@@ -114,7 +121,13 @@ void Scene::render()
 void Scene::loadTexture3D()
 {
     //glClearColor(1.0f,1.0f,1.0f,1.0f);
-    
+    if (_textureData)
+    {
+        glDeleteTextures( 1, &_textureID );
+        delete[] _textureData;
+        _textureData = 0;
+    }
+
     glGenTextures( 1, &_textureID );
     glBindTexture( GL_TEXTURE_3D, _textureID );
     
@@ -126,7 +139,8 @@ void Scene::loadTexture3D()
     
     int width, height, depth;
     _volume->getNumberOfSamples( width, height, depth );
-    GLvoid* data = (GLvoid*) _volume->getTexture3D();
+    _textureData =  _volume->getTexture3D();
+    GLvoid* data = (GLvoid*) _textureData;
     glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, width, height, depth, 0, GL_RGBA, GL_FLOAT, data);
 }
 
