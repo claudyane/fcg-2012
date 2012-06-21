@@ -44,7 +44,9 @@ public:
     
     Vector4D getNormal( Vector4D& point );
     
-    float* getTexture3D();
+    Vector4D getNormal( int i, int j, int k );
+    
+    float* getTexture3D( Vector4D light );
     
 private:
     

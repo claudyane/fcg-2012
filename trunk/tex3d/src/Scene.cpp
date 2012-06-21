@@ -173,7 +173,7 @@ bool Scene::loadScene( std::string filePath )
     
     fscanf( fp, "%s\n", cameraFile );
     fscanf( fp, "%s\n", volumeFile );
-    fscanf( fp, "%f %f %f\n", &(_lightPosition.x), &(_lightPosition.y),&(_lightPosition.z) )
+    fscanf( fp, "%lf %lf %lf\n", &(_lightPosition.x), &(_lightPosition.y),&(_lightPosition.z) );
     fclose( fp );
         
     DefFileReader reader;
@@ -296,7 +296,7 @@ void Scene::loadTexture3D()
     
     int width, height, depth;
     _volume->getNumberOfSamples( width, height, depth );
-    _textureData =  _volume->getTexture3D();
+    _textureData =  _volume->getTexture3D( _lightPosition );
     GLvoid* data = (GLvoid*) _textureData;
     glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, width, height, depth, 0, GL_RGBA, GL_FLOAT, data);
 }
