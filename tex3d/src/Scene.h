@@ -55,6 +55,8 @@ private:
     GLuint _textureID;
     float* _textureData;
     
+    Vector4D _lightPosition;
+    
     int _nSlices;
 };
 
