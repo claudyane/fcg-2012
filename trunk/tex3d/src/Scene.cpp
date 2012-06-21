@@ -205,9 +205,6 @@ void Scene::drawXSlices( int num, int direction  )
     glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
     
     glEnable( GL_TEXTURE_3D );
-    glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
-    
-    glEnable( GL_TEXTURE_3D );    
     glBindTexture( GL_TEXTURE_3D, _textureID );
     
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
