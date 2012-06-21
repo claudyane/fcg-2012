@@ -114,6 +114,7 @@ void Scene::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     drawBox();
+    drawSlice();
 }
 
 
@@ -142,6 +143,42 @@ void Scene::loadTexture3D()
     _textureData =  _volume->getTexture3D();
     GLvoid* data = (GLvoid*) _textureData;
     glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, width, height, depth, 0, GL_RGBA, GL_FLOAT, data);
+}
+
+
+
+void Scene::drawSlice()
+{
+    int nx, ny, nz;
+    _volume->getNumberOfSamples( nx, ny, nz );
+    
+    float dx, dy, dz;
+    _volume->getVoxelDimension( dx, dy, dz );
+    
+    float xMax, yMax, zMax;
+    xMax = nx*dx;
+    yMax = ny*dy;
+    zMax = nz*dz;
+    
+    glPushAttrib( GL_POLYGON_BIT );
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+    
+    glEnable( GL_TEXTURE_3D );
+    glBindTexture( GL_TEXTURE_3D, _textureID );
+    
+    glBegin( GL_QUADS );
+    
+    // z = 0
+    glTexCoord3f( 0.0f, 0.0f, 0.5f ); glVertex3f( 0.0f, 0.0f, zMax/2 );
+    glTexCoord3f( 0.0f, 1.0f, 0.5f ); glVertex3f( 0.0f, yMax, zMax/2 );
+    glTexCoord3f( 1.0f, 1.0f, 0.5f ); glVertex3f( xMax, yMax, zMax/2 );
+    glTexCoord3f( 1.0f, 0.0f, 0.5f ); glVertex3f( xMax, 0.0f, zMax/2 );
+    
+    glEnd();
+    
+    glDisable( GL_TEXTURE_3D );
+    
+    glPopAttrib();
 }
 
 
@@ -203,5 +240,7 @@ void Scene::drawBox()
     glVertex3f( 0.0f, yMax, zMax );
     
     glEnd();
+    
+    glPopAttrib();
 }
 

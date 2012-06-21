@@ -39,6 +39,8 @@ private:
     
     void drawBox();
     
+    void drawSlice();
+    
     Volume* _volume;
     Color _backgroundColor;
     Camera* _camera;
