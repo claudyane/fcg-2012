@@ -33,7 +33,7 @@ private:
     static gboolean cb_configGLCanvas( GtkWidget* canvas, GdkEventConfigure* event, gpointer user_data );
     static gboolean cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event, gpointer user_data );
     static void cb_loadFile( GtkWidget* button, gpointer user_data );
-    static void cb_render( GtkWidget* button, gpointer user_data );
+    static void cb_histogram( GtkWidget* button, gpointer user_data );
     static gboolean cb_deleteWindow( GtkWidget* widget, GdkEvent* event, gpointer data );
     static gint cb_keyPress( GtkWidget* widget, GdkEvent* event, gpointer callback_data );
     
