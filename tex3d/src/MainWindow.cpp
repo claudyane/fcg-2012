@@ -164,8 +164,6 @@ gboolean MainWindow::cb_configGLCanvas( GtkWidget* canvas, GdkEventConfigure* ev
 
     glLoadIdentity();
     glViewport( 0, 0, canvas->allocation.width, canvas->allocation.height );
-    glMatrixMode( GL_PROJECTION );
-    glOrtho ( 0, canvas->allocation.width, 0, canvas->allocation.height, -10, 10 );
 
     // end opengl commands
     gdk_gl_drawable_gl_end( glDrawable );
