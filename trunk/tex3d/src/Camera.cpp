@@ -79,7 +79,7 @@ void Camera::load()
     
     if(_manipulator)
 	{
-		_manipulator->SetZCenter( (_near+_far)/2.0f );
+		_manipulator->SetZCenter( (_center -_eye).norm() );
 		_manipulator->Load();
 	}
     
@@ -99,6 +99,13 @@ void Camera::getScreenSize( int& width, int& height )
 Vector4D Camera::getPosition()
 {
     return _eye;
+}
+
+
+
+Vector4D Camera::getCenter()
+{
+    return _center;
 }
 
 
