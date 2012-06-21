@@ -6,12 +6,16 @@
  */
 
 #include <cstring>
+#include <GL/gl.h>
 
 #include "Histogram.h"
 
 Histogram::Histogram( int width, int height )
 {
     clear();
+    
+    _width = width;
+    _height = height;
 }
 
 Histogram::~Histogram()
@@ -41,6 +45,25 @@ void Histogram::setVolume(Volume* volume)
 
 void Histogram::draw()
 {
+    glMatrixMode( GL_PROJECTION );
+    glPushMatrix();
+    glOrtho( 0, _width, 0, _height, 0, 2 );
+    
+    glMatrixMode( GL_MODELVIEW );
+    glPushMatrix();
+    glLoadIdentity();
+    
+    glPushAttrib( GL_ALL_ATTRIB_BITS );
+    glDisable( GL_LIGHTING );
+    glDisable( GL_DEPTH_TEST );
+    
+    // do shit!
+    
+    glPopAttrib();
+    glMatrixMode( GL_MODELVIEW );
+    glPopMatrix();
+    glMatrixMode( GL_PROJECTION );
+    glPopMatrix();
 }
 
 void Histogram::clear()
