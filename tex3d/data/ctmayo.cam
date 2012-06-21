@@ -3,6 +3,6 @@ at= 64 64 64
 up= 0 0 1
 fovy= 60
 nearp= 3
-farp= 100
+farp= 1000
 screenW= 500
 screenH= 500
