@@ -88,18 +88,22 @@ GtkWidget* MainWindow::buildButtonsBox()
     GtkWidget* buttonsBox = gtk_hbox_new(  FALSE, 5 );
     
     // creating button to load a scene
-    GtkWidget* loadButton = gtk_button_new_with_label( "Load Scene" );
-    gtk_widget_set_size_request( loadButton, 100, 30 );
+    GtkWidget* loadButton = gtk_button_new();
     gtk_box_pack_start( GTK_BOX(buttonsBox), loadButton, FALSE, FALSE, 2 );
     g_signal_connect( loadButton, "clicked", G_CALLBACK( cb_loadFile ), this );    
+    
+    std::string filename = "../../data/icons/openFile.png";
+    loadWidgetImage( filename.c_str(), GTK_BUTTON(loadButton) );
     
     _fileLabel = gtk_label_new( "" );
     gtk_box_pack_start( GTK_BOX(buttonsBox), _fileLabel, FALSE, FALSE, 2 );
     
-    GtkWidget* histogramButton = gtk_button_new_with_label( "Histogram" );
-    gtk_widget_set_size_request( histogramButton, 100, 30 );
+    GtkWidget* histogramButton = gtk_button_new();
     gtk_box_pack_start( GTK_BOX(buttonsBox), histogramButton, FALSE, FALSE, 2 );
     g_signal_connect( histogramButton, "clicked", G_CALLBACK( cb_histogram ), this );  
+    
+    filename = "../../data/icons/histogram.png";
+    loadWidgetImage( filename.c_str(), GTK_BUTTON(histogramButton) );
     
     return buttonsBox;
 }
@@ -288,4 +292,33 @@ void MainWindow::endGL()
     
     //Tell GTK we stopped messing with OpenGL
     gdk_gl_drawable_gl_end( glDrawable );
+}
+
+
+
+bool MainWindow::loadWidgetImage( const char* filename, GtkButton* widget )
+{
+    GError* err = NULL;
+    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file( filename, &err );
+    
+    if(pixbuf == NULL)
+    {
+       fprintf(stderr, "Erro GTK: não conseguiu carregar imagem %s.\n %s\n", filename, err->message);
+       g_error_free( err );
+
+       return false;
+    }
+
+    GtkWidget* image = gtk_image_new_from_pixbuf( pixbuf );
+
+    GtkWidget* box = gtk_hbox_new( FALSE, 0 );
+    gtk_container_set_border_width (GTK_CONTAINER (box), 2);
+    gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 3);
+
+    gtk_widget_show (image);    
+    gtk_widget_show (box);
+
+    gtk_container_add (GTK_CONTAINER (widget), box);
+     
+    return true;
 }
