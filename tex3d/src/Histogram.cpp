@@ -45,8 +45,18 @@ void Histogram::setVolume(Volume* volume)
 
 void Histogram::draw()
 {
+    setupOGL();
+    
+    // do shit!
+    
+    cleanupOGL();
+}
+
+void Histogram::setupOGL()
+{
     glMatrixMode( GL_PROJECTION );
     glPushMatrix();
+    glLoadIdentity();
     glOrtho( 0, _width, 0, _height, 0, 2 );
     
     glMatrixMode( GL_MODELVIEW );
@@ -56,9 +66,10 @@ void Histogram::draw()
     glPushAttrib( GL_ALL_ATTRIB_BITS );
     glDisable( GL_LIGHTING );
     glDisable( GL_DEPTH_TEST );
-    
-    // do shit!
-    
+}
+
+void Histogram::cleanupOGL()
+{
     glPopAttrib();
     glMatrixMode( GL_MODELVIEW );
     glPopMatrix();

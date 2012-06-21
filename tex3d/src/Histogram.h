@@ -41,6 +41,10 @@ private:
      */
     void clear();
     
+    void setupOGL();
+    
+    void cleanupOGL();
+    
     /** Where the values of the histogram will be stored */
     int _values[256];
     
