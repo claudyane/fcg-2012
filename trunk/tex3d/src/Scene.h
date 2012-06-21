@@ -40,7 +40,7 @@ public:
 private:
     
     void drawBox();    
-    void drawSlice();    
+    void drawSlice();
     void drawXSlices( int num, int direction );
     void drawYSlices( int num, int direction );
     void drawZSlices( int num, int direction );
