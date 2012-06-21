@@ -36,6 +36,11 @@ public:
     void draw();
     
 private:
+    /**
+     * Cleans the _values vector, setting all to zero
+     */
+    void clear();
+    
     /** Where the values of the histogram will be stored */
     int _values[256];
 };
