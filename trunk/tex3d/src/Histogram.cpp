@@ -24,8 +24,11 @@ Histogram::~Histogram()
 }
 
 void Histogram::setVolume(Volume* volume)
-{
+{    
     clear();
+    
+    if (!volume)
+        return;
     
     int nx, ny, nz;
     volume->getNumberOfSamples( nx, ny, nz );

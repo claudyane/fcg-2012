@@ -55,7 +55,7 @@ GtkWidget* MainWindow::build()
 {
     GtkWidget* window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
     gtk_container_set_border_width( GTK_CONTAINER (window), 5 );
-    gtk_window_set_title( GTK_WINDOW (window), "Raycasting");
+    gtk_window_set_title( GTK_WINDOW (window), "OpenGL Volume Rendering");
     gtk_window_set_resizable( GTK_WINDOW (window), FALSE ); 
     g_signal_connect( window, "delete-event", G_CALLBACK (cb_deleteWindow), window );
     g_signal_connect( window, "key-press-event", G_CALLBACK (cb_keyPress), this );
@@ -99,7 +99,7 @@ GtkWidget* MainWindow::buildButtonsBox()
     GtkWidget* histogramButton = gtk_button_new_with_label( "Histogram" );
     gtk_widget_set_size_request( histogramButton, 100, 30 );
     gtk_box_pack_start( GTK_BOX(buttonsBox), histogramButton, FALSE, FALSE, 2 );
-    g_signal_connect( histogramButton, "clicked", G_CALLBACK( cb_loadFile ), this );  
+    g_signal_connect( histogramButton, "clicked", G_CALLBACK( cb_histogram ), this );  
     
     return buttonsBox;
 }
@@ -110,7 +110,7 @@ GtkWidget* MainWindow::buildCanvasBox()
 {
     GtkWidget* canvasBox = gtk_hbox_new( FALSE, 2 );
     
-    _canvas = buildRayTraceCanvas();
+    _canvas = buildCanvas();
     gtk_box_pack_start( GTK_BOX(canvasBox), _canvas, FALSE, FALSE, 2 );
     
     return canvasBox;
@@ -118,23 +118,23 @@ GtkWidget* MainWindow::buildCanvasBox()
 
 
 
-GtkWidget* MainWindow::buildRayTraceCanvas()
+GtkWidget* MainWindow::buildCanvas()
 {
     // Create the canvas and set  it's size
-    GtkWidget* rayTraceCanvas = gtk_drawing_area_new();
-    gtk_drawing_area_size( GTK_DRAWING_AREA(rayTraceCanvas), 300, 300 );
+    GtkWidget* canvas = gtk_drawing_area_new();
+    gtk_drawing_area_size( GTK_DRAWING_AREA(canvas), 500, 500 );
 
     // OpenGL configuration for the canvas
     GdkGLConfig* glconfig = gdk_gl_config_new_by_mode( static_cast<GdkGLConfigMode>( GDK_GL_MODE_RGB | GDK_GL_MODE_DEPTH | GDK_GL_MODE_DOUBLE ) );
 
     // Define the canvas as capable of rendering OpenGL graphics
-    gtk_widget_set_gl_capability( rayTraceCanvas, glconfig, NULL, TRUE, GDK_GL_RGBA_TYPE );
+    gtk_widget_set_gl_capability( canvas, glconfig, NULL, TRUE, GDK_GL_RGBA_TYPE );
 
     // Connect the signals to the callbacks
-    g_signal_connect( rayTraceCanvas, "configure-event", G_CALLBACK( cb_configGLCanvas )    , NULL );
-    g_signal_connect( rayTraceCanvas, "expose-event"   , G_CALLBACK( cb_exposeGLCanvas )    , this );
+    g_signal_connect( canvas, "configure-event", G_CALLBACK( cb_configGLCanvas )    , NULL );
+    g_signal_connect( canvas, "expose-event"   , G_CALLBACK( cb_exposeGLCanvas )    , this );
 
-    return rayTraceCanvas;
+    return canvas;
 }
 
 
