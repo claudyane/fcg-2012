@@ -173,6 +173,7 @@ bool Scene::loadScene( std::string filePath )
     
     fscanf( fp, "%s\n", cameraFile );
     fscanf( fp, "%s\n", volumeFile );
+    fscanf( fp, "%f %f %f\n", &(_lightPosition.x), &(_lightPosition.y),&(_lightPosition.z) )
     fclose( fp );
         
     DefFileReader reader;
