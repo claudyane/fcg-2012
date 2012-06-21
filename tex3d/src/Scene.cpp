@@ -79,6 +79,8 @@ bool Scene::loadScene( std::string filePath )
     
     _camera->setCenter( _volume->getCenter() );
     
+    loadTexture3D();
+    
     return true;
 }
 
@@ -114,7 +116,7 @@ void Scene::loadTexture3D()
     //glClearColor(1.0f,1.0f,1.0f,1.0f);
     
     glGenTextures( 1, &_textureID );
-	glBindTexture( GL_TEXTURE_3D, _textureID );
+    glBindTexture( GL_TEXTURE_3D, _textureID );
     
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
