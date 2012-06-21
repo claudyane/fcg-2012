@@ -20,6 +20,8 @@ Scene::Scene()
     _volume = NULL;
     _camera = NULL;    
     _textureData = 0;
+    
+    _nSlices = 30;
 }
 
 
@@ -110,13 +112,30 @@ void Scene::render()
     
     _camera->load();
     
+    // Salva parametros do openGL
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glEnable( GL_DEPTH_TEST );
     
+    // Desenha a caixa envolvente
     drawBox();
-    drawSlice();
+    
+    // TODO: resolver numero de fatias
+    int nx, ny, nz;
+    _volume->getNumberOfSamples( nx, ny, nz );
+    
+    // Define orientação das fatias
+    float modelview[16];
+    glGetFloatv( GL_MODELVIEW_MATRIX , modelview );
+    int maxIndex = max( fabs(modelview[8]), fabs(modelview[9]), fabs(modelview[10]) );        
+    
+    if (maxIndex == 0)
+        drawXSlices( nx );
+    else if (maxIndex == 1)
+        drawYSlices( ny );
+    else
+        drawZSlices( nz );
     
     glPopAttrib();
 }
@@ -152,6 +171,20 @@ void Scene::loadTexture3D()
 
 
 void Scene::drawXSlices( int num )
+{
+    
+}
+
+
+
+void Scene::drawYSlices( int num )
+{
+    
+}
+
+
+
+void Scene::drawZSlices( int num )
 {
     
 }
@@ -258,4 +291,24 @@ void Scene::drawBox()
     
     glPopAttrib();
 }
+
+
+
+int Scene::max(float a, float b, float c)
+{
+    if (a > b)
+    {
+        if (a > c)
+            return 0; // a é o maior
+    }
+    else
+    {
+        if (b > c)
+            return 1; // b é o maior
+    }
+    
+    return 2; // c é o maior
+}
+
+
 

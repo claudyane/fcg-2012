@@ -37,11 +37,14 @@ public:
     
 private:
     
-    void drawBox();
-    
-    void drawSlice();
-    
+    void drawBox();    
+    void drawSlice();    
     void drawXSlices( int num );
+    void drawYSlices( int num );
+    void drawZSlices( int num );
+    
+    int max( float a, float b, float c );
+    
     
     Volume* _volume;
     Color _backgroundColor;
@@ -49,6 +52,8 @@ private:
     
     GLuint _textureID;
     float* _textureData;
+    
+    int _nSlices;
 };
 
 #endif	/* SCENE_H */
