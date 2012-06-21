@@ -289,6 +289,7 @@ float* Volume::getTexture3D()
 
 int Volume::index( int i, int j, int k )
 {
-    return i*_ny*_nz + j*_nz + k;
+    //return i*_ny*_nz + j*_nz + k;
+    return k*_ny*_nx + j*_nx + i;
 }
 

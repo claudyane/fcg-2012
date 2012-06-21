@@ -110,11 +110,15 @@ void Scene::render()
     
     _camera->load();
     
+    glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glEnable( GL_DEPTH_TEST );
     
     drawBox();
     drawSlice();
+    
+    glPopAttrib();
 }
 
 
@@ -160,15 +164,19 @@ void Scene::drawSlice()
     yMax = ny*dy;
     zMax = nz*dz;
     
-    glPushAttrib( GL_POLYGON_BIT );
+    glPushAttrib( GL_TEXTURE_BIT | GL_ENABLE_BIT );
     glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
     
-    glEnable( GL_TEXTURE_3D );
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
+    
+    glEnable( GL_TEXTURE_3D );    
     glBindTexture( GL_TEXTURE_3D, _textureID );
     
+    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+        
     glBegin( GL_QUADS );
     
-    // z = 0
     glTexCoord3f( 0.0f, 0.0f, 0.5f ); glVertex3f( 0.0f, 0.0f, zMax/2 );
     glTexCoord3f( 0.0f, 1.0f, 0.5f ); glVertex3f( 0.0f, yMax, zMax/2 );
     glTexCoord3f( 1.0f, 1.0f, 0.5f ); glVertex3f( xMax, yMax, zMax/2 );
