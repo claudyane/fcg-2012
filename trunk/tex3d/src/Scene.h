@@ -39,9 +39,9 @@ private:
     
     void drawBox();    
     void drawSlice();    
-    void drawXSlices( int num );
-    void drawYSlices( int num );
-    void drawZSlices( int num );
+    void drawXSlices( int num, int direction );
+    void drawYSlices( int num, int direction  );
+    void drawZSlices( int num, int direction  );
     
     int max( float a, float b, float c );
     
