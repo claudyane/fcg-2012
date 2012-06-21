@@ -11,9 +11,10 @@ Histogram::Histogram()
 {
 }
 
-Histogram::Histogram(const Histogram& orig) {
+Histogram::~Histogram()
+{
 }
 
-Histogram::~Histogram() {
-}
+void Histogram::setVolume(Volume* volume){}
 
+void Histogram::draw(){}
