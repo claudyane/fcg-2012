@@ -263,7 +263,7 @@ Vector4D Volume::getNormal( Vector4D& point )
 
 float* Volume::getTexture3D()
 {
-    float* texture = new float[_nx*_ny*_nz];
+    float* texture = new float[4*_nx*_ny*_nz];
     
     for (int i = 0; i < _nx; i++)
     {
