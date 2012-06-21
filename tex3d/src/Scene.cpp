@@ -202,7 +202,7 @@ void Scene::drawXSlices( int num, int direction  )
     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     
     glEnable( GL_BLEND );
-    glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     
     glEnable( GL_TEXTURE_3D );
     glBindTexture( GL_TEXTURE_3D, _textureID );
@@ -265,7 +265,7 @@ void Scene::drawYSlices( int num, int direction  )
     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     
     glEnable( GL_BLEND );
-    glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     
     glEnable( GL_TEXTURE_3D );    
     glBindTexture( GL_TEXTURE_3D, _textureID );
@@ -329,7 +329,7 @@ void Scene::drawZSlices( int num, int direction  )
     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     
     glEnable( GL_BLEND );
-    glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     
     glEnable( GL_TEXTURE_3D );  
     glBindTexture( GL_TEXTURE_3D, _textureID );
