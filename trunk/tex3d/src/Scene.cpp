@@ -321,7 +321,7 @@ void Scene::drawXSlices( int num, int direction  )
     glEnable( GL_TEXTURE_3D );
     glBindTexture( GL_TEXTURE_3D, _textureID );
     
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
     
     glBegin( GL_QUADS );
     
@@ -386,7 +386,7 @@ void Scene::drawYSlices( int num, int direction  )
     glEnable( GL_TEXTURE_3D );    
     glBindTexture( GL_TEXTURE_3D, _textureID );
     
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
     
     glBegin( GL_QUADS );
     
@@ -452,7 +452,7 @@ void Scene::drawZSlices( int num, int direction  )
     glEnable( GL_TEXTURE_3D );  
     glBindTexture( GL_TEXTURE_3D, _textureID );
     
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
     
     glBegin( GL_QUADS );
     
@@ -550,43 +550,43 @@ void Scene::drawBox()
     
     glBegin( GL_QUADS );
     
-    glColor4f( 1.0f, 0.0f, 0.0f, 1.0f );
     // x = 0
+    glColor4f( 1.0f, 0.0f, 0.0f, 1.0f );
     glVertex3f( 0.0f, 0.0f, 0.0f );
     glVertex3f( 0.0f, 0.0f, zMax );
     glVertex3f( 0.0f, yMax, zMax );
-    glVertex3f( 0.0f, yMax, 0.0f );
+    glVertex3f( 0.0f, yMax, 0.0f );    
     
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-    // x = xMax
-    glVertex3f( xMax, 0.0f, 0.0f );
-    glVertex3f( xMax, yMax, 0.0f );
-    glVertex3f( xMax, yMax, zMax );
-    glVertex3f( xMax, 0.0f, zMax );
-    
-    glColor4f( 0.0f, 1.0f, 0.0f, 1.0f );
     // y = 0
+    glColor4f( 0.0f, 1.0f, 0.0f, 1.0f );    
     glVertex3f( 0.0f, 0.0f, 0.0f );
     glVertex3f( xMax, 0.0f, 0.0f );
     glVertex3f( xMax, 0.0f, zMax );
     glVertex3f( 0.0f, 0.0f, zMax );
     
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-    // y = yMax
-    glVertex3f( 0.0f, yMax, 0.0f );
-    glVertex3f( 0.0f, yMax, zMax );
-    glVertex3f( xMax, yMax, zMax );
-    glVertex3f( xMax, yMax, 0.0f );
-    
-    glColor4f( 0.0f, 0.0f, 1.0f, 1.0f );
     // z = 0
+    glColor4f( 0.0f, 0.0f, 1.0f, 1.0f );    
     glVertex3f( 0.0f, 0.0f, 0.0f );
     glVertex3f( 0.0f, yMax, 0.0f );
     glVertex3f( xMax, yMax, 0.0f );
     glVertex3f( xMax, 0.0f, 0.0f );
     
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+    // x = xMax
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );    
+    glVertex3f( xMax, 0.0f, 0.0f );
+    glVertex3f( xMax, yMax, 0.0f );
+    glVertex3f( xMax, yMax, zMax );
+    glVertex3f( xMax, 0.0f, zMax );
+    
+    // y = yMax
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );    
+    glVertex3f( 0.0f, yMax, 0.0f );
+    glVertex3f( 0.0f, yMax, zMax );
+    glVertex3f( xMax, yMax, zMax );
+    glVertex3f( xMax, yMax, 0.0f );    
+    
     // z = zMax
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );    
     glVertex3f( 0.0f, 0.0f, zMax );
     glVertex3f( xMax, 0.0f, zMax );
     glVertex3f( xMax, yMax, zMax );
