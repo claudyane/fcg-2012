@@ -433,36 +433,42 @@ void Scene::drawBox()
     
     glBegin( GL_QUADS );
     
+    glColor4f( 1.0f, 0.0f, 0.0f, 1.0f );
     // x = 0
     glVertex3f( 0.0f, 0.0f, 0.0f );
     glVertex3f( 0.0f, 0.0f, zMax );
     glVertex3f( 0.0f, yMax, zMax );
     glVertex3f( 0.0f, yMax, 0.0f );
     
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
     // x = xMax
     glVertex3f( xMax, 0.0f, 0.0f );
     glVertex3f( xMax, yMax, 0.0f );
     glVertex3f( xMax, yMax, zMax );
     glVertex3f( xMax, 0.0f, zMax );
     
+    glColor4f( 0.0f, 1.0f, 0.0f, 1.0f );
     // y = 0
     glVertex3f( 0.0f, 0.0f, 0.0f );
     glVertex3f( xMax, 0.0f, 0.0f );
     glVertex3f( xMax, 0.0f, zMax );
     glVertex3f( 0.0f, 0.0f, zMax );
     
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
     // y = yMax
     glVertex3f( 0.0f, yMax, 0.0f );
     glVertex3f( 0.0f, yMax, zMax );
     glVertex3f( xMax, yMax, zMax );
     glVertex3f( xMax, yMax, 0.0f );
     
+    glColor4f( 0.0f, 0.0f, 1.0f, 1.0f );
     // z = 0
     glVertex3f( 0.0f, 0.0f, 0.0f );
     glVertex3f( 0.0f, yMax, 0.0f );
     glVertex3f( xMax, yMax, 0.0f );
     glVertex3f( xMax, 0.0f, 0.0f );
     
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
     // z = zMax
     glVertex3f( 0.0f, 0.0f, zMax );
     glVertex3f( xMax, 0.0f, zMax );
