@@ -20,7 +20,9 @@ Histogram::Histogram( int width, int height )
     _rightBorder = 5;
     _leftBorder = _rightBorder;
     _topBorder = _rightBorder;
-    _bottomBorder = _rightBorder;
+    
+    float characterHeight = glutBitmapHeight( GLUT_BITMAP_9_BY_15 );    
+    _bottomBorder = _rightBorder + characterHeight;
     
     _width = width;
     _height = height;
@@ -70,6 +72,27 @@ void Histogram::draw()
     
     drawHorizontalAxis();
     
+    // calcula espaçamento horizontal e vertical das amostras
+    float dx = (_width - _rightBorder - _leftBorder)/256.0f; 
+    float dy = (_height - _topBorder - _bottomBorder - 1.0f )/_maxValue; 
+    
+    glBegin( GL_QUADS );
+    for (int i = 0; i < 255; i++)
+    {
+        int red = i % 2; 
+        
+        glColor3f( (float)red, 0.0f, 0.0f );
+        
+        int value = _values[i];
+        float valueHeight = value*dy + _bottomBorder + 1.0f;
+        float valuePos = i*dx;
+        glVertex2f( valuePos     , _bottomBorder + 1.0f );
+        glVertex2f( valuePos     , valueHeight          );
+        glVertex2f( valuePos + dx, valueHeight          );
+        glVertex2f( valuePos + dx, _bottomBorder + 1.0f );
+    }
+    glEnd();
+    
     cleanupOGL();
 }
 
@@ -79,17 +102,17 @@ void Histogram::drawHorizontalAxis()
     glColor3f( 0.0f, 0.0f, 0.0f );
     glLineWidth( 1.0f );
     glBegin( GL_LINES );
-    glVertex2f( _leftBorder, _bottomBorder + characterHeight + 1.0f );
-    glVertex2f( _width-_rightBorder, _bottomBorder + characterHeight + 1.0f );
+    glVertex2f( _leftBorder, _bottomBorder + 1.0f );
+    glVertex2f( _width-_rightBorder, _bottomBorder + 1.0f );
     glEnd();
     
     glColor4f( 0.0f, 0.0f, 0.0f, 1.0f );
     float dx = (_width - _rightBorder - _leftBorder)/255.0f;    
-    for (int i = 0; i < 256; i+= 32)
+    for (int i = 0; i < 256; i+= 16)
     {
         std::stringstream text;
         text << i;        
-        glRasterPos2f( _leftBorder + i*dx, _bottomBorder );
+        glRasterPos2f( _leftBorder + i*dx, _bottomBorder - characterHeight);
         glutBitmapString( GLUT_BITMAP_9_BY_15, (const unsigned char*) text.str().c_str() );   
     }       
 }
