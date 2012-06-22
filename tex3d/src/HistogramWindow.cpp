@@ -8,7 +8,7 @@
 HistogramWindow::HistogramWindow()
 {   
     _width = 1100;
-    _height = 300;
+    _height = 550;
     
     _histogram = new Histogram( _width, _height );
     _window = build();
