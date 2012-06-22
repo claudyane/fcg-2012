@@ -6,8 +6,10 @@
  */
 
 #include <cstring>
+#include <string>
 #include <GL/gl.h>
 #include <GL/freeglut.h>
+#include <sstream>
 
 #include "Histogram.h"
 
@@ -15,8 +17,11 @@ Histogram::Histogram( int width, int height )
 {
     clear();
     
-    _rightBorder = 0.05 * width;
+    _rightBorder = 5;
+    _leftBorder = _rightBorder;
     _topBorder = _rightBorder;
+    _bottomBorder = _rightBorder;
+    
     _width = width;
     _height = height;
 }
@@ -74,9 +79,19 @@ void Histogram::drawHorizontalAxis()
     glColor3f( 0.0f, 0.0f, 0.0f );
     glLineWidth( 1.0f );
     glBegin( GL_LINES );
-    glVertex2f( 0.0f, characterHeight + 1.0f );
-    glVertex2f( _width, characterHeight + 1.0f );
+    glVertex2f( _leftBorder, _bottomBorder + characterHeight + 1.0f );
+    glVertex2f( _width-_rightBorder, _bottomBorder + characterHeight + 1.0f );
     glEnd();
+    
+    glColor4f( 0.0f, 0.0f, 0.0f, 1.0f );
+    float dx = (_width - _rightBorder - _leftBorder)/255.0f;    
+    for (int i = 0; i < 256; i+= 32)
+    {
+        std::stringstream text;
+        text << i;        
+        glRasterPos2f( _leftBorder + i*dx, _bottomBorder );
+        glutBitmapString( GLUT_BITMAP_9_BY_15, (const unsigned char*) text.str().c_str() );   
+    }       
 }
 
 void Histogram::setupOGL()
