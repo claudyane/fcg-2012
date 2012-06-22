@@ -183,7 +183,7 @@ gboolean HistogramWindow::cb_motion( GtkWidget* widget, GdkEvent* event, gpointe
     
     gtk_label_set_label( GTK_LABEL(window->_messageBar), window->_histogram->getInfo( x ).c_str() );
     
-    gtk_widget_queue_draw( window->_messageBar );
+    gtk_widget_queue_draw( window->_window );
 
     return TRUE;
 }
