@@ -91,7 +91,7 @@ void Histogram::draw()
 
             int value = _values[i];
             float valueHeight = value*dy + _bottomBorder + 1.0f;
-            float valuePos = i*dx;
+            float valuePos = _leftBorder + i*dx;
             glVertex2f( valuePos     , _bottomBorder + 1.0f );
             glVertex2f( valuePos     , valueHeight          );
             glVertex2f( valuePos + dx, valueHeight          );
@@ -119,7 +119,7 @@ void Histogram::drawHorizontalAxis()
     {
         std::stringstream text;
         text << i;        
-        glRasterPos2f( _leftBorder + i*dx, _bottomBorder - characterHeight);
+        glRasterPos2f( _leftBorder + i*dx - dx/2.0f, _bottomBorder - characterHeight);
         glutBitmapString( GLUT_BITMAP_9_BY_15, (const unsigned char*) text.str().c_str() );   
     }       
 }
@@ -170,7 +170,7 @@ std::string Histogram::getInfo( int x )
     
     std::stringstream info;
     info << "Voxel value: " << pos << "\n";
-    info << "Number of samples: " << _values[pos] << "\n";
+    info << "Number of samples: " << _values[pos];
     
     return info.str();
 }
