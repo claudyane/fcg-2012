@@ -4,6 +4,8 @@
 #include <gtk/gtkgl.h>
 #include "HistogramWindow.h"
 
+#include <iostream>
+
 
 HistogramWindow::HistogramWindow()
 {   
@@ -46,19 +48,34 @@ void HistogramWindow::setVolume( Volume* volume )
 
 GtkWidget* HistogramWindow::build()
 {
-    GtkWidget* window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
-    gtk_container_set_border_width( GTK_CONTAINER (window), 5 );
-    gtk_window_set_title( GTK_WINDOW (window), "Histograma");
-    gtk_window_set_resizable( GTK_WINDOW (window), FALSE ); 
-    g_signal_connect( window, "delete-event", G_CALLBACK (cb_deleteWindow), this );
+    // creates window
+    _window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+    gtk_container_set_border_width( GTK_CONTAINER (_window), 5 );
+    gtk_window_set_title( GTK_WINDOW (_window), "Histogram");
+    gtk_window_set_resizable( GTK_WINDOW (_window), FALSE ); 
+    g_signal_connect( _window, "delete-event", G_CALLBACK (cb_deleteWindow), this );
     
-    GtkWidget* canvasBox = gtk_vbox_new( FALSE, 2 );   
+    // creates canvas
+    GtkWidget* mainBox = gtk_vbox_new( FALSE, 2 );   
     _canvas = buildCanvas();
-    gtk_box_pack_start( GTK_BOX(canvasBox), _canvas, FALSE, FALSE, 2 );
+    gtk_box_pack_start( GTK_BOX(mainBox), _canvas, FALSE, FALSE, 2 );
     
-    gtk_container_add( GTK_CONTAINER(window), canvasBox );           
+    // separator
+    gtk_box_pack_start(GTK_BOX (mainBox), gtk_hseparator_new(), TRUE , TRUE , 2  );    
     
-    return window;
+    // creates message bar
+    GtkWidget* messageHBox = gtk_hbox_new( FALSE, 2 );
+    gtk_box_pack_start( GTK_BOX(mainBox), messageHBox, FALSE, FALSE, 2 );
+    _messageBar = gtk_label_new( "Created by Eliana Goldner and Walther Maciel" );
+    gtk_box_pack_start( GTK_BOX(messageHBox), _messageBar, FALSE, FALSE, 2 );
+    
+    // fill
+    GtkWidget* fill = gtk_label_new("");
+    gtk_box_pack_start( GTK_BOX(messageHBox), fill, TRUE, TRUE, 2 );
+    
+    gtk_container_add( GTK_CONTAINER(_window), mainBox );           
+    
+    return _window;
 }
 
 
@@ -66,20 +83,23 @@ GtkWidget* HistogramWindow::build()
 GtkWidget* HistogramWindow::buildCanvas()
 {
     // Create the canvas and set  it's size
-    GtkWidget* canvas = gtk_drawing_area_new();
-    gtk_drawing_area_size( GTK_DRAWING_AREA(canvas), _width, _height );
+    _canvas = gtk_drawing_area_new();
+    gtk_drawing_area_size( GTK_DRAWING_AREA(_canvas), _width, _height );
+    gtk_widget_add_events( _canvas, (GDK_POINTER_MOTION_MASK) );
 
     // OpenGL configuration for the canvas
     GdkGLConfig* glconfig = gdk_gl_config_new_by_mode( static_cast<GdkGLConfigMode>( GDK_GL_MODE_RGB | GDK_GL_MODE_DEPTH | GDK_GL_MODE_DOUBLE ) );
 
     // Define the canvas as capable of rendering OpenGL graphics
-    gtk_widget_set_gl_capability( canvas, glconfig, NULL, TRUE, GDK_GL_RGBA_TYPE );
+    gtk_widget_set_gl_capability( _canvas, glconfig, NULL, TRUE, GDK_GL_RGBA_TYPE );
 
     // Connect the signals to the callbacks
-    g_signal_connect( canvas, "configure-event", G_CALLBACK( cb_configGLCanvas )    , this );
-    g_signal_connect( canvas, "expose-event"   , G_CALLBACK( cb_exposeGLCanvas )    , this );
+    g_signal_connect( _canvas, "configure-event"     , G_CALLBACK( cb_configGLCanvas ), this );
+    g_signal_connect( _canvas, "expose-event"        , G_CALLBACK( cb_exposeGLCanvas ), this );
+    g_signal_connect( _canvas, "motion-notify-event", G_CALLBACK(cb_motion)           , this );
+    //gtk_signal_connect( GTK_OBJECT (_canvas), "motion-notify-event", GTK_SIGNAL_FUNC(HistogramWindow::cb_motion), this );
 
-    return canvas;
+    return _canvas;
 }
 
 
@@ -149,6 +169,22 @@ gboolean HistogramWindow::cb_deleteWindow( GtkWidget* widget, GdkEvent* event, g
     HistogramWindow* window = ( HistogramWindow* )data;
     window->hide();
     
+    return TRUE;
+}
+
+
+
+gboolean HistogramWindow::cb_motion( GtkWidget* widget, GdkEvent* event, gpointer user_data )
+{  
+    HistogramWindow* window = (HistogramWindow*)user_data;
+    GdkEventMotion* motionEvent = (GdkEventMotion*) event;
+
+    int x = (int)motionEvent->x;
+    
+    gtk_label_set_label( GTK_LABEL(window->_messageBar), window->_histogram->getInfo( x ).c_str() );
+    
+    gtk_widget_queue_draw( window->_messageBar );
+
     return TRUE;
 }
 
