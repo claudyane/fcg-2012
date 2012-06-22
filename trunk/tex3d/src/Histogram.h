@@ -9,6 +9,7 @@
 #define	HISTOGRAM_H
 
 #include "Volume.h"
+#include <string>
 
 
 class Histogram
@@ -34,6 +35,8 @@ public:
      * This functions assumes there is a valid OpenGL context already active.
      */
     void draw();
+    
+    std::string getInfo( int x );
     
 private:
     /**
@@ -67,6 +70,8 @@ private:
     float _bottomBorder;
     
     int _maxValue;
+    
+    Volume* _volume;
 };
 
 #endif	/* HISTOGRAM_H */

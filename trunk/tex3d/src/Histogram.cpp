@@ -17,6 +17,8 @@ Histogram::Histogram( int width, int height )
 {
     clear();
     
+    _volume = 0;
+    
     _rightBorder = 5;
     _leftBorder = _rightBorder;
     _topBorder = _rightBorder;
@@ -36,6 +38,8 @@ Histogram::~Histogram()
 void Histogram::setVolume(Volume* volume)
 {    
     clear();
+    
+    _volume = volume;
     
     if (!volume)
         return;
@@ -72,26 +76,29 @@ void Histogram::draw()
     
     drawHorizontalAxis();
     
-    // calcula espaçamento horizontal e vertical das amostras
-    float dx = (_width - _rightBorder - _leftBorder)/256.0f; 
-    float dy = (_height - _topBorder - _bottomBorder - 1.0f )/_maxValue; 
-    
-    glBegin( GL_QUADS );
-    for (int i = 0; i < 255; i++)
-    {
-        int red = i % 2; 
-        
-        glColor3f( (float)red, 0.0f, 0.0f );
-        
-        int value = _values[i];
-        float valueHeight = value*dy + _bottomBorder + 1.0f;
-        float valuePos = i*dx;
-        glVertex2f( valuePos     , _bottomBorder + 1.0f );
-        glVertex2f( valuePos     , valueHeight          );
-        glVertex2f( valuePos + dx, valueHeight          );
-        glVertex2f( valuePos + dx, _bottomBorder + 1.0f );
+    if (_volume)
+    {       
+        // calcula espaçamento horizontal e vertical das amostras
+        float dx = (_width - _rightBorder - _leftBorder)/256.0f; 
+        float dy = (_height - _topBorder - _bottomBorder - 1.0f )/_maxValue; 
+
+        glBegin( GL_QUADS );
+        for (int i = 0; i < 255; i++)
+        {
+            int red = i % 2; 
+
+            glColor3f( (float)red, 0.0f, 0.0f );
+
+            int value = _values[i];
+            float valueHeight = value*dy + _bottomBorder + 1.0f;
+            float valuePos = i*dx;
+            glVertex2f( valuePos     , _bottomBorder + 1.0f );
+            glVertex2f( valuePos     , valueHeight          );
+            glVertex2f( valuePos + dx, valueHeight          );
+            glVertex2f( valuePos + dx, _bottomBorder + 1.0f );
+        }
+        glEnd();
     }
-    glEnd();
     
     cleanupOGL();
 }
@@ -149,3 +156,22 @@ void Histogram::clear()
     _maxValue = 0;
     memset( _values, 0, sizeof( _values ) );
 }
+
+
+
+std::string Histogram::getInfo( int x )
+{
+    float dx = (_width - _rightBorder - _leftBorder)/256.0f; 
+    
+    int pos = (x-_leftBorder)/dx;
+    
+    if (!_volume || pos < 0 || pos > 255)
+        return "\n";
+    
+    std::stringstream info;
+    info << "Voxel value: " << pos << "\n";
+    info << "Number of samples: " << _values[pos] << "\n";
+    
+    return info.str();
+}
+

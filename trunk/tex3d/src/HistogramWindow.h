@@ -36,6 +36,7 @@ private:
     static gboolean cb_configGLCanvas( GtkWidget* canvas, GdkEventConfigure* event, gpointer user_data );
     static gboolean cb_exposeGLCanvas( GtkWidget* canvas, GdkEventExpose* event, gpointer user_data );
     static gboolean cb_deleteWindow( GtkWidget* widget, GdkEvent* event, gpointer data );
+    static gboolean cb_motion( GtkWidget* widget, GdkEvent* event, gpointer user_data );
     
     Histogram* _histogram;
     int _width;
@@ -43,6 +44,7 @@ private:
     
     GtkWidget* _window;
     GtkWidget* _canvas;
+    GtkWidget* _messageBar;
 };
 
 #endif	/* HISTOGRAM_WINDOW_H */
