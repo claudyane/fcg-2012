@@ -9,7 +9,7 @@ ifeq ($(DBG),Yes)
   CFLAGS = -g -fopenmp -lglut `pkg-config --cflags --libs gtk+-2.0 gtkglext-1.0 gtkglext-x11-1.0 glu`
   BUILD_DIR = debug
 else
-  CFLAGS = -fopenmp `pkg-config -lglut --cflags --libs gtk+-2.0 gtkglext-1.0 gtkglext-x11-1.0 glu`
+  CFLAGS = -fopenmp -lglut `pkg-config --cflags --libs gtk+-2.0 gtkglext-1.0 gtkglext-x11-1.0 glu`
   BUILD_DIR = release
 endif
 
