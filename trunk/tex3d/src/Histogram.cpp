@@ -10,6 +10,7 @@
 #include <GL/gl.h>
 #include <GL/freeglut.h>
 #include <sstream>
+#include <math.h>
 
 #include "Histogram.h"
 
@@ -80,7 +81,7 @@ void Histogram::draw()
     {       
         // calcula espaçamento horizontal e vertical das amostras
         float dx = (_width - _rightBorder - _leftBorder)/256.0f; 
-        float dy = (_height - _topBorder - _bottomBorder - 1.0f )/_maxValue; 
+        float dy = (_height - _topBorder - _bottomBorder - 1.0f )/log2(_maxValue); 
 
         glBegin( GL_QUADS );
         for (int i = 0; i < 255; i++)
@@ -89,7 +90,7 @@ void Histogram::draw()
 
             glColor3f( (float)red, 0.0f, 0.0f );
 
-            int value = _values[i];
+            double value = log2(_values[i]);
             float valueHeight = value*dy + _bottomBorder + 1.0f;
             float valuePos = _leftBorder + i*dx;
             glVertex2f( valuePos     , _bottomBorder + 1.0f );
