@@ -1,0 +1,1 @@
+Contains programming assignments for the discipline Computer Graphics Foundations, at PUC-Rio, in 2012
